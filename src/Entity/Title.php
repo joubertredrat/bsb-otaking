@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\TitleRepository;
@@ -37,12 +39,6 @@ class Title
     #[ORM\Column(length: 20)]
     private ?string $statusView = null;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY)]
-    private array $files = [];
-
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
-    private array $tags = [];
-
     #[ORM\ManyToMany(targetEntity: Fansub::class, inversedBy: 'titles')]
     private Collection $fansubs;
 
@@ -52,9 +48,13 @@ class Title
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'title')]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->fansubs = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,30 +146,6 @@ class Title
         return $this;
     }
 
-    public function getFiles(): array
-    {
-        return $this->files;
-    }
-
-    public function setFiles(array $files): self
-    {
-        $this->files = $files;
-
-        return $this;
-    }
-
-    public function getTags(): array
-    {
-        return $this->tags;
-    }
-
-    public function setTags(?array $tags): self
-    {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Fansub>
      */
@@ -214,6 +190,33 @@ class Title
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addTitle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeTitle($this);
+        }
 
         return $this;
     }
