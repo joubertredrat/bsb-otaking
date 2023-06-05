@@ -18,6 +18,10 @@ class File
     #[ORM\Column(length: 750)]
     private ?string $name = null;
 
+    #[ORM\ManyToOne(inversedBy: 'files')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Title $title = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -37,6 +41,18 @@ class File
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getTitle(): ?Title
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?Title $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }

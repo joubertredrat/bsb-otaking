@@ -41,6 +41,11 @@ class TagRepository extends ServiceEntityRepository
         }
     }
 
+    public function get(int $id): ?Tag
+    {
+        return $this->getEntityManager()->find(Tag::class, $id);
+    }
+
 //    /**
 //     * @return Tag[] Returns an array of Tag objects
 //     */

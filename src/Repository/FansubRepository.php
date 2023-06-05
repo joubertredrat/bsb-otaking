@@ -41,6 +41,11 @@ class FansubRepository extends ServiceEntityRepository
         }
     }
 
+    public function get(int $id): ?Fansub
+    {
+        return $this->getEntityManager()->find(Fansub::class, $id);
+    }
+
 //    /**
 //     * @return Fansub[] Returns an array of Fansub objects
 //     */
