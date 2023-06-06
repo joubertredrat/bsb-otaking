@@ -15,4 +15,6 @@ interface TagRepositoryInterface
     public function get(int $id): ?Tag;
 
     public function getByName(string $name): ?Tag;
+
+    public function list(): array;
 }

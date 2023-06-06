@@ -51,6 +51,15 @@ class TagRepository extends ServiceEntityRepository implements TagRepositoryInte
         return $this->findOneBy(['name' => $name]);
     }
 
+    public function list(): array
+    {
+       return $this->createQueryBuilder('t')
+           ->orderBy('t.name', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+    }
+
 //    /**
 //     * @return Tag[] Returns an array of Tag objects
 //     */
