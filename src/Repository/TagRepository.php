@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Tag[]    findAll()
  * @method Tag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TagRepository extends ServiceEntityRepository
+class TagRepository extends ServiceEntityRepository implements TagRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -43,7 +43,12 @@ class TagRepository extends ServiceEntityRepository
 
     public function get(int $id): ?Tag
     {
-        return $this->getEntityManager()->find(Tag::class, $id);
+        return $this->find($id);
+    }
+
+    public function getByName(string $name): ?Tag
+    {
+        return $this->findOneBy(['name' => $name]);
     }
 
 //    /**

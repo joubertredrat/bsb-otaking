@@ -54,6 +54,11 @@
     ],
     "post-update-cmd": [
       "@auto-scripts"
+    ],
+    "tests": "vendor/phpunit/phpunit/phpunit --testdox",
+    "coverage": [
+      "XDEBUG_MODE=coverage vendor/phpunit/phpunit/phpunit --coverage-html .coverage",
+      "open .coverage/index.html"
     ]
   },
   "conflict": {
@@ -67,6 +72,7 @@
     }
   },
   "require-dev": {
+    "mockery/mockery": "^1.6",
     "phpunit/phpunit": "^10",
     "symfony/maker-bundle": "^1.48"
   }
