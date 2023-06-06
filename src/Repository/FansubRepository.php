@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Fansub[]    findAll()
  * @method Fansub[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FansubRepository extends ServiceEntityRepository
+class FansubRepository extends ServiceEntityRepository implements FansubRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -43,7 +43,7 @@ class FansubRepository extends ServiceEntityRepository
 
     public function get(int $id): ?Fansub
     {
-        return $this->getEntityManager()->find(Fansub::class, $id);
+        return $this->find($id);
     }
 
 //    /**

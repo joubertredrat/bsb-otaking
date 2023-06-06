@@ -5,20 +5,22 @@ declare(strict_types=1);
 namespace App\UseCase;
 
 use App\Dto\CreateTitle as DtoCreateTitle;
+use App\Entity\Fansub;
 use App\Entity\File;
+use App\Entity\Tag;
 use App\Entity\Title;
-use App\Repository\FansubRepository;
-use App\Repository\FileRepository;
-use App\Repository\TagRepository;
-use App\Repository\TitleRepository;
+use App\Exception\UseCase\CreateTitle\FansubsNotFoundException;
+use App\Exception\UseCase\CreateTitle\TagsNotFoundException;
+use App\Repository\FansubRepositoryInterface;
+use App\Repository\TagRepositoryInterface;
+use App\Repository\TitleRepositoryInterface;
 
 class CreateTitle
 {
     public function __construct(
-        protected FansubRepository $fansubRepository,
-        protected TitleRepository $titleRepository,
-        protected TagRepository $tagRepository,
-        protected FileRepository $fileRepository,
+        protected TitleRepositoryInterface $titleRepository,
+        protected FansubRepositoryInterface $fansubRepository,
+        protected TagRepositoryInterface $tagRepository,
     ) {
     }
 
@@ -53,7 +55,7 @@ class CreateTitle
 
         foreach ($ids as $id) {
             $fansub = $this->fansubRepository->get($id);
-            if (is_null($fansub)) {
+            if (!$fansub instanceof Fansub) {
                 $notFound[] = $id;
                 continue;
             }
@@ -61,7 +63,7 @@ class CreateTitle
         }
 
         if ($notFound) {
-            // Exception
+            throw FansubsNotFoundException::dispatch($notFound);
         }
     }
 
@@ -71,7 +73,7 @@ class CreateTitle
 
         foreach ($ids as $id) {
             $tag = $this->tagRepository->get($id);
-            if (is_null($tag)) {
+            if (!$tag instanceof Tag) {
                 $notFound[] = $id;
                 continue;
             }
@@ -79,7 +81,7 @@ class CreateTitle
         }
 
         if ($notFound) {
-            // Exception
+            throw TagsNotFoundException::dispatch($notFound);
         }
     }
 }

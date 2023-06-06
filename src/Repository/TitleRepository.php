@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Title[]    findAll()
  * @method Title[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TitleRepository extends ServiceEntityRepository
+class TitleRepository extends ServiceEntityRepository implements TitleRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
