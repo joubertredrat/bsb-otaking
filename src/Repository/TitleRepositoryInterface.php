@@ -11,4 +11,6 @@ interface TitleRepositoryInterface
     public function save(Title $entity, bool $flush = false): void;
 
     public function remove(Title $entity, bool $flush = false): void;
+
+    public function list(): array;
 }
