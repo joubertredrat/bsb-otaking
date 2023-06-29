@@ -6,7 +6,7 @@ namespace App\UseCase;
 
 use App\Dto\CreateFansub as DtoCreateFansub;
 use App\Entity\Fansub;
-use App\Exception\Dto\CreateFansub\InvalidNameException;
+use App\Exception\UseCase\CreateFansub\FansubNameAlreadyExistsException;
 use App\Repository\FansubRepositoryInterface;
 
 class CreateFansub
@@ -19,7 +19,7 @@ class CreateFansub
     {
         $fansubFound = $this->fansubRepository->getByName($createFansub->name);
         if ($fansubFound instanceof Fansub) {
-            throw InvalidNameException::dispatch($createFansub->name);
+            throw FansubNameAlreadyExistsException::dispatch($createFansub->name);
         }
 
         $fansub = new Fansub();

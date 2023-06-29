@@ -6,7 +6,7 @@ namespace App\Tests\UseCase;
 
 use App\Dto\CreateFansub as DtoCreateFansub;
 use App\Entity\Fansub;
-use App\Exception\Dto\CreateFansub\InvalidNameException;
+use App\Exception\UseCase\CreateFansub\FansubNameAlreadyExistsException;
 use App\Repository\FansubRepositoryInterface;
 use App\UseCase\CreateFansub;
 use Mockery;
@@ -37,7 +37,7 @@ class CreateFansubTest extends TestCase
 
     public function testCreateFansubWithNameAlreadyExists(): void
     {
-        $this->expectException(InvalidNameException::class);
+        $this->expectException(FansubNameAlreadyExistsException::class);
 
         $dtoCreateTag = new DtoCreateFansub(name: 'Foo');
         $fansubFound = new Fansub();
