@@ -46,6 +46,20 @@ class FansubRepository extends ServiceEntityRepository implements FansubReposito
         return $this->find($id);
     }
 
+    public function getByName(string $name): ?Fansub
+    {
+        return $this->findOneBy(['name' => $name]);
+    }
+
+    public function list(): array
+    {
+       return $this->createQueryBuilder('f')
+           ->orderBy('f.name', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+    }
+
 //    /**
 //     * @return Fansub[] Returns an array of Fansub objects
 //     */

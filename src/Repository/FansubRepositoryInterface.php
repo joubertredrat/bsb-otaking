@@ -13,4 +13,8 @@ interface FansubRepositoryInterface
     public function remove(Fansub $entity, bool $flush = false): void;
 
     public function get(int $id): ?Fansub;
+
+    public function getByName(string $name): ?Fansub;
+
+    public function list(): array;
 }
