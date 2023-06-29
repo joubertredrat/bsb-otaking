@@ -53,35 +53,11 @@ class FansubRepository extends ServiceEntityRepository implements FansubReposito
 
     public function list(): array
     {
-       return $this->createQueryBuilder('f')
-           ->orderBy('f.name', 'ASC')
-           ->getQuery()
-           ->getResult()
-       ;
+        return $this
+            ->createQueryBuilder('f')
+            ->orderBy('f.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
-
-//    /**
-//     * @return Fansub[] Returns an array of Fansub objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Fansub
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
