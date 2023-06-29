@@ -9,6 +9,7 @@ use App\Entity\Tag;
 use App\Exception\UseCase\CreateTag\TagNameAlreadyExistsException;
 use App\Repository\TagRepositoryInterface;
 use App\UseCase\CreateTag;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class CreateTagTest extends TestCase
@@ -17,7 +18,7 @@ class CreateTagTest extends TestCase
     {
         $dtoCreateTag = new DtoCreateTag(name: 'foo:bar');
 
-        $tagRepository = \Mockery::mock(TagRepositoryInterface::class);
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $tagRepository
             ->shouldReceive('getByName')
             ->withArgs(['foo:bar'])
@@ -42,7 +43,7 @@ class CreateTagTest extends TestCase
         $tagFound = new Tag();
         $tagFound->setName('foo:bar');
 
-        $tagRepository = \Mockery::mock(TagRepositoryInterface::class);
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $tagRepository
             ->shouldReceive('getByName')
             ->withArgs(['foo:bar'])

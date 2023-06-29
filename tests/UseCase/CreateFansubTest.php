@@ -9,6 +9,7 @@ use App\Entity\Fansub;
 use App\Exception\Dto\CreateFansub\InvalidNameException;
 use App\Repository\FansubRepositoryInterface;
 use App\UseCase\CreateFansub;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class CreateFansubTest extends TestCase
@@ -17,7 +18,7 @@ class CreateFansubTest extends TestCase
     {
         $dtoCreateTag = new DtoCreateFansub(name: 'Foo');
 
-        $fansubRepository = \Mockery::mock(FansubRepositoryInterface::class);
+        $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $fansubRepository
             ->shouldReceive('getByName')
             ->withArgs(['Foo'])
@@ -42,7 +43,7 @@ class CreateFansubTest extends TestCase
         $fansubFound = new Fansub();
         $fansubFound->setName('Foo');
 
-        $fansubRepository = \Mockery::mock(FansubRepositoryInterface::class);
+        $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $fansubRepository
             ->shouldReceive('getByName')
             ->withArgs(['Foo'])

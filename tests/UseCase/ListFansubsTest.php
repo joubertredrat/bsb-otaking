@@ -7,6 +7,7 @@ namespace App\Tests\UseCase;
 use App\Entity\Fansub;
 use App\Repository\FansubRepositoryInterface;
 use App\UseCase\ListFansubs;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class ListFansubsTest extends TestCase
@@ -20,7 +21,7 @@ class ListFansubsTest extends TestCase
 
         $fansubsExpected = [$fansubFoo, $fansubBar];
 
-        $fansubRepository = \Mockery::mock(FansubRepositoryInterface::class);
+        $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $fansubRepository
             ->shouldReceive('list')
             ->andReturn($fansubsExpected)

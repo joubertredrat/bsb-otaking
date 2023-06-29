@@ -7,6 +7,7 @@ namespace App\Tests\UseCase;
 use App\Entity\Title;
 use App\Repository\TitleRepositoryInterface;
 use App\UseCase\ListTitles;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class ListTitlesTest extends TestCase
@@ -20,7 +21,7 @@ class ListTitlesTest extends TestCase
 
         $titlesExpected = [$titleFoo, $titleBar];
 
-        $titleRepository = \Mockery::mock(TitleRepositoryInterface::class);
+        $titleRepository = Mockery::mock(TitleRepositoryInterface::class);
         $titleRepository
             ->shouldReceive('list')
             ->andReturn($titlesExpected)

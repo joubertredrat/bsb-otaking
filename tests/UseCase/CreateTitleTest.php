@@ -13,6 +13,7 @@ use App\Repository\FansubRepositoryInterface;
 use App\Repository\TagRepositoryInterface;
 use App\Repository\TitleRepositoryInterface;
 use App\UseCase\CreateTitle;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class CreateTitleTest extends TestCase
@@ -35,7 +36,7 @@ class CreateTitleTest extends TestCase
         $fansub = new Fansub();
         $fansub->setName('Foo Fansub');
 
-        $fansubRepository = \Mockery::mock(FansubRepositoryInterface::class);
+        $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $fansubRepository
             ->shouldReceive('get')
             ->withArgs([1])
@@ -45,14 +46,14 @@ class CreateTitleTest extends TestCase
         $tag = new Tag();
         $tag->setName('foo:bar');
 
-        $tagRepository = \Mockery::mock(TagRepositoryInterface::class);
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $tagRepository
             ->shouldReceive('get')
             ->withArgs([2])
             ->andReturn($tag)
         ;
 
-        $titleRepository = \Mockery::mock(TitleRepositoryInterface::class);
+        $titleRepository = Mockery::mock(TitleRepositoryInterface::class);
         $titleRepository
             ->shouldReceive('save')
             ->once()
@@ -95,15 +96,15 @@ class CreateTitleTest extends TestCase
             tags: [2],
         );
 
-        $fansubRepository = \Mockery::mock(FansubRepositoryInterface::class);
+        $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $fansubRepository
             ->shouldReceive('get')
             ->withArgs([7])
             ->andReturn(null)
         ;
 
-        $tagRepository = \Mockery::mock(TagRepositoryInterface::class);
-        $titleRepository = \Mockery::mock(TitleRepositoryInterface::class);
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
+        $titleRepository = Mockery::mock(TitleRepositoryInterface::class);
 
         $createTitle = new CreateTitle(
             titleRepository: $titleRepository,
@@ -134,21 +135,21 @@ class CreateTitleTest extends TestCase
         $fansub = new Fansub();
         $fansub->setName('Foo Fansub');
 
-        $fansubRepository = \Mockery::mock(FansubRepositoryInterface::class);
+        $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $fansubRepository
             ->shouldReceive('get')
             ->withArgs([1])
             ->andReturn($fansub)
         ;
 
-        $tagRepository = \Mockery::mock(TagRepositoryInterface::class);
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $tagRepository
             ->shouldReceive('get')
             ->withArgs([8])
             ->andReturn(null)
         ;
 
-        $titleRepository = \Mockery::mock(TitleRepositoryInterface::class);
+        $titleRepository = Mockery::mock(TitleRepositoryInterface::class);
 
         $createTitle = new CreateTitle(
             titleRepository: $titleRepository,

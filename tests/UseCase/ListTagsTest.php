@@ -7,6 +7,7 @@ namespace App\Tests\UseCase;
 use App\Entity\Tag;
 use App\Repository\TagRepositoryInterface;
 use App\UseCase\ListTags;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class ListTagsTest extends TestCase
@@ -20,7 +21,7 @@ class ListTagsTest extends TestCase
 
         $tagsExpected = [$tagBarFoo, $tagFooBar];
 
-        $tagRepository = \Mockery::mock(TagRepositoryInterface::class);
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $tagRepository
             ->shouldReceive('list')
             ->andReturn($tagsExpected)
