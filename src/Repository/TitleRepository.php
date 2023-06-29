@@ -43,7 +43,8 @@ class TitleRepository extends ServiceEntityRepository implements TitleRepository
 
     public function list(): array
     {
-        return $this->createQueryBuilder('t')
+        return $this
+            ->createQueryBuilder('t')
             ->orderBy('t.name', 'ASC')
             ->getQuery()
             ->getResult()
