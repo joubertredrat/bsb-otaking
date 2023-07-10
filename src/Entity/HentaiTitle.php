@@ -41,20 +41,20 @@ class HentaiTitle
     #[ORM\Column(length: 20)]
     private ?string $statusView = null;
 
-    #[ORM\ManyToMany(targetEntity: Fansub::class, inversedBy: 'titles')]
-    private Collection $fansubs;
-
-    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'title')]
+    #[ORM\ManyToMany(targetEntity: HentaiTag::class, mappedBy: 'title')]
     private Collection $tags;
 
-    #[ORM\OneToMany(mappedBy: 'title', targetEntity: File::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'title', targetEntity: HentaiFile::class, cascade: ['persist'])]
     private Collection $files;
+
+    #[ORM\ManyToMany(targetEntity: Fansub::class, inversedBy: 'hentaiTitles')]
+    private Collection $fansubs;
 
     public function __construct()
     {
-        $this->fansubs = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->files = new ArrayCollection();
+        $this->fansubs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,30 +147,6 @@ class HentaiTitle
     }
 
     /**
-     * @return Collection<int, Fansub>
-     */
-    public function getFansubs(): Collection
-    {
-        return $this->fansubs;
-    }
-
-    public function addFansub(Fansub $fansub): self
-    {
-        if (!$this->fansubs->contains($fansub)) {
-            $this->fansubs->add($fansub);
-        }
-
-        return $this;
-    }
-
-    public function removeFansub(Fansub $fansub): self
-    {
-        $this->fansubs->removeElement($fansub);
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Tag>
      */
     public function getTags(): Collection
@@ -223,6 +199,30 @@ class HentaiTitle
                 $file->setTitle(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fansub>
+     */
+    public function getFansubs(): Collection
+    {
+        return $this->fansubs;
+    }
+
+    public function addFansub(Fansub $fansub): self
+    {
+        if (!$this->fansubs->contains($fansub)) {
+            $this->fansubs->add($fansub);
+        }
+
+        return $this;
+    }
+
+    public function removeFansub(Fansub $fansub): self
+    {
+        $this->fansubs->removeElement($fansub);
 
         return $this;
     }
