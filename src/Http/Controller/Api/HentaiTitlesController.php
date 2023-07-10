@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controller\Api;
 
+use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
+use App\Exception\UseCase\CreateHentaiTitle\FansubsNotFoundException;
+use App\Exception\UseCase\CreateHentaiTitle\HentaiTagsNotFoundException;
 use App\Http\Factory\HentaiTitleListResponseFactory;
 use App\Http\Request\CreateHentaiTitleRequest;
+use App\Http\Response\HentaiTitleResponse;
 use App\UseCase\CreateHentaiTitle;
 use App\UseCase\ListHentaiTitles;
 use Fig\Http\Message\RequestMethodInterface;
@@ -45,7 +49,24 @@ class HentaiTitlesController extends ApiController
     public function create(CreateHentaiTitleRequest $request): JsonResponse
     {
         try {
-            return $this->jsonCreated([]);
+            $dto = new DtoCreateHentaiTitle(
+                name: $request->name,
+                alternativeNames: $request->alternativeNames,
+                type: $request->type,
+                language: $request->language,
+                episodes: $request->episodes,
+                statusDownload: $request->statusDownload,
+                statusView: $request->statusView,
+                fansubs: $request->fansubs,
+                files: $request->files,
+                tags: $request->tags,
+            );
+            $title = $this->createHentaiTitle->execute($dto);
+            $response = new HentaiTitleResponse($title);
+
+            return $this->jsonCreated($response);
+        } catch (FansubsNotFoundException | HentaiTagsNotFoundException $e) {
+            return $this->jsonErrorUnprocessableEntity($e);
         } catch (Throwable $e) {
             return $this->jsonErrorInternalServerError($e);
         }

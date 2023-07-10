@@ -64,6 +64,7 @@ class CreateHentaiTitleRequest extends AbstractJsonRequest
 
     #[NotBlank]
     #[All([
+        new Type('int'),
         new Positive(),
     ])]
     public readonly array $fansubs;
@@ -74,7 +75,8 @@ class CreateHentaiTitleRequest extends AbstractJsonRequest
     public array $files = [];
 
     #[All([
-        new Type('string'),
+        new Type('int'),
+        new Positive(),
     ])]
     public array $tags = [];
 }

@@ -8,6 +8,7 @@ use App\Repository\HentaiFileRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HentaiFileRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class HentaiFile
 {
     use Timestampable;
