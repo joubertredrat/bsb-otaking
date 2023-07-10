@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\TitleRepository;
+use App\Repository\HentaiTitleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TitleRepository::class)]
-class Title
+#[ORM\Entity(repositoryClass: HentaiTitleRepository::class)]
+class HentaiTitle
 {
     use Timestampable;
 
@@ -178,7 +178,7 @@ class Title
         return $this->tags;
     }
 
-    public function addTag(Tag $tag): self
+    public function addTag(HentaiTag $tag): self
     {
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
@@ -188,7 +188,7 @@ class Title
         return $this;
     }
 
-    public function removeTag(Tag $tag): self
+    public function removeTag(HentaiTag $tag): self
     {
         if ($this->tags->removeElement($tag)) {
             $tag->removeTitle($this);
@@ -205,7 +205,7 @@ class Title
         return $this->files;
     }
 
-    public function addFile(File $file): self
+    public function addFile(HentaiFile $file): self
     {
         if (!$this->files->contains($file)) {
             $this->files->add($file);
@@ -215,7 +215,7 @@ class Title
         return $this;
     }
 
-    public function removeFile(File $file): self
+    public function removeFile(HentaiFile $file): self
     {
         if ($this->files->removeElement($file)) {
             // set the owning side to null (unless already changed)

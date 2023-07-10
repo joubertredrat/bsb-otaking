@@ -4,26 +4,18 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Title;
+use App\Entity\HentaiTitle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Title>
- *
- * @method Title|null find($id, $lockMode = null, $lockVersion = null)
- * @method Title|null findOneBy(array $criteria, array $orderBy = null)
- * @method Title[]    findAll()
- * @method Title[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class TitleRepository extends ServiceEntityRepository implements TitleRepositoryInterface
+class HentaiTitleRepository extends ServiceEntityRepository implements HentaiTitleRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Title::class);
+        parent::__construct($registry, HentaiTitle::class);
     }
 
-    public function save(Title $entity, bool $flush = false): void
+    public function save(HentaiTitle $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -32,7 +24,7 @@ class TitleRepository extends ServiceEntityRepository implements TitleRepository
         }
     }
 
-    public function remove(Title $entity, bool $flush = false): void
+    public function remove(HentaiTitle $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

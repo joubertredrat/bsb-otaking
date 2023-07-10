@@ -4,26 +4,18 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Tag;
+use App\Entity\HentaiTag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Tag>
- *
- * @method Tag|null find($id, $lockMode = null, $lockVersion = null)
- * @method Tag|null findOneBy(array $criteria, array $orderBy = null)
- * @method Tag[]    findAll()
- * @method Tag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class TagRepository extends ServiceEntityRepository implements TagRepositoryInterface
+class HentaiTagRepository extends ServiceEntityRepository implements HentaiTagRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Tag::class);
+        parent::__construct($registry, HentaiTag::class);
     }
 
-    public function save(Tag $entity, bool $flush = false): void
+    public function save(HentaiTag $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -32,7 +24,7 @@ class TagRepository extends ServiceEntityRepository implements TagRepositoryInte
         }
     }
 
-    public function remove(Tag $entity, bool $flush = false): void
+    public function remove(HentaiTag $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -41,12 +33,12 @@ class TagRepository extends ServiceEntityRepository implements TagRepositoryInte
         }
     }
 
-    public function get(int $id): ?Tag
+    public function get(int $id): ?HentaiTag
     {
         return $this->find($id);
     }
 
-    public function getByName(string $name): ?Tag
+    public function getByName(string $name): ?HentaiTag
     {
         return $this->findOneBy(['name' => $name]);
     }

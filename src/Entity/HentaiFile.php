@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\FileRepository;
+use App\Repository\HentaiFileRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FileRepository::class)]
-class File
+#[ORM\Entity(repositoryClass: HentaiFileRepository::class)]
+class HentaiFile
 {
     use Timestampable;
 
@@ -22,7 +22,7 @@ class File
 
     #[ORM\ManyToOne(inversedBy: 'files')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Title $title = null;
+    private ?HentaiTitle $title = null;
 
     public function getId(): ?int
     {
@@ -41,12 +41,12 @@ class File
         return $this;
     }
 
-    public function getTitle(): ?Title
+    public function getTitle(): ?HentaiTitle
     {
         return $this->title;
     }
 
-    public function setTitle(?Title $title): self
+    public function setTitle(?HentaiTitle $title): self
     {
         $this->title = $title;
 

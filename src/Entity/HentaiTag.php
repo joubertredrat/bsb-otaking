@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\TagRepository;
+use App\Repository\HentaiTagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TagRepository::class)]
+#[ORM\Entity(repositoryClass: HentaiTagRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Tag
+class HentaiTag
 {
     use Timestampable;
 
@@ -23,7 +23,7 @@ class Tag
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Title::class, inversedBy: 'tags')]
+    #[ORM\ManyToMany(targetEntity: HentaiTitle::class, inversedBy: 'tags')]
     private Collection $title;
 
     public function __construct()
@@ -49,14 +49,14 @@ class Tag
     }
 
     /**
-     * @return Collection<int, Title>
+     * @return Collection<int, HentaiTitle>
      */
     public function getTitle(): Collection
     {
         return $this->title;
     }
 
-    public function addTitle(Title $title): self
+    public function addTitle(HentaiTitle $title): self
     {
         if (!$this->title->contains($title)) {
             $this->title->add($title);
@@ -65,7 +65,7 @@ class Tag
         return $this;
     }
 
-    public function removeTitle(Title $title): self
+    public function removeTitle(HentaiTitle $title): self
     {
         $this->title->removeElement($title);
 
