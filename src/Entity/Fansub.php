@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FansubRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Fansub
 {
     use Timestampable;
