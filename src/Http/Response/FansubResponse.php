@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Response;
 
 use App\Entity\Fansub;
+use App\Helper\DateTime;
 use JsonSerializable;
 
-class FansubResponse extends AbstractResponse implements JsonSerializable
+class FansubResponse implements JsonSerializable
 {
     public function __construct(public readonly Fansub $fansub)
     {
@@ -18,8 +19,8 @@ class FansubResponse extends AbstractResponse implements JsonSerializable
         return [
             'id' => $this->fansub->getId(),
             'name' => $this->fansub->getName(),
-            'createdAt' => $this->datetime($this->fansub->getCreatedAt()),
-            'updatedAt' => $this->datetime($this->fansub->getUpdatedAt()),
+            'createdAt' => DateTime::getString($this->fansub->getCreatedAt()),
+            'updatedAt' => DateTime::getString($this->fansub->getUpdatedAt()),
         ];
     }
 }
