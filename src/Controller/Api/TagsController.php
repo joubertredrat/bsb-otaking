@@ -32,7 +32,7 @@ class TagsController extends ApiController
         try {
             $tags = $this->listTags->execute();
             $response = TagListResponseFactory::createFromUsecase($tags);
-            return $this->json($response);
+            return $this->jsonOk($response);
         } catch (Throwable $e) {
             return $this->jsonErrorInternalServerError($e);
         }
