@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controller\Api;
 
+use App\Dto\CreateFansub as DtoCreateFansub;
+use App\Exception\UseCase\CreateFansub\FansubNameAlreadyExistsException;
+use App\Http\Factory\FansubListResponseFactory;
+use App\Http\Response\FansubResponse;
 use App\Request\CreateFansubRequest;
 use App\UseCase\CreateFansub;
 use App\UseCase\ListFansubs;
@@ -28,7 +32,9 @@ class FansubsController extends ApiController
     public function list(): JsonResponse
     {
         try {
-            return $this->json([]);
+            $fansubs = $this->listFansubs->execute();
+            $response = FansubListResponseFactory::createFromUsecase($fansubs);
+            return $this->jsonOk($response);
         } catch (Throwable $e) {
             return $this->jsonErrorInternalServerError($e);
         }
@@ -41,9 +47,14 @@ class FansubsController extends ApiController
     )]
     public function create(CreateFansubRequest $request): JsonResponse
     {
-        dd($request->name);
         try {
-            return $this->jsonCreated(['data' => 'created']);
+            $dto = new DtoCreateFansub(name: $request->name);
+            $fansub = $this->createFansub->execute($dto);
+            $response = new FansubResponse($fansub);
+
+            return $this->jsonCreated($response);
+        } catch (FansubNameAlreadyExistsException $e) {
+            return $this->jsonErrorUnprocessableEntity($e);
         } catch (Throwable $e) {
             return $this->jsonErrorInternalServerError($e);
         }
