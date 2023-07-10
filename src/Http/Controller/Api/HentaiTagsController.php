@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api;
+namespace App\Http\Controller\Api;
 
-use App\Dto\CreateTag as DtoCreateTag;
+use App\Dto\CreateHentaiTag as DtoCreateHentaiTag;
 use App\Exception\Dto\CreateTag\InvalidNameException;
 use App\Exception\UseCase\CreateTag\TagNameAlreadyExistsException;
-use App\Factory\TagListResponseFactory;
-use App\Response\TagResponse;
-use App\UseCase\CreateTag;
-use App\UseCase\ListTags;
+use App\Http\Factory\HentaiTagListResponseFactory;
+use App\Http\Response\HentaiTagResponse;
+use App\UseCase\CreateHentaiTag;
+use App\UseCase\ListHentaiTags;
 use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,34 +18,42 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
-class TagsController extends ApiController
+class HentaiTagsController extends ApiController
 {
     public function __construct(
-        protected CreateTag $createTag,
-        protected ListTags $listTags,
+        protected CreateHentaiTag $createHentaiTag,
+        protected ListHentaiTags $listHentaiTags,
     ) {
     }
 
-    #[Route('/api/tags', name: 'app_api_list_tags', methods: [RequestMethodInterface::METHOD_GET])]
+    #[Route(
+        path: '/api/hentai/tags',
+        name: 'app_api_list_tags',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
     public function list(): JsonResponse
     {
         try {
-            $tags = $this->listTags->execute();
-            $response = TagListResponseFactory::createFromUsecase($tags);
+            $tags = $this->listHentaiTags->execute();
+            $response = HentaiTagListResponseFactory::createFromUsecase($tags);
             return $this->jsonOk($response);
         } catch (Throwable $e) {
             return $this->jsonErrorInternalServerError($e);
         }
     }
 
-    #[Route('/api/tags', name: 'app_api_create_tag', methods: [RequestMethodInterface::METHOD_POST])]
+    #[Route(
+        path: '/api/hentai/tags',
+        name: 'app_api_create_tag',
+        methods: [RequestMethodInterface::METHOD_POST],
+    )]
     public function create(#[MapRequestPayload(acceptFormat: 'json')] Request $request): JsonResponse
     {
         try {
             $data = json_decode($request->getContent(), true);
-            $dtoCreateTag = new DtoCreateTag(name: $data['name']);
-            $tag = $this->createTag->execute($dtoCreateTag);
-            $response = new TagResponse($tag);
+            $dtoCreateHentaiTag = new DtoCreateHentaiTag(name: $data['name']);
+            $tag = $this->createHentaiTag->execute($dtoCreateHentaiTag);
+            $response = new HentaiTagResponse($tag);
 
             return $this->jsonCreated($response);
         } catch (InvalidNameException $e) {

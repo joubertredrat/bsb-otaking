@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Request;
+namespace App\Http\Request;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Jawira\CaseConverter\Convert;

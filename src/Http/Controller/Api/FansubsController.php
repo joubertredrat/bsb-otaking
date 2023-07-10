@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api;
+namespace App\Http\Controller\Api;
 
 use App\Request\CreateFansubRequest;
 use App\UseCase\CreateFansub;
@@ -20,7 +20,11 @@ class FansubsController extends ApiController
     ) {
     }
 
-    #[Route('/api/fansubs', name: 'app_api_list_fansubs', methods: [RequestMethodInterface::METHOD_GET])]
+    #[Route(
+        path: '/api/fansubs',
+        name: 'app_api_list_fansubs',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
     public function list(): JsonResponse
     {
         try {
@@ -31,13 +35,13 @@ class FansubsController extends ApiController
     }
 
     #[Route(
-        '/api/fansubs',
+        path: '/api/fansubs',
         name: 'app_api_create_fansub',
         methods: [RequestMethodInterface::METHOD_POST],
     )]
     public function create(CreateFansubRequest $request): JsonResponse
     {
-        dd($request->firstName);
+        dd($request->name);
         try {
             return $this->jsonCreated(['data' => 'created']);
         } catch (Throwable $e) {

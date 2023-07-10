@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Factory;
+namespace App\Http\Factory;
 
 use App\Entity\HentaiTag;
-use App\Response\HentaiTagResponse;
-use App\Response\ListResponse;
+use App\Http\Response\HentaiTagResponse;
+use App\Http\Response\ListResponse;
 
 class HentaiTagListResponseFactory
 {

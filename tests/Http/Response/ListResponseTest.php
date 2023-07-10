@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Factory;
+namespace App\Tests\Http\Response;
 
 use App\Entity\HentaiTag;
-use App\Factory\HentaiTagListResponseFactory;
-use App\Response\HentaiTagResponse;
+use App\Http\Response\HentaiTagResponse;
+use App\Http\Response\ListResponse;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-class HentaiTagListResponseFactoryTest extends TestCase
+class ListResponseTest extends TestCase
 {
-    function testCreateFromUsecase(): void
+    function testJsonSerialize(): void
     {
         $hentaiTag = new HentaiTag();
         $hentaiTag->setName('tag:foo');
@@ -24,7 +24,9 @@ class HentaiTagListResponseFactoryTest extends TestCase
             'data' => [$hentaiTagResponse],
         ];
 
-        $response = HentaiTagListResponseFactory::createFromUsecase([$hentaiTag]);
+        $response = new ListResponse();
+        $response->add($hentaiTagResponse);
+
         self::assertEquals($arrayExpected, $response->jsonSerialize());
     }
 }

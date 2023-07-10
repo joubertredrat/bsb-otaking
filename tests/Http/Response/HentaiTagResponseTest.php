@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Response;
+namespace App\Tests\Http\Response;
 
 use App\Entity\HentaiTag;
-use App\Response\HentaiTagResponse;
+use App\Http\Response\HentaiTagResponse;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 

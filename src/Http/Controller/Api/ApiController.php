@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api;
+namespace App\Http\Controller\Api;
 
 use Fig\Http\Message\StatusCodeInterface;
 use JsonSerializable;
