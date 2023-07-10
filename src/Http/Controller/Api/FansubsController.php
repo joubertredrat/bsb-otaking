@@ -26,7 +26,7 @@ class FansubsController extends ApiController
 
     #[Route(
         path: '/api/fansubs',
-        name: 'app_api_list_fansubs',
+        name: 'app_api_fansub_list',
         methods: [RequestMethodInterface::METHOD_GET],
     )]
     public function list(): JsonResponse
@@ -42,7 +42,7 @@ class FansubsController extends ApiController
 
     #[Route(
         path: '/api/fansubs',
-        name: 'app_api_create_fansub',
+        name: 'app_api_fansub_create',
         methods: [RequestMethodInterface::METHOD_POST],
     )]
     public function create(CreateFansubRequest $request): JsonResponse
