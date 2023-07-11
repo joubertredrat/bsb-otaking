@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Request;
 
-use Fig\Http\Message\StatusCodeInterface;
+use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequest;
 use Jawira\CaseConverter\Convert;
 use ReflectionClass;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -34,12 +33,7 @@ abstract class AbstractJsonRequest
     {
         $request = $this->getRequest();
         if (!self::isValidFormat($request)) {
-            $response = new JsonResponse(
-                ['error' => 'expected application/json on header Content-Type request'],
-                StatusCodeInterface::STATUS_BAD_REQUEST,
-            );
-            $response->send();
-            exit;
+            throw InvalidJsonRequest::dispatch(['Expected application/json on header Content-Type request']);
         }
 
         $reflection = new ReflectionClass($this);
@@ -55,24 +49,24 @@ abstract class AbstractJsonRequest
 
     protected function validate(): void
     {
-        $errors = $this->validator->validate($this);
-        $messages = [];
+        $violations = $this->validator->validate($this);
+        if (count($violations) < 1) {
+            return;
+        }
+
+        $errors = [];
 
         /** @var \Symfony\Component\Validator\ConstraintViolation */
-        foreach ($errors as $message) {
-            $attribute = $this->convertCase ? self::snakeCase($message->getPropertyPath()) : $message->getPropertyPath();
-            $messages[] = [
+        foreach ($violations as $violation) {
+            $attribute = $this->convertCase ? self::snakeCase($violation->getPropertyPath()) : $violation->getPropertyPath();
+            $errors[] = [
                 'property' => $attribute,
-                'value' => $message->getInvalidValue(),
-                'message' => $message->getMessage(),
+                'value' => $violation->getInvalidValue(),
+                'message' => $violation->getMessage(),
             ];
         }
 
-        if (count($messages) > 0) {
-            $response = new JsonResponse(['errors' => $messages], StatusCodeInterface::STATUS_BAD_REQUEST);
-            $response->send();
-            exit;
-        }
+        throw InvalidJsonRequest::dispatch($errors);
     }
 
     private static function isValidFormat(Request $request): bool
