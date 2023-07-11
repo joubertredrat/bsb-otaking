@@ -25,11 +25,26 @@ class HentaiTitleResponse implements JsonSerializable
             'episodes' => $this->hentaiTitle->getEpisodes(),
             'statusDownload' => $this->hentaiTitle->getStatusDownload(),
             'statusView' => $this->hentaiTitle->getStatusView(),
+            'fansubs' => $this->getFansubs(),
             'tags' => $this->getTags(),
             'files' => $this->getFiles(),
             'createdAt' => DateTime::getString($this->hentaiTitle->getCreatedAt()),
             'updatedAt' => DateTime::getString($this->hentaiTitle->getUpdatedAt()),
         ];
+    }
+
+    private function getFansubs(): array
+    {
+        $fansubs = [];
+
+        foreach ($this->hentaiTitle->getFansubs()->toArray() as $fansub) {
+            $fansubs[] = [
+                'id' => $fansub->getId(),
+                'name' => $fansub->getName(),
+            ];
+        }
+
+        return $fansubs;
     }
 
     private function getTags(): array
