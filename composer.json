@@ -67,6 +67,10 @@
     "coverage": [
       "XDEBUG_MODE=coverage vendor/phpunit/phpunit/phpunit --coverage-html .coverage",
       "open .coverage/index.html"
+    ],
+    "metrics": [
+      "vendor/bin/phpmetrics --report-html=.metrics src/",
+      "open .metrics/index.html"
     ]
   },
   "conflict": {
@@ -81,6 +85,7 @@
   },
   "require-dev": {
     "mockery/mockery": "^1.6",
+    "phpmetrics/phpmetrics": "^2.8",
     "phpunit/phpunit": "^10",
     "symfony/maker-bundle": "^1.48"
   }
