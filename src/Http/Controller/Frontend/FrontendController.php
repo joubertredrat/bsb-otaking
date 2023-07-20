@@ -22,4 +22,14 @@ class FrontendController extends AbstractController
             'title' => 'Not today :)',
         ]);
     }
+
+    #[Route(
+        path: '/pato/fansub',
+        name: 'app_frontend_fansub',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function page(): Response
+    {
+        return $this->render('fansub.html.twig');
+    }
 }
