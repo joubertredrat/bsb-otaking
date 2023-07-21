@@ -38,13 +38,13 @@ function submitNewFansub() {
     success: function (data, textStatus, xhr) {
       $('.fansubs_form').modal('hide');
       getFansubData();
-      alertSuccess(`Fansub ${jsonData.name} cadastrado com sucesso`);
+      alertSuccess(`Fansub ${jsonData.name} created with success`);
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      let message = 'Algo de errado não deu certo';
+      let message = 'Anything wrong is not right';
 
       if (isUnprocessableContent(jqXHR.status)) {
-        message = `Fansub ${jsonData.name} já existe`;
+        message = `Fansub ${jsonData.name} already exists`;
       }
 
       alertError(message);
@@ -53,7 +53,7 @@ function submitNewFansub() {
 }//submitNewFansub
 
 function submitEditFansub() {
-  alertError('Em breve');
+  alertError('Soon');
 }//submitEditFansub
 
 function getFansubData() {
@@ -72,10 +72,10 @@ function getFansubData() {
     });
 
     $('.fansub_edit').bind('click', function () {
-      alertError('Em breve');
+      alertError('Soon');
     });
     $('.fansub_remove').bind('click', function () {
-      alertError('Em breve');
+      alertError('Soon');
     });
   });
 }//getFansubData
@@ -98,10 +98,6 @@ function getFansubRow(id, name, created, updated) {
     </td>
   </tr>`;
 }//getFansubRow
-
-function getFansubNoRows() {
-  return '<tr class="center aligned fansubs_row"><td colspan="4">Nenhum fansub encontrado</td></tr>';
-}//getFansubNoRows
 
 function searchFansubs() {
   $('#fansubs tbody .fansubs_norows').hide();
@@ -162,7 +158,7 @@ function addFormValidation() {
           rules: [
             {
               type: 'empty',
-              prompt: 'Informe um nome de fansub'
+              prompt: 'Fill name of fansub'
             }
           ]
         }
@@ -182,13 +178,13 @@ function clearForm() {
 
 <div class="ui grid">
   <div class="two wide column">
-    <button class="ui button" id="new_fansub"><i class="star icon"></i> Novo</button>
+    <button class="ui button" id="new_fansub"><i class="star icon"></i> New</button>
   </div>
   <div class="fourteen wide column">
     <div class="ui file action input" id="search-data">
       <input id="search" type="text" placeholder="Search by fansub name">
       <label for="search" class="ui button">
-        <i class="search icon"></i>Pesquisar
+        <i class="search icon"></i>Search
       </label>
     </div>
   </div>
@@ -205,7 +201,7 @@ function clearForm() {
       </thead>
       <tbody>
         <tr class="center aligned fansubs_norows" hidden>
-          <td colspan="4">Nenhum fansub encontrado</td>
+          <td colspan="4">None fansub found</td>
         </tr>
       </tbody>
     </table>
@@ -213,16 +209,16 @@ function clearForm() {
   <div class="sixteen wide column">
     <div class="ui modal fansubs_form">
     <i class="close icon"></i>
-    <div class="header">Formulário</div>
+    <div class="header">Form</div>
     <div class="content">
       <form class="ui form form_fansub">
         <input type="hidden" name="form_fansub_id" id="form_fansub_id" value="" />
         <div class="field">
-          <label for="form_fansub_name">Nome</label>
-          <input type="text" name="form_fansub_name" id="form_fansub_name" placeholder="Nome do fansub">
+          <label for="form_fansub_name">Name</label>
+          <input type="text" name="form_fansub_name" id="form_fansub_name" placeholder="Name of fansub">
         </div>
         <div class="ui error message"></div>
-        <div class="ui submit primary button">Enviar</div>
+        <div class="ui submit primary button">Send</div>
       </form>
     </div>
   </div>
