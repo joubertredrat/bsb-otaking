@@ -6,4 +6,55 @@
 {% endblock %}
 
 {% block body %}
+<h1 class="ui dividing header">Hentai Tags</h1>
+
+<div class="ui grid">
+  <div class="two wide column">
+    <button class="ui button" id="hentai_tags_new"><i class="star icon"></i> New</button>
+  </div>
+  <div class="fourteen wide column">
+    <div class="ui file action input" id="hentai_tags_search">
+      <input id="hentai_tags_search_criteria" type="text" placeholder="Search by hentai tag name">
+      <label for="search" class="ui button">
+        <i class="search icon"></i>Search
+      </label>
+    </div>
+  </div>
+
+  <div class="sixteen wide column">
+    <table class="ui celled table" id="hentai_tags_data">
+      <caption></caption>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th class="collapsing">Created</th>
+          <th class="collapsing">Updated</th>
+          <th class="collapsing"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="center aligned hentai_tags_data_norows" hidden>
+          <td colspan="4">None hentai tags found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+   <div class="sixteen wide column">
+    <div class="ui modal hentai_tags_modal">
+    <i class="close icon"></i>
+    <div class="header">Form</div>
+    <div class="content">
+      <form class="ui form hentai_tags_form">
+        <input type="hidden" name="hentai_tags_form_id" id="hentai_tags_form_id" value="" />
+        <div class="field">
+          <label for="hentai_tags_form_name">Name</label>
+          <input type="text" name="hentai_tags_form_name" id="hentai_tags_form_name" placeholder="Name of fansub">
+        </div>
+        <div class="ui error message"></div>
+        <div class="ui submit primary button">Send</div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}
