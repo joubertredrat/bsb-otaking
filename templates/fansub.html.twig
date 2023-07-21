@@ -5,11 +5,11 @@
 {% block scripts %}
 <script>
 $(document).ready(function() {
-  $('#new_fansub').bind('click', function () {
+  $('#fansubs_new').bind('click', function () {
     fansubModal();
   });
 
-  $('#search-data label').bind('click', function () {
+  $('#fansubs_search label').bind('click', function () {
     searchFansubs();
   });
 
@@ -17,16 +17,19 @@ $(document).ready(function() {
   addFormValidation();
 });//$(document).ready
 
-$('.form_fansub').submit(function(e){
-  e.preventDefault();
-  const id = $('#form_fansub_id').val();
-  id === '' ? submitNewFansub() : submitEditFansub();
+$('.fansubs_form').submit(function(e) {
+  const isValid = $('.fansubs_form').form('is valid');
+  if (isValid) {
+    e.preventDefault();
+    const id = $('#fansubs_form_id').val();
+    id === '' ? submitNewFansub() : submitEditFansub();
+  }
   return false;
-});//$('.form_fansub').submit
+});//$('.fansubs_form').submit
 
 function submitNewFansub() {
   jsonData = {
-    name: $('#form_fansub_name').val()
+    name: $('#fansubs_form_name').val()
   };
 
   $.ajax({
@@ -36,7 +39,7 @@ function submitNewFansub() {
     contentType: 'application/json',
     encode: true,
     success: function (data, textStatus, xhr) {
-      $('.fansubs_form').modal('hide');
+      $('.fansubs_modal').modal('hide');
       getFansubData();
       alertSuccess(`Fansub ${jsonData.name} created with success`);
     },
@@ -53,46 +56,46 @@ function submitNewFansub() {
 }//submitNewFansub
 
 function submitEditFansub() {
-  alertError('Soon');
+  alertInfo('Soon');
 }//submitEditFansub
 
 function getFansubData() {
-  $('#fansubs tbody .fansubs_row').remove();
+  $('#fansubs_data tbody .fansubs_data_row').remove();
   $.get('/api/fansubs', function(object, status) {
     if (object.data.length < 1) {
-      $('#fansubs tbody .fansubs_norows').show();
+      $('#fansubs_data tbody .fansubs_data_norows').show();
       return;
     }
 
-    $('#fansubs tbody .fansubs_norows').hide();
+    $('#fansubs_data tbody .fansubs_data_norows').hide();
     $.each(object.data, function (i, item) {
-      $('#fansubs tbody').append(
+      $('#fansubs_data tbody').append(
         getFansubRow(item.id, item.name, formatDate(item.createdAt), formatDate(item.updatedAt))
       );
     });
 
-    $('.fansub_edit').bind('click', function () {
-      alertError('Soon');
+    $('.fansubs_edit').bind('click', function () {
+      alertInfo('Soon');
     });
-    $('.fansub_remove').bind('click', function () {
-      alertError('Soon');
+    $('.fansubs_remove').bind('click', function () {
+      alertInfo('Soon');
     });
   });
 }//getFansubData
 
 function getFansubRow(id, name, created, updated) {
   return `<tr
-      class="fansubs_row"
+      class="fansubs_data_row"
       data-search-fansub-name="${name}"
     >
     <td>${name}</td>
     <td class="collapsing">${created}</td>
     <td class="collapsing">${updated}</td>
     <td class="collapsing">
-      <button class="ui icon button fansub_edit">
+      <button class="ui icon button fansubs_edit">
       <i class="edit icon"></i>
       </button>
-      <button class="ui icon button fansub_remove">
+      <button class="ui icon button fansubs_remove">
       <i class="trash icon"></i>
       </button>
     </td>
@@ -100,18 +103,18 @@ function getFansubRow(id, name, created, updated) {
 }//getFansubRow
 
 function searchFansubs() {
-  $('#fansubs tbody .fansubs_norows').hide();
-  $('#fansubs tbody .fansubs_row').show();
+  $('#fansubs_data tbody .fansubs_data_norows').hide();
+  $('#fansubs_data tbody .fansubs_data_row').show();
 
-  const searchCriteria = $('#search').val();
+  const searchCriteria = $('#fansubs_search_criteria').val();
   if (searchCriteria == '') {
     return;
   }
 
-  let listSize = $('#fansubs tbody .fansubs_row').length;
+  let listSize = $('#fansubs_data tbody .fansubs_data_row').length;
   let hideCount = 0;
 
-  $('#fansubs tbody .fansubs_row').each(function() {
+  $('#fansubs_data tbody .fansubs_data_row').each(function() {
     let hide = true;
 
     let row = $(this);
@@ -127,12 +130,12 @@ function searchFansubs() {
   });
 
   if (hideCount == listSize) {
-    $('#fansubs tbody .fansubs_norows').show();
+    $('#fansubs_data tbody .fansubs_data_norows').show();
   }
 }//searchFansubs
 
 function fansubModal() {
-  $('.fansubs_form')
+  $('.fansubs_modal')
     .modal({
       closable: false,
       closeIcon: true,
@@ -140,7 +143,7 @@ function fansubModal() {
         clearForm();
       },
       onApprove: function() {
-        $('.form_fansub').submit();
+        $('.fansubs_form').submit();
         return false;
       }
     })
@@ -149,12 +152,12 @@ function fansubModal() {
 }//newFansubModal
 
 function addFormValidation() {
-  $('.form_fansub')
+  $('.fansubs_form')
     .form({
       on: 'submit',
       fields: {
-        form_fansub_name: {
-          identifier: 'form_fansub_name',
+        fansubs_form_name: {
+          identifier: 'fansubs_form_name',
           rules: [
             {
               type: 'empty',
@@ -168,7 +171,7 @@ function addFormValidation() {
 }//addFormValidation
 
 function clearForm() {
-  $('.form_fansub').form('reset');
+  $('.fansubs_form').form('reset');
 }//clearForm
 </script>
 {% endblock %}
@@ -178,18 +181,19 @@ function clearForm() {
 
 <div class="ui grid">
   <div class="two wide column">
-    <button class="ui button" id="new_fansub"><i class="star icon"></i> New</button>
+    <button class="ui button" id="fansubs_new"><i class="star icon"></i> New</button>
   </div>
   <div class="fourteen wide column">
-    <div class="ui file action input" id="search-data">
-      <input id="search" type="text" placeholder="Search by fansub name">
+    <div class="ui file action input" id="fansubs_search">
+      <input id="fansubs_search_criteria" type="text" placeholder="Search by fansub name">
       <label for="search" class="ui button">
         <i class="search icon"></i>Search
       </label>
     </div>
   </div>
+
   <div class="sixteen wide column">
-    <table class="ui celled table" id="fansubs">
+    <table class="ui celled table" id="fansubs_data">
       <caption></caption>
       <thead>
         <tr>
@@ -200,22 +204,23 @@ function clearForm() {
         </tr>
       </thead>
       <tbody>
-        <tr class="center aligned fansubs_norows" hidden>
+        <tr class="center aligned fansubs_data_norows" hidden>
           <td colspan="4">None fansub found</td>
         </tr>
       </tbody>
     </table>
   </div>
+
   <div class="sixteen wide column">
-    <div class="ui modal fansubs_form">
+    <div class="ui modal fansubs_modal">
     <i class="close icon"></i>
     <div class="header">Form</div>
     <div class="content">
-      <form class="ui form form_fansub">
-        <input type="hidden" name="form_fansub_id" id="form_fansub_id" value="" />
+      <form class="ui form fansubs_form">
+        <input type="hidden" name="fansubs_form_id" id="fansubs_form_id" value="" />
         <div class="field">
-          <label for="form_fansub_name">Name</label>
-          <input type="text" name="form_fansub_name" id="form_fansub_name" placeholder="Name of fansub">
+          <label for="fansubs_form_name">Name</label>
+          <input type="text" name="fansubs_form_name" id="fansubs_form_name" placeholder="Name of fansub">
         </div>
         <div class="ui error message"></div>
         <div class="ui submit primary button">Send</div>

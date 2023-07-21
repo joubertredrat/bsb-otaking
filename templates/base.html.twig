@@ -71,6 +71,22 @@
         });
       }//alertError
 
+      function alertInfo(message) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Info!',
+          text: message
+        });
+      }//alertInfo
+
+      function alertQuestion(message) {
+        Swal.fire({
+          icon: 'question',
+          title: 'Question!',
+          text: message
+        });
+      }//alertQuestion
+
       function isUnprocessableContent(status) {
         return status === 422;
       }//isUnprocessableContent
