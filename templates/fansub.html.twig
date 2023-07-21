@@ -5,14 +5,59 @@
 {% block scripts %}
 <script>
 $(document).ready(function() {
+  $('#new_fansub').bind('click', function () {
+    fansubModal();
+  });
+
   $('#search-data label').bind('click', function () {
     searchFansubs();
   });
 
   getFansubData();
+  addFormValidation();
 });//$(document).ready
 
+$('.form_fansub').submit(function(e){
+  e.preventDefault();
+  const id = $('#form_fansub_id').val();
+  id === '' ? submitNewFansub() : submitEditFansub();
+  return false;
+});//$('.form_fansub').submit
+
+function submitNewFansub() {
+  jsonData = {
+    name: $('#form_fansub_name').val()
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: '/api/fansubs',
+    data: JSON.stringify(jsonData),
+    contentType: 'application/json',
+    encode: true,
+    success: function (data, textStatus, xhr) {
+      $('.fansubs_form').modal('hide');
+      getFansubData();
+      alertSuccess(`Fansub ${jsonData.name} cadastrado com sucesso`);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      let message = 'Algo de errado não deu certo';
+
+      if (isUnprocessableContent(jqXHR.status)) {
+        message = `Fansub ${jsonData.name} já existe`;
+      }
+
+      alertError(message);
+    },
+  });
+}//submitNewFansub
+
+function submitEditFansub() {
+  alertError('Em breve');
+}//submitEditFansub
+
 function getFansubData() {
+  $('#fansubs tbody .fansubs_row').remove();
   $.get('/api/fansubs', function(object, status) {
     if (object.data.length < 1) {
       $('#fansubs tbody .fansubs_norows').show();
@@ -25,11 +70,18 @@ function getFansubData() {
         getFansubRow(item.id, item.name, formatDate(item.createdAt), formatDate(item.updatedAt))
       );
     });
+
+    $('.fansub_edit').bind('click', function () {
+      alertError('Em breve');
+    });
+    $('.fansub_remove').bind('click', function () {
+      alertError('Em breve');
+    });
   });
 }//getFansubData
 
 function getFansubRow(id, name, created, updated) {
-  return `<tr 
+  return `<tr
       class="fansubs_row"
       data-search-fansub-name="${name}"
     >
@@ -37,10 +89,10 @@ function getFansubRow(id, name, created, updated) {
     <td class="collapsing">${created}</td>
     <td class="collapsing">${updated}</td>
     <td class="collapsing">
-      <button class="ui icon button">
+      <button class="ui icon button fansub_edit">
       <i class="edit icon"></i>
       </button>
-      <button class="ui icon button">
+      <button class="ui icon button fansub_remove">
       <i class="trash icon"></i>
       </button>
     </td>
@@ -63,16 +115,15 @@ function searchFansubs() {
   let listSize = $('#fansubs tbody .fansubs_row').length;
   let hideCount = 0;
 
-  $('#fansubs tbody .fansubs_row').each(function() { 
+  $('#fansubs tbody .fansubs_row').each(function() {
     let hide = true;
-    
+
     let row = $(this);
     const fansubName = row.data('search-fansub-name');
     if (fansubName.toLowerCase().includes(searchCriteria.toLowerCase())) {
       hide = false;
     }
 
-    console.log(hide);
     if (hide) {
       row.hide();
       hideCount++;
@@ -83,6 +134,46 @@ function searchFansubs() {
     $('#fansubs tbody .fansubs_norows').show();
   }
 }//searchFansubs
+
+function fansubModal() {
+  $('.fansubs_form')
+    .modal({
+      closable: false,
+      closeIcon: true,
+      onHidden: function(){
+        clearForm();
+      },
+      onApprove: function() {
+        $('.form_fansub').submit();
+        return false;
+      }
+    })
+    .modal('show')
+  ;
+}//newFansubModal
+
+function addFormValidation() {
+  $('.form_fansub')
+    .form({
+      on: 'submit',
+      fields: {
+        form_fansub_name: {
+          identifier: 'form_fansub_name',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Informe um nome de fansub'
+            }
+          ]
+        }
+      }
+    })
+  ;
+}//addFormValidation
+
+function clearForm() {
+  $('.form_fansub').form('reset');
+}//clearForm
 </script>
 {% endblock %}
 
@@ -91,7 +182,7 @@ function searchFansubs() {
 
 <div class="ui grid">
   <div class="two wide column">
-    <button class="ui button"><i class="star icon"></i> Novo</button>
+    <button class="ui button" id="new_fansub"><i class="star icon"></i> Novo</button>
   </div>
   <div class="fourteen wide column">
     <div class="ui file action input" id="search-data">
@@ -118,6 +209,22 @@ function searchFansubs() {
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="sixteen wide column">
+    <div class="ui modal fansubs_form">
+    <i class="close icon"></i>
+    <div class="header">Formulário</div>
+    <div class="content">
+      <form class="ui form form_fansub">
+        <input type="hidden" name="form_fansub_id" id="form_fansub_id" value="" />
+        <div class="field">
+          <label for="form_fansub_name">Nome</label>
+          <input type="text" name="form_fansub_name" id="form_fansub_name" placeholder="Nome do fansub">
+        </div>
+        <div class="ui error message"></div>
+        <div class="ui submit primary button">Enviar</div>
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}
