@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Hentai Tags{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block body %}
+<h1 class="ui dividing header">Hentai Tags</h1>
+
+<div class="ui grid">
+  <div class="two wide column">
+    <button class="ui button" id="new_tag"><i class="star icon"></i> New</button>
+  </div>
+  <div class="fourteen wide column">
+    <div class="ui file action input" id="search-data">
+      <input id="search" type="text" placeholder="Search by name of hentai tag">
+      <label for="search" class="ui button">
+        <i class="search icon"></i>Search
+      </label>
+    </div>
+  </div>
+  <div class="sixteen wide column">
+    <table class="ui celled table" id="tags">
+      <caption></caption>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="center aligned tags_norows" hidden>
+          <td colspan="4">None tag found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

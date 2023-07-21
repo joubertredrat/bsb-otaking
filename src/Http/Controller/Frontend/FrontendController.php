@@ -16,11 +16,9 @@ class FrontendController extends AbstractController
         name: 'app_frontend_index',
         methods: [RequestMethodInterface::METHOD_GET],
     )]
-    public function index(): Response
+    public function pageIndex(): Response
     {
-        return $this->render('index.html.twig', [
-            'title' => 'Not today :)',
-        ]);
+        return $this->render('index.html.twig');
     }
 
     #[Route(
@@ -28,8 +26,18 @@ class FrontendController extends AbstractController
         name: 'app_frontend_fansub',
         methods: [RequestMethodInterface::METHOD_GET],
     )]
-    public function page(): Response
+    public function pageFansub(): Response
     {
         return $this->render('fansub.html.twig');
+    }
+
+    #[Route(
+        path: '/pato/hentai/tag',
+        name: 'app_frontend_hentai_tag',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function pageHentaiTag(): Response
+    {
+        return $this->render('hentai_tags.html.twig');
     }
 }
