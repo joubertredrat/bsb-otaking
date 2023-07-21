@@ -6,7 +6,14 @@
 <script>
 $(document).ready(function() {
   $('#fansubs_new').bind('click', function () {
-    fansubModal();
+    openFormModal();
+  });
+
+  $('#fansubs_search_criteria').keydown(function(e) {
+    const keycode = (e.keyCode ? e.keyCode : e.which);
+    if (keycode == '13') {
+      searchFansubs();
+    }
   });
 
   $('#fansubs_search label').bind('click', function () {
@@ -86,7 +93,7 @@ function getFansubData() {
 function getFansubRow(id, name, created, updated) {
   return `<tr
       class="fansubs_data_row"
-      data-search-fansub-name="${name}"
+      data-fansubs-search-name="${name}"
     >
     <td>${name}</td>
     <td class="collapsing">${created}</td>
@@ -118,7 +125,7 @@ function searchFansubs() {
     let hide = true;
 
     let row = $(this);
-    const fansubName = row.data('search-fansub-name');
+    const fansubName = row.data('fansubs-search-name');
     if (fansubName.toLowerCase().includes(searchCriteria.toLowerCase())) {
       hide = false;
     }
@@ -134,7 +141,7 @@ function searchFansubs() {
   }
 }//searchFansubs
 
-function fansubModal() {
+function openFormModal() {
   $('.fansubs_modal')
     .modal({
       closable: false,
@@ -149,7 +156,7 @@ function fansubModal() {
     })
     .modal('show')
   ;
-}//newFansubModal
+}//openFormModal
 
 function addFormValidation() {
   $('.fansubs_form')

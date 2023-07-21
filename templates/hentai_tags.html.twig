@@ -3,6 +3,184 @@
 {% block title %}Hentai Tags{% endblock %}
 
 {% block scripts %}
+<script>
+$(document).ready(function() {
+  $('#hentai_tags_new').bind('click', function () {
+    openFormModal();
+  });
+
+  $('#hentai_tags_search_criteria').keydown(function(e) {
+    const keycode = (e.keyCode ? e.keyCode : e.which);
+    if (keycode == '13') {
+      searchHentaiTags();
+    }
+  });
+
+  $('#hentai_tags_search label').bind('click', function () {
+    searchHentaiTags();
+  });
+
+  getHentaiTagData();
+  addFormValidation();
+});//$(document).ready
+
+$('.hentai_tags_form').submit(function(e) {
+  const isValid = $('.hentai_tags_form').form('is valid');
+  if (isValid) {
+    e.preventDefault();
+    const id = $('#hentai_tags_form_id').val();
+    id === '' ? submitNewHentaiTag() : submitEditHentaiTag();
+  }
+  return false;
+});//$('.hentai_tags_form').submit
+
+function submitNewHentaiTag() {
+  jsonData = {
+    name: $('#hentai_tags_form_name').val()
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: '/api/hentai/tags',
+    data: JSON.stringify(jsonData),
+    contentType: 'application/json',
+    encode: true,
+    success: function (data, textStatus, xhr) {
+      $('.hentai_tags_modal').modal('hide');
+      getHentaiTagData();
+      alertSuccess(`Hentai tag ${jsonData.name} created with success`);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      let message = 'Anything wrong is not right';
+
+      if (isUnprocessableContent(jqXHR.status)) {
+        message = `Hentai tag ${jsonData.name} already exists`;
+      }
+
+      alertError(message);
+    },
+  });
+}//submitNewHentaiTag
+
+function submitEditHentaiTag() {
+  alertInfo('Soon');
+}//submitEditHentaiTag
+
+function getHentaiTagData() {
+  $('#hentai_tags_data tbody .hentai_tags_data_row').remove();
+  $.get('/api/hentai/tags', function(object, status) {
+    if (object.data.length < 1) {
+      $('#hentai_tags_data tbody .hentai_tags_data_norows').show();
+      return;
+    }
+
+    $('#hentai_tags_data tbody .hentai_tags_data_norows').hide();
+    $.each(object.data, function (i, item) {
+      $('#hentai_tags_data tbody').append(
+        getHentaiTagRow(item.id, item.name, formatDate(item.createdAt), formatDate(item.updatedAt))
+      );
+    });
+
+    $('.hentai_tags_edit').bind('click', function () {
+      alertInfo('Soon');
+    });
+    $('.hentai_tags_remove').bind('click', function () {
+      alertInfo('Soon');
+    });
+  });
+}//getHentaiTagData
+
+function getHentaiTagRow(id, name, created, updated) {
+  return `<tr
+      class="hentai_tags_data_row"
+      data-hentai-tags-search-name="${name}"
+    >
+    <td>${name}</td>
+    <td class="collapsing">${created}</td>
+    <td class="collapsing">${updated}</td>
+    <td class="collapsing">
+      <button class="ui icon button hentai_tags_edit">
+      <i class="edit icon"></i>
+      </button>
+      <button class="ui icon button hentai_tags_remove">
+      <i class="trash icon"></i>
+      </button>
+    </td>
+  </tr>`;
+}//getHentaiTagRow
+
+function searchHentaiTags() {
+  $('#hentai_tags_data tbody .hentai_tags_data_norows').hide();
+  $('#hentai_tags_data tbody .hentai_tags_data_row').show();
+
+  const searchCriteria = $('#hentai_tags_search_criteria').val();
+  if (searchCriteria == '') {
+    return;
+  }
+
+  let listSize = $('#hentai_tags_data tbody .hentai_tags_data_row').length;
+  let hideCount = 0;
+
+  $('#hentai_tags_data tbody .hentai_tags_data_row').each(function() {
+    let hide = true;
+
+    let row = $(this);
+    const hentaiTagName = row.data('hentai-tags-search-name');
+    if (hentaiTagName.toLowerCase().includes(searchCriteria.toLowerCase())) {
+      hide = false;
+    }
+
+    if (hide) {
+      row.hide();
+      hideCount++;
+    }
+  });
+
+  if (hideCount == listSize) {
+    $('#hentai_tags_data tbody .hentai_tags_data_norows').show();
+  }
+}//searchHentaiTags
+
+function openFormModal() {
+  $('.hentai_tags_modal')
+    .modal({
+      closable: false,
+      closeIcon: true,
+      onHidden: function(){
+        clearForm();
+      },
+      onApprove: function() {
+        $('.hentai_tags_form').submit();
+        return false;
+      }
+    })
+    .modal('show')
+  ;
+}//openFormModal
+
+function addFormValidation() {
+  $('.hentai_tags_form')
+    .form({
+      on: 'submit',
+      fields: {
+        hentai_tags_form_name: {
+          identifier: 'hentai_tags_form_name',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Fill name of hentai tag'
+            }
+          ]
+        }
+      }
+    })
+  ;
+}//addFormValidation
+
+function clearForm() {
+  $('.hentai_tags_form').form('reset');
+}//clearForm
+</script>
 {% endblock %}
 
 {% block body %}
@@ -49,7 +227,7 @@
         <input type="hidden" name="hentai_tags_form_id" id="hentai_tags_form_id" value="" />
         <div class="field">
           <label for="hentai_tags_form_name">Name</label>
-          <input type="text" name="hentai_tags_form_name" id="hentai_tags_form_name" placeholder="Name of fansub">
+          <input type="text" name="hentai_tags_form_name" id="hentai_tags_form_name" placeholder="Name of hentai tag name">
         </div>
         <div class="ui error message"></div>
         <div class="ui submit primary button">Send</div>
