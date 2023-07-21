@@ -40,4 +40,14 @@ class FrontendController extends AbstractController
     {
         return $this->render('hentai_tags.html.twig');
     }
+
+    #[Route(
+        path: '/pato/hentai/title',
+        name: 'app_frontend_hentai_title',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function pageHentaiTitle(): Response
+    {
+        return $this->render('hentai_titles.html.twig');
+    }
 }
