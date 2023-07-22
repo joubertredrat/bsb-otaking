@@ -8,7 +8,9 @@ use JsonSerializable;
 
 final class ListResponse implements JsonSerializable
 {
-    private array $list = [];
+    public function __construct(protected array $list = [])
+    {
+    }
 
     public function add(JsonSerializable $item): void
     {

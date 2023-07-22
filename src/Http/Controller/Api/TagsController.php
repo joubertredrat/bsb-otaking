@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controller\Api;
 
 use App\Dto\CreateTag as DtoCreateTag;
+use App\Entity\Tag;
 use App\Http\Factory\TagListResponseFactory;
 use App\Http\Request\CreateTagRequest;
+use App\Http\Response\ListResponse;
 use App\Http\Response\TagResponse;
 use App\UseCase\CreateTag;
 use App\UseCase\ListTags;
@@ -31,6 +33,17 @@ class TagsController extends ApiController
     {
         $tags = $this->listTags->execute();
         $response = TagListResponseFactory::createFromUsecase($tags);
+        return $this->jsonOk($response);
+    }
+
+    #[Route(
+        path: '/api/tags/types',
+        name: 'app_api_tags_types',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function types(): JsonResponse
+    {
+        $response = new ListResponse(list: Tag::getTypesAvailable());
         return $this->jsonOk($response);
     }
 
