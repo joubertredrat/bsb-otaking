@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class FansubTest extends TestCase
 {
-    function testAttributes(): void
+    public function testAttributes(): void
     {
         $nameExpected = 'Foo';
         $fansub = new Fansub();

@@ -6,9 +6,9 @@ namespace App\Exception\UseCase\CreateHentaiTitle;
 
 use RuntimeException;
 
-class HentaiTagsNotFoundException extends RuntimeException
+class TagsNotFoundException extends RuntimeException
 {
-    public static function dispatch(array $ids): self
+    public static function create(array $ids): self
     {
         return new self(
             \sprintf(

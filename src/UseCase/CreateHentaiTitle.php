@@ -7,20 +7,20 @@ namespace App\UseCase;
 use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
 use App\Entity\Fansub;
 use App\Entity\HentaiFile;
-use App\Entity\HentaiTag;
 use App\Entity\HentaiTitle;
+use App\Entity\Tag;
 use App\Exception\UseCase\CreateHentaiTitle\FansubsNotFoundException;
-use App\Exception\UseCase\CreateHentaiTitle\HentaiTagsNotFoundException;
+use App\Exception\UseCase\CreateHentaiTitle\TagsNotFoundException;
 use App\Repository\FansubRepositoryInterface;
-use App\Repository\HentaiTagRepositoryInterface;
 use App\Repository\HentaiTitleRepositoryInterface;
+use App\Repository\TagRepositoryInterface;
 
 class CreateHentaiTitle
 {
     public function __construct(
         protected FansubRepositoryInterface $fansubRepository,
         protected HentaiTitleRepositoryInterface $hentaiTitleRepository,
-        protected HentaiTagRepositoryInterface $hentaiTagRepository,
+        protected TagRepositoryInterface $tagRepository,
     ) {
     }
 
@@ -72,16 +72,16 @@ class CreateHentaiTitle
         $notFound = [];
 
         foreach ($ids as $id) {
-            $hentaiTag = $this->hentaiTagRepository->get($id);
-            if (!$hentaiTag instanceof HentaiTag) {
+            $tag = $this->tagRepository->get($id);
+            if (!$tag instanceof Tag) {
                 $notFound[] = $id;
                 continue;
             }
-            $hentaiTitle->addTag($hentaiTag);
+            $hentaiTitle->addTag($tag);
         }
 
         if ($notFound) {
-            throw HentaiTagsNotFoundException::dispatch($notFound);
+            throw TagsNotFoundException::create($notFound);
         }
     }
 }

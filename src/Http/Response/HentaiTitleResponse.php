@@ -52,7 +52,7 @@ class HentaiTitleResponse implements JsonSerializable
         $tags = [];
 
         foreach ($this->hentaiTitle->getTags()->toArray() as $tag) {
-            $tags[] = $tag->getName();
+            $tags[] = $tag->getResourceName();
         }
 
         return $tags;

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class FansubListResponseFactoryTest extends TestCase
 {
-    function testCreateFromUsecase(): void
+    public function testCreateFromUsecase(): void
     {
         $fansub = new Fansub();
         $fansub->setName('Fansub Foo');

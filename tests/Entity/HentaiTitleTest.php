@@ -7,13 +7,13 @@ namespace App\Tests\Entity;
 use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
 use App\Entity\Fansub;
 use App\Entity\HentaiFile;
-use App\Entity\HentaiTag;
 use App\Entity\HentaiTitle;
+use App\Entity\Tag;
 use PHPUnit\Framework\TestCase;
 
 class HentaiTitleTest extends TestCase
 {
-    function testAttributes(): void
+    public function testAttributes(): void
     {
         $nameExpected = 'Foo';
         $alternativeNamesExpected = [];
@@ -75,19 +75,23 @@ class HentaiTitleTest extends TestCase
         $hentaiTitle->removeFile($hentaiFileOne);
         self::assertCount(1, $hentaiTitle->getFiles());
 
-        $hentaiTagFoo = new HentaiTag();
-        $hentaiTagFoo->setName('tag:foo');
-        $hentaiTagBar = new HentaiTag();
-        $hentaiTagBar->setName('tag:bar');
-        $hentaiTitle->addTag($hentaiTagFoo);
+        $tagFoo = (new Tag())
+            ->setType(Tag::TYPE_ALL)
+            ->setName('foo')
+        ;
+        $tagBar = (new Tag())
+            ->setType(Tag::TYPE_ALL)
+            ->setName('bar')
+        ;
+        $hentaiTitle->addTag($tagFoo);
         self::assertCount(1, $hentaiTitle->getTags());
-        $hentaiTitle->addTag($hentaiTagFoo);
+        $hentaiTitle->addTag($tagFoo);
         self::assertCount(1, $hentaiTitle->getTags());
-        $hentaiTitle->addTag($hentaiTagBar);
+        $hentaiTitle->addTag($tagBar);
         self::assertCount(2, $hentaiTitle->getTags());
-        $hentaiTitle->removeTag($hentaiTagFoo);
+        $hentaiTitle->removeTag($tagFoo);
         self::assertCount(1, $hentaiTitle->getTags());
-        $hentaiTitle->removeTag($hentaiTagFoo);
+        $hentaiTitle->removeTag($tagFoo);
         self::assertCount(1, $hentaiTitle->getTags());
     }
 }

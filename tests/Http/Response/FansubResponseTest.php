@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class FansubResponseTest extends TestCase
 {
-    function testJsonSerialize(): void
+    public function testJsonSerialize(): void
     {
         $arrayExpected = [
             'id' => null,

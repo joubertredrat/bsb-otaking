@@ -6,12 +6,12 @@ namespace App\Tests\UseCase;
 
 use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
 use App\Entity\Fansub;
-use App\Entity\HentaiTag;
+use App\Entity\Tag;
 use App\Exception\UseCase\CreateHentaiTitle\FansubsNotFoundException;
-use App\Exception\UseCase\CreateHentaiTitle\HentaiTagsNotFoundException;
+use App\Exception\UseCase\CreateHentaiTitle\TagsNotFoundException;
 use App\Repository\FansubRepositoryInterface;
-use App\Repository\HentaiTagRepositoryInterface;
 use App\Repository\HentaiTitleRepositoryInterface;
+use App\Repository\TagRepositoryInterface;
 use App\UseCase\CreateHentaiTitle;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -43,14 +43,16 @@ class CreateHentaiTitleTest extends TestCase
             ->andReturn($fansub)
         ;
 
-        $hentaiTag = new HentaiTag();
-        $hentaiTag->setName('foo:bar');
+        $tag = (new Tag())
+            ->setType(Tag::TYPE_ALL)
+            ->setName('foo')
+        ;
 
-        $hentaiTagRepository = Mockery::mock(HentaiTagRepositoryInterface::class);
-        $hentaiTagRepository
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
+        $tagRepository
             ->shouldReceive('get')
             ->withArgs([2])
-            ->andReturn($hentaiTag)
+            ->andReturn($tag)
         ;
 
         $hentaiTitleRepository = Mockery::mock(HentaiTitleRepositoryInterface::class);
@@ -62,7 +64,7 @@ class CreateHentaiTitleTest extends TestCase
         $usecase = new CreateHentaiTitle(
             fansubRepository: $fansubRepository,
             hentaiTitleRepository: $hentaiTitleRepository,
-            hentaiTagRepository: $hentaiTagRepository,
+            tagRepository: $tagRepository,
         );
 
         $hentaiTitleGot = $usecase->execute($dtoCreateHentaiTitle);
@@ -103,13 +105,13 @@ class CreateHentaiTitleTest extends TestCase
             ->andReturn(null)
         ;
 
-        $hentaiTagRepository = Mockery::mock(HentaiTagRepositoryInterface::class);
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $hentaiTitleRepository = Mockery::mock(HentaiTitleRepositoryInterface::class);
 
         $usecase = new CreateHentaiTitle(
             fansubRepository: $fansubRepository,
             hentaiTitleRepository: $hentaiTitleRepository,
-            hentaiTagRepository: $hentaiTagRepository,
+            tagRepository: $tagRepository,
         );
 
         $usecase->execute($dtoCreateHentaiTitle);
@@ -117,7 +119,7 @@ class CreateHentaiTitleTest extends TestCase
 
     public function testCreateHentaiTitleWithTagNotFound(): void
     {
-        $this->expectException(HentaiTagsNotFoundException::class);
+        $this->expectException(TagsNotFoundException::class);
 
         $dtoCreateHentaiTitle = new DtoCreateHentaiTitle(
             name: 'Super Foo',
@@ -142,8 +144,8 @@ class CreateHentaiTitleTest extends TestCase
             ->andReturn($fansub)
         ;
 
-        $hentaiTagRepository = Mockery::mock(HentaiTagRepositoryInterface::class);
-        $hentaiTagRepository
+        $tagRepository = Mockery::mock(TagRepositoryInterface::class);
+        $tagRepository
             ->shouldReceive('get')
             ->withArgs([8])
             ->andReturn(null)
@@ -154,7 +156,7 @@ class CreateHentaiTitleTest extends TestCase
         $usecase = new CreateHentaiTitle(
             fansubRepository: $fansubRepository,
             hentaiTitleRepository: $hentaiTitleRepository,
-            hentaiTagRepository: $hentaiTagRepository,
+            tagRepository: $tagRepository,
         );
 
         $usecase->execute($dtoCreateHentaiTitle);

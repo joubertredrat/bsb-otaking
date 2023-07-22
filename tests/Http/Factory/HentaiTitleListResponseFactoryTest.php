@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class HentaiTitleListResponseFactoryTest extends TestCase
 {
-    function testCreateFromUsecase(): void
+    public function testCreateFromUsecase(): void
     {
         $hentaiTitle = new HentaiTitle();
         $hentaiTitle->setName('Foo');

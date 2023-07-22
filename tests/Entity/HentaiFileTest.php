@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class HentaiFileTest extends TestCase
 {
-    function testAttributes(): void
+    public function testAttributes(): void
     {
         $nameExpected = 'episode_01.mkv';
         $hentaiTitleExpected = new HentaiTitle();

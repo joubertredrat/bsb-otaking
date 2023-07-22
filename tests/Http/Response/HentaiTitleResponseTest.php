@@ -6,15 +6,15 @@ namespace App\Tests\Http\Response;
 
 use App\Entity\Fansub;
 use App\Entity\HentaiFile;
-use App\Entity\HentaiTag;
 use App\Entity\HentaiTitle;
+use App\Entity\Tag;
 use App\Http\Response\HentaiTitleResponse;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 class HentaiTitleResponseTest extends TestCase
 {
-    function testJsonSerialize(): void
+    public function testJsonSerialize(): void
     {
         $arrayExpected = [
             'id' => null,
@@ -31,7 +31,7 @@ class HentaiTitleResponseTest extends TestCase
                     'name' => 'Fansub Foo',
                 ],
             ],
-            'tags' => ['tag:foo'],
+            'tags' => [sprintf('%s:foo', Tag::TYPE_ALL)],
             'files' => [
                 'EP01.mkv',
                 'EP02.mkv',
@@ -54,9 +54,10 @@ class HentaiTitleResponseTest extends TestCase
         $fansubFoo->setName('Fansub Foo');
         $hentaiTitle->addFansub($fansubFoo);
 
-        $hentaiTagFoo = new HentaiTag();
-        $hentaiTagFoo->setName('tag:foo');
-        $hentaiTitle->addTag($hentaiTagFoo);
+        $tagFoo = new Tag();
+        $tagFoo->setType(Tag::TYPE_ALL);
+        $tagFoo->setName('foo');
+        $hentaiTitle->addTag($tagFoo);
 
         $hentaiFileOne = new HentaiFile();
         $hentaiFileOne->setName('EP01.mkv');

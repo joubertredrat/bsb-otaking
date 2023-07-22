@@ -42,20 +42,20 @@ class HentaiTitle
     #[ORM\Column(length: 20)]
     private ?string $statusView = null;
 
-    #[ORM\ManyToMany(targetEntity: HentaiTag::class, mappedBy: 'title')]
+    #[ORM\ManyToMany(targetEntity: Fansub::class, inversedBy: 'hentaiTitles')]
+    private Collection $fansubs;
+
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'hentaiTitles')]
     private Collection $tags;
 
     #[ORM\OneToMany(mappedBy: 'title', targetEntity: HentaiFile::class, cascade: ['persist'])]
     private Collection $files;
 
-    #[ORM\ManyToMany(targetEntity: Fansub::class, inversedBy: 'hentaiTitles')]
-    private Collection $fansubs;
-
     public function __construct()
     {
+        $this->fansubs = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->files = new ArrayCollection();
-        $this->fansubs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,6 +148,30 @@ class HentaiTitle
     }
 
     /**
+     * @return Collection<int, Fansub>
+     */
+    public function getFansubs(): Collection
+    {
+        return $this->fansubs;
+    }
+
+    public function addFansub(Fansub $fansub): self
+    {
+        if (!$this->fansubs->contains($fansub)) {
+            $this->fansubs->add($fansub);
+        }
+
+        return $this;
+    }
+
+    public function removeFansub(Fansub $fansub): self
+    {
+        $this->fansubs->removeElement($fansub);
+
+        return $this;
+    }
+
+    /**
      * @return Collection<int, Tag>
      */
     public function getTags(): Collection
@@ -155,20 +179,20 @@ class HentaiTitle
         return $this->tags;
     }
 
-    public function addTag(HentaiTag $tag): self
+    public function addTag(Tag $tag): self
     {
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
-            $tag->addTitle($this);
+            $tag->addHentaiTitle($this);
         }
 
         return $this;
     }
 
-    public function removeTag(HentaiTag $tag): self
+    public function removeTag(Tag $tag): self
     {
         if ($this->tags->removeElement($tag)) {
-            $tag->removeTitle($this);
+            $tag->removeHentaiTitle($this);
         }
 
         return $this;
@@ -200,30 +224,6 @@ class HentaiTitle
                 $file->setTitle(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Fansub>
-     */
-    public function getFansubs(): Collection
-    {
-        return $this->fansubs;
-    }
-
-    public function addFansub(Fansub $fansub): self
-    {
-        if (!$this->fansubs->contains($fansub)) {
-            $this->fansubs->add($fansub);
-        }
-
-        return $this;
-    }
-
-    public function removeFansub(Fansub $fansub): self
-    {
-        $this->fansubs->removeElement($fansub);
 
         return $this;
     }

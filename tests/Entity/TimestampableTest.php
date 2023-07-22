@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class TimestampableTest extends TestCase
 {
-    function testAttributes(): void
+    public function testAttributes(): void
     {
         $foo = new class {
             use Timestampable;
