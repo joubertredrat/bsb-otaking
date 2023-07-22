@@ -32,13 +32,13 @@ class FrontendController extends AbstractController
     }
 
     #[Route(
-        path: '/pato/hentai/tag',
-        name: 'app_frontend_hentai_tag',
+        path: '/pato/tag',
+        name: 'app_frontend_tag',
         methods: [RequestMethodInterface::METHOD_GET],
     )]
-    public function pageHentaiTag(): Response
+    public function pageTag(): Response
     {
-        return $this->render('hentai_tags.html.twig');
+        return $this->render('tag.html.twig');
     }
 
     #[Route(

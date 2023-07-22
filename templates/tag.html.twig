@@ -1,0 +1,273 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Tags{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+  $('#tags_new').bind('click', function () {
+    openFormModal();
+  });
+
+  $('#tags_search_criteria').keydown(function(e) {
+    const keycode = (e.keyCode ? e.keyCode : e.which);
+    if (keycode == '13') {
+      searchTags();
+    }
+  });
+
+  $('#tags_search label').bind('click', function () {
+    searchTags();
+  });
+
+  getTagTypeData();
+  getTagData();
+  addFormValidation();
+});//$(document).ready
+
+$('.tags_form').submit(function(e) {
+  const isValid = $('.tags_form').form('is valid');
+  if (isValid) {
+    e.preventDefault();
+    const id = $('#tags_form_id').val();
+    id === '' ? submitNewTag() : submitEditTag();
+  }
+  return false;
+});//$('.tags_form').submit
+
+function submitNewTag() {
+  jsonData = {
+    type: $('#tags_form_type').val(),
+    name: $('#tags_form_name').val()
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: '/api/tags',
+    data: JSON.stringify(jsonData),
+    contentType: 'application/json',
+    encode: true,
+    success: function (data, textStatus, xhr) {
+      closeFormModal();
+      getTagData();
+      alertSuccess(`Tag ${jsonData.type}:${jsonData.name} created with success`);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      let message = 'Anything wrong is not right';
+
+      if (isUnprocessableContent(jqXHR.status)) {
+        message = `Tag ${jsonData.type}:${jsonData.name} already exists`;
+      }
+
+      alertError(message);
+    },
+  });
+}//submitNewTag
+
+function submitEditTag() {
+  alertInfo('Soon');
+}//submitEditTag
+
+function getTagData() {
+  $('#tags_data tbody .tags_data_row').remove();
+  $.get('/api/tags', function(object, status) {
+    if (object.data.length < 1) {
+      $('#tags_data tbody .tags_data_norows').show();
+      return;
+    }
+
+    $('#tags_data tbody .tags_data_norows').hide();
+    $.each(object.data, function (i, item) {
+      $('#tags_data tbody').append(
+        getTagRow(item.id, item.type, item.name, item.resourceName, formatDate(item.createdAt), formatDate(item.updatedAt))
+      );
+    });
+
+    $('.tags_edit').bind('click', function () {
+      alertInfo('Soon');
+    });
+    $('.tags_remove').bind('click', function () {
+      alertInfo('Soon');
+    });
+  });
+}//getTagData
+
+function getTagTypeData() {
+  $.get('/api/tags/types', function(object, status) {
+    $.each(object.data, function (i, item) {
+      $('#tags_form_type').append($('<option>', {
+          value: item,
+          text: item
+      }));
+    });
+  });
+}
+
+function getTagRow(id, type, name, resourceName, created, updated) {
+  return `<tr
+      class="tags_data_row"
+      data-tags-search-resource-name="${resourceName}"
+    >
+    <td>${type}</td>
+    <td>${name}</td>
+    <td>${resourceName}</td>
+    <td class="collapsing">${created}</td>
+    <td class="collapsing">${updated}</td>
+    <td class="collapsing">
+      <button class="ui icon button tags_edit">
+      <i class="edit icon"></i>
+      </button>
+      <button class="ui icon button tags_remove">
+      <i class="trash icon"></i>
+      </button>
+    </td>
+  </tr>`;
+}//getTagRow
+
+function searchTags() {
+  $('#tags_data tbody .tags_data_norows').hide();
+  $('#tags_data tbody .tags_data_row').show();
+
+  const searchCriteria = $('#tags_search_criteria').val();
+  if (searchCriteria == '') {
+    return;
+  }
+
+  let listSize = $('#tags_data tbody .tags_data_row').length;
+  let hideCount = 0;
+
+  $('#tags_data tbody .tags_data_row').each(function() {
+    let hide = true;
+
+    let row = $(this);
+    const resourceName = row.data('tags-search-resource-name');
+    if (resourceName.toLowerCase().includes(searchCriteria.toLowerCase())) {
+      hide = false;
+    }
+
+    if (hide) {
+      row.hide();
+      hideCount++;
+    }
+  });
+
+  if (hideCount == listSize) {
+    $('#tags_data tbody .tags_data_norows').show();
+  }
+}//searchTags
+
+function openFormModal() {
+  $('.tags_modal')
+    .modal({
+      closable: false,
+      closeIcon: true,
+      onHidden: function(){
+        clearForm();
+      },
+      onApprove: function() {
+        $('.tags_form').submit();
+        return false;
+      }
+    })
+    .modal('show')
+  ;
+}//openFormModal
+
+function closeFormModal() {
+  $('.tags_modal').modal('hide');
+}//closeFormModal
+
+function addFormValidation() {
+  $('.tags_form')
+    .form({
+      on: 'submit',
+      fields: {
+        tags_form_type: {
+          identifier: 'tags_form_type',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Fill type of tag'
+            }
+          ]
+        },
+        tags_form_name: {
+          identifier: 'tags_form_name',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Fill name of tag'
+            }
+          ]
+        }
+      }
+    })
+  ;
+}//addFormValidation
+
+function clearForm() {
+  $('.tags_form').form('reset');
+}//clearForm
+</script>
+{% endblock %}
+
+{% block body %}
+<h1 class="ui dividing header">Tags</h1>
+
+<div class="ui grid">
+  <div class="two wide column">
+    <button class="ui button" id="tags_new"><i class="star icon"></i> New</button>
+  </div>
+  <div class="fourteen wide column">
+    <div class="ui file action input" id="tags_search">
+      <input id="tags_search_criteria" type="text" placeholder="Search by tag resource name">
+      <label for="search" class="ui button">
+        <i class="search icon"></i>Search
+      </label>
+    </div>
+  </div>
+
+  <div class="sixteen wide column">
+    <table class="ui celled table" id="tags_data">
+      <caption></caption>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>ResourceName</th>
+          <th class="collapsing">Created</th>
+          <th class="collapsing">Updated</th>
+          <th class="collapsing"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="center aligned tags_data_norows" hidden>
+          <td colspan="6">None tags found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+   <div class="sixteen wide column">
+    <div class="ui modal tags_modal">
+    <i class="close icon"></i>
+    <div class="header">Form</div>
+    <div class="content">
+      <form class="ui form tags_form">
+        <input type="hidden" name="tags_form_id" id="tags_form_id" value="" />
+        <div class="field">
+          <label for="tags_form_type">Type</label>
+          <select class="ui fluid dropdown" name="tags_form_type" id="tags_form_type">
+          </select>
+        </div>
+        <div class="field">
+          <label for="tags_form_name">Name</label>
+          <input type="text" name="tags_form_name" id="tags_form_name" placeholder="Name of tag name">
+        </div>
+        <div class="ui error message"></div>
+        <div class="ui submit primary button">Send</div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
