@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Exception\Http\Request\AbstractJsonRequest;
 
-use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequest;
+use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequestException;
 use PHPUnit\Framework\TestCase;
 
-class InvalidJsonRequestTest extends TestCase
+class InvalidJsonRequestExceptionTest extends TestCase
 {
     public function testThrowException(): void
     {
-        $this->expectException(InvalidJsonRequest::class);
+        $this->expectException(InvalidJsonRequestException::class);
         $this->expectExceptionMessage('');
 
         $errorsExpected = [
@@ -22,7 +22,7 @@ class InvalidJsonRequestTest extends TestCase
             ],
         ];
 
-        $exception = InvalidJsonRequest::dispatch($errorsExpected);
+        $exception = InvalidJsonRequestException::create($errorsExpected);
         self::assertEquals($errorsExpected, $exception->getErrors());
 
         throw $exception;

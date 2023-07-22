@@ -47,8 +47,8 @@ class TagRepository extends ServiceEntityRepository implements TagRepositoryInte
     {
         return $this
             ->createQueryBuilder('t')
-            ->orderBy('t.type', 'ASC')
-            ->orderBy('t.name', 'ASC')
+            ->addOrderBy('t.type', 'ASC')
+            ->addOrderBy('t.name', 'ASC')
             ->getQuery()
             ->getResult()
         ;

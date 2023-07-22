@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Http\Request;
 
-use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequest;
+use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequestException;
 use App\Http\Request\AbstractJsonRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +37,11 @@ class AbstractJsonRequestTest extends TestCase
         $requestStack = $this->getRequestStackMock($request);
         $validator = $this->getValidationMock();
 
-        $requestValidator = new class (validator: $validator, requestStack: $requestStack, convertCase: true) extends AbstractJsonRequest {
+        $requestValidator = new class (
+            validator: $validator,
+            requestStack: $requestStack,
+            convertCase: true,
+        ) extends AbstractJsonRequest {
             #[NotBlank]
             #[Type('string')]
             public readonly string $name;
@@ -48,7 +52,7 @@ class AbstractJsonRequestTest extends TestCase
 
     public function testWithInvalidContentType(): void
     {
-        $this->expectException(InvalidJsonRequest::class);
+        $this->expectException(InvalidJsonRequestException::class);
 
         $request = new Request(
             query: [],
@@ -67,7 +71,11 @@ class AbstractJsonRequestTest extends TestCase
         $requestStack = $this->getRequestStackMock($request);
         $validator = $this->getValidationMock();
 
-        $requestValidator = new class (validator: $validator, requestStack: $requestStack, convertCase: true) extends AbstractJsonRequest {
+        $requestValidator = new class (
+            validator: $validator,
+            requestStack: $requestStack,
+            convertCase: true
+        ) extends AbstractJsonRequest {
             #[NotBlank]
             #[Type('string')]
             public readonly string $name;
@@ -76,7 +84,7 @@ class AbstractJsonRequestTest extends TestCase
 
     public function testWithInvalidData(): void
     {
-        $this->expectException(InvalidJsonRequest::class);
+        $this->expectException(InvalidJsonRequestException::class);
 
         $request = new Request(
             query: [],
@@ -95,7 +103,11 @@ class AbstractJsonRequestTest extends TestCase
         $requestStack = $this->getRequestStackMock($request);
         $validator = $this->getValidationMock();
 
-        $requestValidator = new class (validator: $validator, requestStack: $requestStack, convertCase: true) extends AbstractJsonRequest {
+        $requestValidator = new class (
+            validator: $validator,
+            requestStack: $requestStack,
+            convertCase: true
+        ) extends AbstractJsonRequest {
             #[NotBlank]
             #[Type('string')]
             public readonly string $name;

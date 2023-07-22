@@ -6,14 +6,14 @@ namespace App\Exception\Http\Request\AbstractJsonRequest;
 
 use RuntimeException;
 
-class InvalidJsonRequest extends RuntimeException
+class InvalidJsonRequestException extends RuntimeException
 {
     public function __construct(protected readonly array $errors = [])
     {
         parent::__construct();
     }
 
-    public static function dispatch(array $errors): self
+    public static function create(array $errors): self
     {
         return new self($errors);
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\EventListener;
 
 use App\EventListener\ExceptionListener;
-use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequest;
+use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequestException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -28,7 +28,7 @@ class ExceptionListenerTest extends TestCase
             kernel: $kernel,
             request: $request,
             requestType: HttpKernelInterface::MAIN_REQUEST,
-            e: InvalidJsonRequest::dispatch(['foo' => 'bar']),
+            e: InvalidJsonRequestException::create(['foo' => 'bar']),
         );
 
         $dispatcher->dispatch($event, 'onKernelException');

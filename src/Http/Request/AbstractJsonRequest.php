@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Request;
 
-use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequest;
+use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequestException;
 use Jawira\CaseConverter\Convert;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,13 +33,13 @@ abstract class AbstractJsonRequest
     {
         $request = $this->getRequest();
         if (!self::isValidFormat($request)) {
-            throw InvalidJsonRequest::dispatch(['Expected application/json on header Content-Type request']);
+            throw InvalidJsonRequestException::create(['Expected application/json on header Content-Type request']);
         }
 
         $reflection = new ReflectionClass($this);
 
         foreach ($request->toArray() as $property => $value) {
-            $attribute = $this->convertCase ? self::camelCase($property) : $property;
+            $attribute = $this->camelCase($property);
             if (property_exists($this, $attribute)) {
                 $reflectionProperty = $reflection->getProperty($attribute);
                 $reflectionProperty->setValue($this, $value);
@@ -58,7 +58,7 @@ abstract class AbstractJsonRequest
 
         /** @var \Symfony\Component\Validator\ConstraintViolation */
         foreach ($violations as $violation) {
-            $attribute = $this->convertCase ? self::snakeCase($violation->getPropertyPath()) : $violation->getPropertyPath();
+            $attribute = $this->snakeCase($violation->getPropertyPath());
             $errors[] = [
                 'property' => $attribute,
                 'value' => $violation->getInvalidValue(),
@@ -66,7 +66,7 @@ abstract class AbstractJsonRequest
             ];
         }
 
-        throw InvalidJsonRequest::dispatch($errors);
+        throw InvalidJsonRequestException::create($errors);
     }
 
     private static function isValidFormat(Request $request): bool
@@ -79,13 +79,13 @@ abstract class AbstractJsonRequest
         return [self::FORMAT_JSON];
     }
 
-    private static function camelCase(string $field): string
+    private function camelCase(string $field): string
     {
-        return (new Convert($field))->toCamel();
+        return $this->convertCase ? (new Convert($field))->toCamel() : $field;
     }
 
-    private static function snakeCase(string $field): string
+    private function snakeCase(string $field): string
     {
-        return (new Convert($field))->toSnake();
+        return $this->convertCase ? (new Convert($field))->toSnake() : $field;
     }
 }

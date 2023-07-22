@@ -9,7 +9,6 @@ use DateTimeImmutable;
 use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 class StatusController extends ApiController
 {
@@ -20,13 +19,9 @@ class StatusController extends ApiController
     )]
     public function get(): JsonResponse
     {
-        try {
-            return $this->jsonOk([
-                'status' => 'ok',
-                'datetime' => DateTime::getString(new DateTimeImmutable('now')),
-            ]);
-        } catch (Throwable $e) {
-            return $this->jsonErrorInternalServerError($e);
-        }
+        return $this->jsonOk([
+            'status' => 'ok',
+            'datetime' => DateTime::getString(new DateTimeImmutable('now')),
+        ]);
     }
 }
