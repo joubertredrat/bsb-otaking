@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controller\Api;
 
 use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
+use App\Entity\HentaiTitle;
 use App\Http\Factory\HentaiTitleListResponseFactory;
 use App\Http\Request\CreateHentaiTitleRequest;
 use App\Http\Response\HentaiTitleResponse;
+use App\Http\Response\ListResponse;
 use App\UseCase\CreateHentaiTitle;
 use App\UseCase\ListHentaiTitles;
 use Fig\Http\Message\RequestMethodInterface;
@@ -41,7 +43,41 @@ class HentaiTitlesController extends ApiController
     )]
     public function types(): JsonResponse
     {
-        return $this->jsonOk([]);
+        $response = new ListResponse(list: HentaiTitle::getTypesAvailable());
+        return $this->jsonOk($response);
+    }
+
+    #[Route(
+        path: '/api/hentai/titles/languages',
+        name: 'app_api_hentai_titles_languages',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function languages(): JsonResponse
+    {
+        $response = new ListResponse(list: HentaiTitle::getLanguagesAvailable());
+        return $this->jsonOk($response);
+    }
+
+    #[Route(
+        path: '/api/hentai/titles/statuses-download',
+        name: 'app_api_hentai_titles_statuses_download',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function statusesDownload(): JsonResponse
+    {
+        $response = new ListResponse(list: HentaiTitle::getStatusesDownloadAvailable());
+        return $this->jsonOk($response);
+    }
+
+    #[Route(
+        path: '/api/hentai/titles/statuses-view',
+        name: 'app_api_hentai_titles_statuses_view',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function statusesView(): JsonResponse
+    {
+        $response = new ListResponse(list: HentaiTitle::getStatusesViewAvailable());
+        return $this->jsonOk($response);
     }
 
     #[Route(
