@@ -75,6 +75,7 @@ function getHentaiTitleData() {
         getHentaiTitleRow(
           item.id,
           item.name,
+          item.alternativeNames,
           item.type,
           item.language,
           item.episodes,
@@ -89,6 +90,8 @@ function getHentaiTitleData() {
       );
     });
 
+    addPopups();
+
     $('.hentai_titles_edit').bind('click', function () {
       alertInfo('Soon');
     });
@@ -98,20 +101,35 @@ function getHentaiTitleData() {
   });
 }//getHentaiTitleData
 
-function getHentaiTitleRow(id, name, type, language, episodes, statusDownload, statusView, fansubs, tags, files, created, updated) {
+function getHentaiTitleRow(
+  id,
+  name,
+  alternativeNames,
+  type,
+  language,
+  episodes,
+  statusDownload,
+  statusView,
+  fansubs,
+  tags,
+  files,
+  created,
+  updated
+) {
   return `<tr
       class="hentai_titles_data_row"
       data-hentai-titles-search-name="${name}"
     >
     <td class="collapsing">${id}</td>
-    <td>${name}</td>
+    <td>${getHentaiTitleAlternativeNAmesPopup(name, alternativeNames)}</td>
     <td class="collapsing">${type}</td>
     <td class="collapsing">${language}</td>
     <td class="collapsing">${episodes}</td>
     <td class="collapsing">${statusDownload}</td>
     <td class="collapsing">${statusView}</td>
-    <td class="collapsing">files</td>
-    <td class="collapsing">tags</td>
+    <td class="collapsing">${getHentaiTitleFansubsPopup(fansubs)}</td>
+    <td class="collapsing">${getHentaiTitleFilesPopup(files)}</td>
+    <td class="collapsing">${getHentaiTitleTagsPopup(tags)}</td>
     <td class="collapsing">${created}</td>
     <td class="collapsing">${updated}</td>
     <td class="collapsing">
@@ -124,6 +142,67 @@ function getHentaiTitleRow(id, name, type, language, episodes, statusDownload, s
     </td>
   </tr>`;
 }//getHentaiTitleRow
+
+function getHentaiTitleAlternativeNAmesPopup(name, alternativeNames) {
+  if (alternativeNames.length < 1) {
+    return name;
+  }
+
+  const html = `<div class='header'>Alternative Names</div><div class='content'>${alternativeNames.join('<br />')}</div>`;
+
+  return `<div
+    class="hentai_titles_popup"
+    data-html="${html}">
+    ${name} <i class="mouse pointer icon"></i>
+  </div>`;
+}
+
+function getHentaiTitleFansubsPopup(fansubs) {
+  if (fansubs.length < 1) {
+    return '';
+  }
+
+  fansubsName = [];
+  $.each(fansubs, function (i, item) {
+    fansubsName.push(item.name);
+  });
+
+  const html = `<div class='header'>Fansubs</div><div class='content'>${fansubsName.join('<br />')}</div>`;
+
+  return `<div
+    class="ui icon button hentai_titles_popup"
+    data-html="${html}">
+    <i class="mouse pointer icon"></i>
+  </div>`;
+}//getHentaiTitleFansubsPopup
+
+function getHentaiTitleFilesPopup(files) {
+  if (files.length < 1) {
+    return '';
+  }
+
+  const html = `<div class='header'>Files</div><div class='content'>${files.join('<br />')}</div>`;
+
+  return `<div
+    class="ui icon button hentai_titles_popup"
+    data-html="${html}">
+    <i class="mouse pointer icon"></i>
+  </div>`;
+}//getHentaiTitleFilesPopup
+
+function getHentaiTitleTagsPopup(tags) {
+  if (tags.length < 1) {
+    return '';
+  }
+
+  const html = `<div class='header'>Tags</div><div class='content'>${tags.join('<br />')}</div>`;
+
+  return `<div
+    class="ui icon button hentai_titles_popup"
+    data-html="${html}">
+    <i class="mouse pointer icon"></i>
+  </div>`;
+}//getHentaiTitleTagsPopup
 
 function searchHentaiTitles() {
   $('#hentai_titles_data tbody .hentai_titles_data_norows').hide();
@@ -200,6 +279,13 @@ function addFormValidation() {
 function clearForm() {
   $('.hentai_titles_form').form('reset');
 }//clearForm
+
+function addPopups() {
+  $('.hentai_titles_popup').popup({delay: {
+    show: 700,
+    hide: 10
+  }});
+}//addPopups
 </script>
 {% endblock %}
 
@@ -231,6 +317,7 @@ function clearForm() {
           <th class="collapsing">Eps</th>
           <th class="collapsing">Down</th>
           <th class="collapsing">View</th>
+          <th class="collapsing">Fansubs</th>
           <th class="collapsing">Files</th>
           <th class="collapsing">Tags</th>
           <th class="collapsing">Created</th>
@@ -240,7 +327,7 @@ function clearForm() {
       </thead>
       <tbody>
         <tr class="center aligned hentai_titles_data_norows" hidden>
-          <td colspan="12">None hentai titles found</td>
+          <td colspan="13">None hentai titles found</td>
         </tr>
       </tbody>
     </table>
