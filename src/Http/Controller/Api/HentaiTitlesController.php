@@ -35,6 +35,16 @@ class HentaiTitlesController extends ApiController
     }
 
     #[Route(
+        path: '/api/hentai/titles/types',
+        name: 'app_api_hentai_titles_types',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function types(): JsonResponse
+    {
+        return $this->jsonOk([]);
+    }
+
+    #[Route(
         path: '/api/hentai/titles',
         name: 'app_api_hentai_titles_create',
         methods: [RequestMethodInterface::METHOD_POST],

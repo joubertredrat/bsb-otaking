@@ -14,6 +14,6 @@ class FansubsNotFoundExceptionTest extends TestCase
         $this->expectException(FansubsNotFoundException::class);
         $this->expectExceptionMessage('Fansubs with IDs not found: 1, 2');
 
-        throw FansubsNotFoundException::dispatch([1, 2]);
+        throw FansubsNotFoundException::create([1, 2]);
     }
 }

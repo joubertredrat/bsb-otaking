@@ -6,6 +6,7 @@ namespace App\Tests\UseCase;
 
 use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
 use App\Entity\Fansub;
+use App\Entity\HentaiTitle;
 use App\Entity\Tag;
 use App\Exception\UseCase\CreateHentaiTitle\FansubsNotFoundException;
 use App\Exception\UseCase\CreateHentaiTitle\TagsNotFoundException;
@@ -23,11 +24,11 @@ class CreateHentaiTitleTest extends TestCase
         $dtoCreateHentaiTitle = new DtoCreateHentaiTitle(
             name: 'Super Foo',
             alternativeNames: [],
-            type: DtoCreateHentaiTitle::TYPE_2D,
-            language: DtoCreateHentaiTitle::LANGUAGE_PT_BR,
+            type: HentaiTitle::TYPE_2D,
+            language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
-            statusDownload: DtoCreateHentaiTitle::STATUS_DOWNLOAD_COMPLETE,
-            statusView: DtoCreateHentaiTitle::STATUS_VIEW_DONE,
+            statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
+            statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1],
             files: ['Ep1.mkv', 'Ep2.mkv'],
             tags: [2],
@@ -88,11 +89,11 @@ class CreateHentaiTitleTest extends TestCase
         $dtoCreateHentaiTitle = new DtoCreateHentaiTitle(
             name: 'Super Foo',
             alternativeNames: [],
-            type: DtoCreateHentaiTitle::TYPE_2D,
-            language: DtoCreateHentaiTitle::LANGUAGE_PT_BR,
+            type: HentaiTitle::TYPE_2D,
+            language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
-            statusDownload: DtoCreateHentaiTitle::STATUS_DOWNLOAD_COMPLETE,
-            statusView: DtoCreateHentaiTitle::STATUS_VIEW_DONE,
+            statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
+            statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [7],
             files: ['Ep1.mkv', 'Ep2.mkv'],
             tags: [2],
@@ -124,11 +125,11 @@ class CreateHentaiTitleTest extends TestCase
         $dtoCreateHentaiTitle = new DtoCreateHentaiTitle(
             name: 'Super Foo',
             alternativeNames: [],
-            type: DtoCreateHentaiTitle::TYPE_2D,
-            language: DtoCreateHentaiTitle::LANGUAGE_PT_BR,
+            type: HentaiTitle::TYPE_2D,
+            language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
-            statusDownload: DtoCreateHentaiTitle::STATUS_DOWNLOAD_COMPLETE,
-            statusView: DtoCreateHentaiTitle::STATUS_VIEW_DONE,
+            statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
+            statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1],
             files: ['Ep1.mkv', 'Ep2.mkv'],
             tags: [8],

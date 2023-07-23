@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 class InvalidArgumentsException extends InvalidArgumentException
 {
-    public static function dispatch(array $arguments): self
+    public static function create(array $arguments): self
     {
         return new self(
             \sprintf(

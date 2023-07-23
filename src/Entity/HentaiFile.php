@@ -11,12 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class HentaiFile
 {
+    use PrimaryKeyable;
     use Timestampable;
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(length: 750)]
     private ?string $name = null;
@@ -24,11 +20,6 @@ class HentaiFile
     #[ORM\ManyToOne(inversedBy: 'files')]
     #[ORM\JoinColumn(nullable: false)]
     private ?HentaiTitle $title = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getName(): ?string
     {

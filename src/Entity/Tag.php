@@ -15,17 +15,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Tag
 {
+    use PrimaryKeyable;
     use Timestampable;
 
     public const TYPE_ANIME = 'anime';
     public const TYPE_HENTAI = 'hentai';
     public const TYPE_ALL = 'all';
-    public const NAME_REGEX = '/^[a-z]+$/';
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    public const NAME_REGEX = '/^[a-z0-9]+$/';
 
     #[ORM\Column(length: 20)]
     private ?string $type = null;
@@ -39,11 +35,6 @@ class Tag
     public function __construct()
     {
         $this->hentaiTitles = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getType(): ?string

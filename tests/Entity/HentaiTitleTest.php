@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
 use App\Entity\Fansub;
 use App\Entity\HentaiFile;
 use App\Entity\HentaiTitle;
 use App\Entity\Tag;
+use App\Exception\Entity\HentaiTitle\InvalidEpisodesException;
+use App\Exception\Entity\HentaiTitle\InvalidLanguageException;
+use App\Exception\Entity\HentaiTitle\InvalidStatusDownloadException;
+use App\Exception\Entity\HentaiTitle\InvalidStatusViewException;
+use App\Exception\Entity\HentaiTitle\InvalidTypeException;
 use PHPUnit\Framework\TestCase;
 
 class HentaiTitleTest extends TestCase
@@ -17,11 +21,11 @@ class HentaiTitleTest extends TestCase
     {
         $nameExpected = 'Foo';
         $alternativeNamesExpected = [];
-        $typeExpected = DtoCreateHentaiTitle::TYPE_2D;
-        $languageExpected = DtoCreateHentaiTitle::LANGUAGE_PT_BR;
+        $typeExpected = HentaiTitle::TYPE_2D;
+        $languageExpected = HentaiTitle::LANGUAGE_PT_BR;
         $episodesExpected = 2;
-        $statusDownloadExpected = DtoCreateHentaiTitle::STATUS_DOWNLOAD_COMPLETE;
-        $statusViewExpected = DtoCreateHentaiTitle::STATUS_VIEW_DONE;
+        $statusDownloadExpected = HentaiTitle::STATUS_DOWNLOAD_COMPLETE;
+        $statusViewExpected = HentaiTitle::STATUS_VIEW_DONE;
 
         $hentaiTitle = new HentaiTitle();
 
@@ -45,10 +49,8 @@ class HentaiTitleTest extends TestCase
         $hentaiTitle->setStatusDownload($statusDownloadExpected);
         $hentaiTitle->setStatusView($statusViewExpected);
 
-        $fansubFoo = new Fansub();
-        $fansubFoo->setName('Foo');
-        $fansubBar = new Fansub();
-        $fansubBar->setName('Bar');
+        $fansubFoo = (new Fansub())->setName('Foo');
+        $fansubBar = (new Fansub())->setName('Bar');
         $hentaiTitle->addFansub($fansubFoo);
         self::assertCount(1, $hentaiTitle->getFansubs());
         $hentaiTitle->addFansub($fansubFoo);
@@ -60,10 +62,8 @@ class HentaiTitleTest extends TestCase
         $hentaiTitle->removeFansub($fansubFoo);
         self::assertCount(1, $hentaiTitle->getFansubs());
 
-        $hentaiFileOne = new HentaiFile();
-        $hentaiFileOne->setName('episode_01.mkv');
-        $hentaiFileTwo = new HentaiFile();
-        $hentaiFileTwo->setName('episode_02.mkv');
+        $hentaiFileOne = (new HentaiFile())->setName('episode_01.mkv');
+        $hentaiFileTwo = (new HentaiFile())->setName('episode_02.mkv');
         $hentaiTitle->addFile($hentaiFileOne);
         self::assertCount(1, $hentaiTitle->getFiles());
         $hentaiTitle->addFile($hentaiFileOne);
@@ -93,5 +93,40 @@ class HentaiTitleTest extends TestCase
         self::assertCount(1, $hentaiTitle->getTags());
         $hentaiTitle->removeTag($tagFoo);
         self::assertCount(1, $hentaiTitle->getTags());
+    }
+
+    public function testAttributesWithInvalidType(): void
+    {
+        $this->expectException(InvalidTypeException::class);
+
+        (new HentaiTitle())->setType('foo');
+    }
+
+    public function testAttributesWithInvalidLanguage(): void
+    {
+        $this->expectException(InvalidLanguageException::class);
+
+        (new HentaiTitle())->setLanguage('foo');
+    }
+
+    public function testAttributesWithInvalidEpisodes(): void
+    {
+        $this->expectException(InvalidEpisodesException::class);
+
+        (new HentaiTitle())->setEpisodes(-1);
+    }
+
+    public function testAttributesWithInvalidStatusDownload(): void
+    {
+        $this->expectException(InvalidStatusDownloadException::class);
+
+        (new HentaiTitle())->setStatusDownload('foo');
+    }
+
+    public function testAttributesWithInvalidStatusView(): void
+    {
+        $this->expectException(InvalidStatusViewException::class);
+
+        (new HentaiTitle())->setStatusView('foo');
     }
 }

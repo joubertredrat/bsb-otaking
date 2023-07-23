@@ -63,7 +63,7 @@ class CreateHentaiTitle
         }
 
         if ($notFound) {
-            throw FansubsNotFoundException::dispatch($notFound);
+            throw FansubsNotFoundException::create($notFound);
         }
     }
 

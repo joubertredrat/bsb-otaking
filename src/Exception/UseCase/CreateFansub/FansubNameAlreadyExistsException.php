@@ -8,7 +8,7 @@ use RuntimeException;
 
 class FansubNameAlreadyExistsException extends RuntimeException
 {
-    public static function dispatch(string $name): self
+    public static function create(string $name): self
     {
         return new self(
             \sprintf('Fansub with name %s already exists', $name)

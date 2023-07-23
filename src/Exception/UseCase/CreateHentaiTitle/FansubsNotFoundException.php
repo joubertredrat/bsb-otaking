@@ -8,7 +8,7 @@ use RuntimeException;
 
 class FansubsNotFoundException extends RuntimeException
 {
-    public static function dispatch(array $ids): self
+    public static function create(array $ids): self
     {
         return new self(
             \sprintf(

@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 final class InvalidNameException extends InvalidArgumentException
 {
-    public static function dispatch(string $name): self
+    public static function create(string $name): self
     {
         return new self(\sprintf('Invalid name got: %s', $name));
     }

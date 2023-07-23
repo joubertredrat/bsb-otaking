@@ -14,6 +14,6 @@ class FansubNameAlreadyExistsExceptionTest extends TestCase
         $this->expectException(FansubNameAlreadyExistsException::class);
         $this->expectExceptionMessage('Fansub with name foo already exists');
 
-        throw FansubNameAlreadyExistsException::dispatch('foo');
+        throw FansubNameAlreadyExistsException::create('foo');
     }
 }

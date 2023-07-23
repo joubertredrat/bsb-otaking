@@ -14,6 +14,6 @@ class InvalidNameExceptionTest extends TestCase
         $this->expectException(InvalidNameException::class);
         $this->expectExceptionMessage('Invalid name got: foo');
 
-        throw InvalidNameException::dispatch('foo');
+        throw InvalidNameException::create('foo');
     }
 }

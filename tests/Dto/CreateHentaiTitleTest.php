@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Dto;
 
 use App\Dto\CreateHentaiTitle;
+use App\Entity\HentaiTitle;
 use App\Exception\Dto\CreateHentaiTitle\InvalidArgumentsException;
 use PHPUnit\Framework\TestCase;
 
@@ -14,11 +15,11 @@ class CreateHentaiTitleTest extends TestCase
     {
         $nameExpected = 'Super Foo';
         $alternativeNamesExpected = [];
-        $typeExpected = CreateHentaiTitle::TYPE_2D;
-        $languageExpected = CreateHentaiTitle::LANGUAGE_PT_BR;
+        $typeExpected = HentaiTitle::TYPE_2D;
+        $languageExpected = HentaiTitle::LANGUAGE_PT_BR;
         $episodesExpected = 2;
-        $statusDownloadExpected = CreateHentaiTitle::STATUS_DOWNLOAD_COMPLETE;
-        $statusViewExpected = CreateHentaiTitle::STATUS_VIEW_DONE;
+        $statusDownloadExpected = HentaiTitle::STATUS_DOWNLOAD_COMPLETE;
+        $statusViewExpected = HentaiTitle::STATUS_VIEW_DONE;
         $fansubsExpected = [1, 2, 3];
         $filesExpected = ['Ep1.mkv', 'Ep2.mkv'];
         $tagsExpected = [4];

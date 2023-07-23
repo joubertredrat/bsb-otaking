@@ -19,7 +19,7 @@ class CreateFansub
     {
         $fansubFound = $this->fansubRepository->getByName($createFansub->name);
         if ($fansubFound instanceof Fansub) {
-            throw FansubNameAlreadyExistsException::dispatch($createFansub->name);
+            throw FansubNameAlreadyExistsException::create($createFansub->name);
         }
 
         $fansub = new Fansub();

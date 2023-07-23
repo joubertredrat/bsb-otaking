@@ -14,6 +14,6 @@ class InvalidArgumentsExceptionTest extends TestCase
         $this->expectException(InvalidArgumentsException::class);
         $this->expectExceptionMessage('Invalid arguments got: foo, bar');
 
-        throw InvalidArgumentsException::dispatch(['foo', 'bar']);
+        throw InvalidArgumentsException::create(['foo', 'bar']);
     }
 }

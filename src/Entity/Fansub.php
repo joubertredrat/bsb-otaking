@@ -13,12 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Fansub
 {
+    use PrimaryKeyable;
     use Timestampable;
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -29,11 +25,6 @@ class Fansub
     public function __construct()
     {
         $this->hentaiTitles = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getName(): ?string
@@ -48,9 +39,6 @@ class Fansub
         return $this;
     }
 
-    /**
-     * @return Collection<int, HentaiTitle>
-     */
     public function getHentaiTitles(): Collection
     {
         return $this->hentaiTitles;
