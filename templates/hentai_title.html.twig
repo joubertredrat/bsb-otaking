@@ -3,8 +3,264 @@
 {% block title %}Hentai Titles{% endblock %}
 
 {% block scripts %}
+<script>
+$(document).ready(function() {
+  $('#hentai_titles_new').bind('click', function () {
+    openFormModal();
+  });
+
+  $('#hentai_titles_search_criteria').keydown(function(e) {
+    const keycode = (e.keyCode ? e.keyCode : e.which);
+    if (keycode == '13') {
+      searchHentaiTitles();
+    }
+  });
+
+  $('#hentai_titles_search label').bind('click', function () {
+    searchHentaiTitles();
+  });
+
+  getHentaiTitleData();
+  addFormValidation();
+});//$(document).ready
+
+$('.hentai_titles_form').submit(function(e) {
+  const isValid = $('.hentai_titles_form').form('is valid');
+  if (isValid) {
+    e.preventDefault();
+    const id = $('#hentai_titles_form_id').val();
+    id === '' ? submitNewTag() : submitEditTag();
+  }
+  return false;
+});//$('.hentai_titles_form').submit
+
+function submitNewHentaiTitle() {
+  jsonData = {
+    name: $('#hentai_titles_form_name').val()
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: '/api/hentai/titles',
+    data: JSON.stringify(jsonData),
+    contentType: 'application/json',
+    encode: true,
+    success: function (data, textStatus, xhr) {
+      closeFormModal();
+      getTagData();
+      alertSuccess(`Hentai title ${jsonData.name} created with success`);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      let message = 'Anything wrong is not right';
+      alertError(message);
+    },
+  });
+}//submitNewHentaiTitle
+
+function submitEditHentaiTitle() {
+  alertInfo('Soon');
+}//submitEditHentaiTitle
+
+function getHentaiTitleData() {
+  $('#hentai_titles_data tbody .hentai_titles_data_row').remove();
+  $.get('/api/hentai/titles', function(object, status) {
+    if (object.data.length < 1) {
+      $('#hentai_titles_data tbody .hentai_titles_data_norows').show();
+      return;
+    }
+
+    $('#hentai_titles_data tbody .hentai_titles_data_norows').hide();
+    $.each(object.data, function (i, item) {
+      $('#hentai_titles_data tbody').append(
+        getHentaiTitleRow(
+          item.id,
+          item.name,
+          item.type,
+          item.language,
+          item.episodes,
+          item.statusDownload,
+          item.statusView,
+          item.fansubs,
+          item.tags,
+          item.files,
+          formatDate(item.createdAt),
+          formatDate(item.updatedAt)
+        )
+      );
+    });
+
+    $('.hentai_titles_edit').bind('click', function () {
+      alertInfo('Soon');
+    });
+    $('.hentai_titles_remove').bind('click', function () {
+      alertInfo('Soon');
+    });
+  });
+}//getHentaiTitleData
+
+function getHentaiTitleRow(id, name, type, language, episodes, statusDownload, statusView, fansubs, tags, files, created, updated) {
+  return `<tr
+      class="hentai_titles_data_row"
+      data-hentai-titles-search-name="${name}"
+    >
+    <td class="collapsing">${id}</td>
+    <td>${name}</td>
+    <td class="collapsing">${type}</td>
+    <td class="collapsing">${language}</td>
+    <td class="collapsing">${episodes}</td>
+    <td class="collapsing">${statusDownload}</td>
+    <td class="collapsing">${statusView}</td>
+    <td class="collapsing">files</td>
+    <td class="collapsing">tags</td>
+    <td class="collapsing">${created}</td>
+    <td class="collapsing">${updated}</td>
+    <td class="collapsing">
+      <button class="ui icon button hentai_titles_edit">
+      <i class="edit icon"></i>
+      </button>
+      <button class="ui icon button hentai_titles_remove">
+      <i class="trash icon"></i>
+      </button>
+    </td>
+  </tr>`;
+}//getHentaiTitleRow
+
+function searchHentaiTitles() {
+  $('#hentai_titles_data tbody .hentai_titles_data_norows').hide();
+  $('#hentai_titles_data tbody .hentai_titles_data_row').show();
+
+  const searchCriteria = $('#hentai_titles_search_criteria').val();
+  if (searchCriteria == '') {
+    return;
+  }
+
+  let listSize = $('#hentai_titles_data tbody .hentai_titles_data_row').length;
+  let hideCount = 0;
+
+  $('#hentai_titles_data tbody .hentai_titles_data_row').each(function() {
+    let hide = true;
+
+    let row = $(this);
+    const resourceName = row.data('hentai-titles-search-name');
+    if (resourceName.toLowerCase().includes(searchCriteria.toLowerCase())) {
+      hide = false;
+    }
+
+    if (hide) {
+      row.hide();
+      hideCount++;
+    }
+  });
+
+  if (hideCount == listSize) {
+    $('#hentai_titles_data tbody .hentai_titles_data_norows').show();
+  }
+}//searchHentaiTitles
+
+function openFormModal() {
+  $('.hentai_titles_modal')
+    .modal({
+      closable: false,
+      closeIcon: true,
+      onHidden: function(){
+        clearForm();
+      },
+      onApprove: function() {
+        $('.hentai_titles_form').submit();
+        return false;
+      }
+    })
+    .modal('show')
+  ;
+}//openFormModal
+
+function closeFormModal() {
+  $('.hentai_titles_modal').modal('hide');
+}//closeFormModal
+
+function addFormValidation() {
+  $('.hentai_titles_form')
+    .form({
+      on: 'submit',
+      fields: {
+        hentai_titles_form_name: {
+          identifier: 'hentai_titles_form_name',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Fill name of hentai title'
+            }
+          ]
+        }
+      }
+    })
+  ;
+}//addFormValidation
+
+function clearForm() {
+  $('.hentai_titles_form').form('reset');
+}//clearForm
+</script>
 {% endblock %}
 
 {% block body %}
 <h1 class="ui dividing header">Hentai Titles</h1>
+
+<div class="ui grid">
+  <div class="two wide column">
+    <button class="ui button" id="hentai_titles_new"><i class="star icon"></i> New</button>
+  </div>
+  <div class="fourteen wide column">
+    <div class="ui file action input" id="hentai_titles_search">
+      <input id="hentai_titles_search_criteria" type="text" placeholder="Search by hentai title name">
+      <label for="search" class="ui button">
+        <i class="search icon"></i>Search
+      </label>
+    </div>
+  </div>
+
+  <div class="sixteen wide column">
+    <table class="ui celled table" id="hentai_titles_data">
+      <caption></caption>
+      <thead>
+        <tr>
+          <th class="collapsing">ID</th>
+          <th>Name</th>
+          <th class="collapsing">Type</th>
+          <th class="collapsing">Lang</th>
+          <th class="collapsing">Eps</th>
+          <th class="collapsing">Down</th>
+          <th class="collapsing">View</th>
+          <th class="collapsing">Files</th>
+          <th class="collapsing">Tags</th>
+          <th class="collapsing">Created</th>
+          <th class="collapsing">Updated</th>
+          <th class="collapsing"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="center aligned hentai_titles_data_norows" hidden>
+          <td colspan="12">None hentai titles found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sixteen wide column">
+    <div class="ui modal hentai_titles_modal">
+    <i class="close icon"></i>
+    <div class="header">Form</div>
+    <div class="content">
+      <form class="ui form hentai_titles_form">
+        <input type="hidden" name="hentai_titles_form_id" id="hentai_titles_form_id" value="" />
+        <div class="field">
+          <label for="hentai_titles_form_name">Name</label>
+          <input type="text" name="hentai_titles_form_name" id="hentai_titles_form_name" placeholder="Name of hentai title name">
+        </div>
+        <div class="ui error message"></div>
+        <div class="ui submit primary button">Send</div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}
