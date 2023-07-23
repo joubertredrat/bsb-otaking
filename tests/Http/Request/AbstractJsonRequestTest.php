@@ -6,13 +6,11 @@ namespace App\Tests\Http\Request;
 
 use App\Exception\Http\Request\AbstractJsonRequest\InvalidJsonRequestException;
 use App\Http\Request\AbstractJsonRequest;
+use App\Tests\Helper;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AbstractJsonRequestTest extends TestCase
 {
@@ -20,22 +18,9 @@ class AbstractJsonRequestTest extends TestCase
     {
         $nameExpected = 'Foo';
 
-        $request = new Request(
-            query: [],
-            request: [],
-            attributes: [],
-            cookies: [],
-            files: [],
-            server: [
-                'CONTENT_TYPE' => 'application/json',
-            ],
-            content: \json_encode([
-                'name' => $nameExpected,
-            ]),
-        );
-
-        $requestStack = $this->getRequestStackMock($request);
-        $validator = $this->getValidationMock();
+        $request = Helper::getRequestMock(['name' => $nameExpected]);
+        $requestStack = Helper::getRequestStackMock($request);
+        $validator = Helper::getValidationMock();
 
         $requestValidator = new class (
             validator: $validator,
@@ -54,22 +39,9 @@ class AbstractJsonRequestTest extends TestCase
     {
         $this->expectException(InvalidJsonRequestException::class);
 
-        $request = new Request(
-            query: [],
-            request: [],
-            attributes: [],
-            cookies: [],
-            files: [],
-            server: [
-                'CONTENT_TYPE' => 'application/other',
-            ],
-            content: \json_encode([
-                'name' => 'Foo',
-            ]),
-        );
-
-        $requestStack = $this->getRequestStackMock($request);
-        $validator = $this->getValidationMock();
+        $request = Helper::getRequestMock(['name' => 'foo'], 'application/other');
+        $requestStack = Helper::getRequestStackMock($request);
+        $validator = Helper::getValidationMock();
 
         $requestValidator = new class (
             validator: $validator,
@@ -86,22 +58,9 @@ class AbstractJsonRequestTest extends TestCase
     {
         $this->expectException(InvalidJsonRequestException::class);
 
-        $request = new Request(
-            query: [],
-            request: [],
-            attributes: [],
-            cookies: [],
-            files: [],
-            server: [
-                'CONTENT_TYPE' => 'application/json',
-            ],
-            content: \json_encode([
-                'names' => 'Foo',
-            ]),
-        );
-
-        $requestStack = $this->getRequestStackMock($request);
-        $validator = $this->getValidationMock();
+        $request = Helper::getRequestMock(['names' => 'foo']);
+        $requestStack = Helper::getRequestStackMock($request);
+        $validator = Helper::getValidationMock();
 
         $requestValidator = new class (
             validator: $validator,
@@ -112,18 +71,5 @@ class AbstractJsonRequestTest extends TestCase
             #[Type('string')]
             public readonly string $name;
         };
-    }
-
-    private function getValidationMock(): ValidatorInterface
-    {
-        return Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
-    }
-
-    private function getRequestStackMock(Request $request): RequestStack
-    {
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
-
-        return $requestStack;
     }
 }

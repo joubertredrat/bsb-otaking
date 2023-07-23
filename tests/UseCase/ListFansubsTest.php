@@ -14,10 +14,8 @@ class ListFansubsTest extends TestCase
 {
     public function testListTagsWithSuccess(): void
     {
-        $fansubFoo = new Fansub();
-        $fansubFoo->setName('Foo');
-        $fansubBar = new Fansub();
-        $fansubBar->setName('Bar');
+        $fansubFoo = (new Fansub())->setName('Foo');
+        $fansubBar = (new Fansub())->setName('Bar');
 
         $fansubsExpected = [$fansubFoo, $fansubBar];
 
