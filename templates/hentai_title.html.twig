@@ -121,15 +121,13 @@ function getHentaiTitleRow(
       data-hentai-titles-search-name="${name}"
     >
     <td class="collapsing">${id}</td>
-    <td>${getHentaiTitleAlternativeNAmesPopup(name, alternativeNames)}</td>
+    <td>${getHentaiTitleAlternativeNamesPopup(name, alternativeNames)}</td>
     <td class="collapsing">${type}</td>
     <td class="collapsing">${language}</td>
     <td class="collapsing">${episodes}</td>
     <td class="collapsing">${statusDownload}</td>
     <td class="collapsing">${statusView}</td>
-    <td class="collapsing">${getHentaiTitleFansubsPopup(fansubs)}</td>
-    <td class="collapsing">${getHentaiTitleFilesPopup(files)}</td>
-    <td class="collapsing">${getHentaiTitleTagsPopup(tags)}</td>
+    <td class="collapsing">${getHentaiTitleFansubsPopup(fansubs)} ${getHentaiTitleFilesPopup(files)} ${getHentaiTitleTagsPopup(tags)}</td>
     <td class="collapsing">${created}</td>
     <td class="collapsing">${updated}</td>
     <td class="collapsing">
@@ -143,7 +141,7 @@ function getHentaiTitleRow(
   </tr>`;
 }//getHentaiTitleRow
 
-function getHentaiTitleAlternativeNAmesPopup(name, alternativeNames) {
+function getHentaiTitleAlternativeNamesPopup(name, alternativeNames) {
   if (alternativeNames.length < 1) {
     return name;
   }
@@ -155,11 +153,11 @@ function getHentaiTitleAlternativeNAmesPopup(name, alternativeNames) {
     data-html="${html}">
     ${name} <i class="mouse pointer icon"></i>
   </div>`;
-}
+}//getHentaiTitleAlternativeNamesPopup
 
 function getHentaiTitleFansubsPopup(fansubs) {
   if (fansubs.length < 1) {
-    return '';
+    return '<div class="ui icon button"><i class="icon"></i></div>';
   }
 
   fansubsName = [];
@@ -172,13 +170,13 @@ function getHentaiTitleFansubsPopup(fansubs) {
   return `<div
     class="ui icon button hentai_titles_popup"
     data-html="${html}">
-    <i class="mouse pointer icon"></i>
+    <i class="palette icon"></i>
   </div>`;
 }//getHentaiTitleFansubsPopup
 
 function getHentaiTitleFilesPopup(files) {
   if (files.length < 1) {
-    return '';
+    return '<div class="ui icon button"><i class="icon"></i></div>';
   }
 
   const html = `<div class='header'>Files</div><div class='content'>${files.join('<br />')}</div>`;
@@ -186,13 +184,13 @@ function getHentaiTitleFilesPopup(files) {
   return `<div
     class="ui icon button hentai_titles_popup"
     data-html="${html}">
-    <i class="mouse pointer icon"></i>
+    <i class="video icon"></i>
   </div>`;
 }//getHentaiTitleFilesPopup
 
 function getHentaiTitleTagsPopup(tags) {
   if (tags.length < 1) {
-    return '';
+    return '<div class="ui icon button"><i class="icon"></i></div>';
   }
 
   const html = `<div class='header'>Tags</div><div class='content'>${tags.join('<br />')}</div>`;
@@ -200,7 +198,7 @@ function getHentaiTitleTagsPopup(tags) {
   return `<div
     class="ui icon button hentai_titles_popup"
     data-html="${html}">
-    <i class="mouse pointer icon"></i>
+    <i class="tags icon"></i>
   </div>`;
 }//getHentaiTitleTagsPopup
 
@@ -317,9 +315,7 @@ function addPopups() {
           <th class="collapsing">Eps</th>
           <th class="collapsing">Down</th>
           <th class="collapsing">View</th>
-          <th class="collapsing">Fansubs</th>
-          <th class="collapsing">Files</th>
-          <th class="collapsing">Tags</th>
+          <th class="collapsing">Fansubs, Files, Tags</th>
           <th class="collapsing">Created</th>
           <th class="collapsing">Updated</th>
           <th class="collapsing"></th>
@@ -327,7 +323,7 @@ function addPopups() {
       </thead>
       <tbody>
         <tr class="center aligned hentai_titles_data_norows" hidden>
-          <td colspan="13">None hentai titles found</td>
+          <td colspan="11">None hentai titles found</td>
         </tr>
       </tbody>
     </table>
