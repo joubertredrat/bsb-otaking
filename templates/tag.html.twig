@@ -108,6 +108,7 @@ function getTagRow(id, type, name, resourceName, created, updated) {
       class="tags_data_row"
       data-tags-search-resource-name="${resourceName}"
     >
+    <td class="collapsing">${id}</td>
     <td>${type}</td>
     <td>${name}</td>
     <td>${resourceName}</td>
@@ -232,6 +233,7 @@ function clearForm() {
       <caption></caption>
       <thead>
         <tr>
+          <th class="collapsing">ID</th>
           <th>Type</th>
           <th>Name</th>
           <th>ResourceName</th>
@@ -242,7 +244,7 @@ function clearForm() {
       </thead>
       <tbody>
         <tr class="center aligned tags_data_norows" hidden>
-          <td colspan="6">None tags found</td>
+          <td colspan="7">None tags found</td>
         </tr>
       </tbody>
     </table>

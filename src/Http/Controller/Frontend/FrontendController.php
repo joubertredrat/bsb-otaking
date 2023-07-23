@@ -48,6 +48,6 @@ class FrontendController extends AbstractController
     )]
     public function pageHentaiTitle(): Response
     {
-        return $this->render('hentai_titles.html.twig');
+        return $this->render('hentai_title.html.twig');
     }
 }

@@ -46,7 +46,7 @@ function submitNewFansub() {
     contentType: 'application/json',
     encode: true,
     success: function (data, textStatus, xhr) {
-      $('.fansubs_modal').modal('hide');
+      closeFormModal();
       getFansubData();
       alertSuccess(`Fansub ${jsonData.name} created with success`);
     },
@@ -95,6 +95,7 @@ function getFansubRow(id, name, created, updated) {
       class="fansubs_data_row"
       data-fansubs-search-name="${name}"
     >
+    <td class="collapsing">${id}</td>
     <td>${name}</td>
     <td class="collapsing">${created}</td>
     <td class="collapsing">${updated}</td>
@@ -158,6 +159,10 @@ function openFormModal() {
   ;
 }//openFormModal
 
+function closeFormModal() {
+  $('.fansubs_modal').modal('hide');
+}//closeFormModal
+
 function addFormValidation() {
   $('.fansubs_form')
     .form({
@@ -204,6 +209,7 @@ function clearForm() {
       <caption></caption>
       <thead>
         <tr>
+          <th class="collapsing">ID</th>
           <th>Name</th>
           <th class="collapsing">Created</th>
           <th class="collapsing">Updated</th>
@@ -212,7 +218,7 @@ function clearForm() {
       </thead>
       <tbody>
         <tr class="center aligned fansubs_data_norows" hidden>
-          <td colspan="4">None fansub found</td>
+          <td colspan="5">None fansub found</td>
         </tr>
       </tbody>
     </table>
