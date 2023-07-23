@@ -13,6 +13,7 @@ use App\Exception\UseCase\CreateHentaiTitle\TagsNotFoundException;
 use App\Repository\FansubRepositoryInterface;
 use App\Repository\HentaiTitleRepositoryInterface;
 use App\Repository\TagRepositoryInterface;
+use App\Tests\Helper;
 use App\UseCase\CreateHentaiTitle;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -30,12 +31,11 @@ class CreateHentaiTitleTest extends TestCase
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1],
-            files: ['Ep1.mkv', 'Ep2.mkv'],
             tags: [2],
+            videoFiles: Helper::getVideoFiles(),
         );
 
-        $fansub = new Fansub();
-        $fansub->setName('Foo Fansub');
+        $fansub = (new Fansub())->setName('Foo Fansub');
 
         $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $fansubRepository
@@ -78,7 +78,7 @@ class CreateHentaiTitleTest extends TestCase
         self::assertEquals($dtoCreateHentaiTitle->statusDownload, $hentaiTitleGot->getStatusDownload());
         self::assertEquals($dtoCreateHentaiTitle->statusView, $hentaiTitleGot->getStatusView());
         self::assertCount(1, $hentaiTitleGot->getFansubs());
-        self::assertCount(2, $hentaiTitleGot->getFiles());
+        self::assertCount(2, $hentaiTitleGot->getVideoFiles());
         self::assertCount(1, $hentaiTitleGot->getTags());
     }
 
@@ -95,8 +95,8 @@ class CreateHentaiTitleTest extends TestCase
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [7],
-            files: ['Ep1.mkv', 'Ep2.mkv'],
             tags: [2],
+            videoFiles: Helper::getVideoFiles(),
         );
 
         $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
@@ -131,8 +131,8 @@ class CreateHentaiTitleTest extends TestCase
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1],
-            files: ['Ep1.mkv', 'Ep2.mkv'],
             tags: [8],
+            videoFiles: Helper::getVideoFiles(),
         );
 
         $fansub = new Fansub();

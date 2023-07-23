@@ -8,7 +8,9 @@ use App\Entity\Fansub;
 use App\Entity\HentaiFile;
 use App\Entity\HentaiTitle;
 use App\Entity\Tag;
+use App\Entity\VideoFile;
 use App\Http\Response\HentaiTitleResponse;
+use App\Tests\Helper;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -16,56 +18,52 @@ class HentaiTitleResponseTest extends TestCase
 {
     public function testJsonSerialize(): void
     {
+        $fansubFoo = (new Fansub())->setName('Fansub Foo');
+        $tagFoo = (new Tag())
+            ->setType(Tag::TYPE_ALL)
+            ->setName('foo')
+        ;
+        $videoFileOne = (new VideoFile())->setName(Helper::VIDEOFILE_01);
+        $videoFileTwo = (new VideoFile())->setName(Helper::VIDEOFILE_02);
+
         $arrayExpected = [
             'id' => null,
             'name' => 'Title Foo',
             'alternativeNames' => ['ほげ'],
-            'type' => '2D',
-            'language' => 'pt_br',
+            'type' => HentaiTitle::TYPE_2D,
+            'language' => HentaiTitle::LANGUAGE_PT_BR,
             'episodes' => 2,
-            'statusDownload' => 'complete',
-            'statusView' => 'done',
+            'statusDownload' => HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
+            'statusView' => HentaiTitle::STATUS_VIEW_DONE,
             'fansubs' => [
                 [
-                    'id' => null,
-                    'name' => 'Fansub Foo',
+                    'id' => $fansubFoo->getId(),
+                    'name' => $fansubFoo->getName(),
                 ],
             ],
-            'tags' => [sprintf('%s:foo', Tag::TYPE_ALL)],
-            'files' => [
-                'EP01.mkv',
-                'EP02.mkv',
+            'tags' => [$tagFoo->getResourceName()],
+            'videoFiles' => [
+                $videoFileOne->getName(),
+                $videoFileTwo->getName(),
             ],
             'createdAt' => '2023-06-29 19:18:17',
             'updatedAt' => null,
         ];
 
-        $hentaiTitle = new HentaiTitle();
-        $hentaiTitle->setName('Title Foo');
-        $hentaiTitle->setAlternativeNames(['ほげ']);
-        $hentaiTitle->setType('2D');
-        $hentaiTitle->setLanguage('pt_br');
-        $hentaiTitle->setEpisodes(2);
-        $hentaiTitle->setStatusDownload('complete');
-        $hentaiTitle->setStatusView('done');
-        $hentaiTitle->setCreatedAt(new DateTimeImmutable('2023-06-29 19:18:17'));
-
-        $fansubFoo = new Fansub();
-        $fansubFoo->setName('Fansub Foo');
-        $hentaiTitle->addFansub($fansubFoo);
-
-        $tagFoo = new Tag();
-        $tagFoo->setType(Tag::TYPE_ALL);
-        $tagFoo->setName('foo');
-        $hentaiTitle->addTag($tagFoo);
-
-        $hentaiFileOne = new HentaiFile();
-        $hentaiFileOne->setName('EP01.mkv');
-        $hentaiFileTwo = new HentaiFile();
-        $hentaiFileTwo->setName('EP02.mkv');
-        $hentaiTitle->addFile($hentaiFileOne);
-        $hentaiTitle->addFile($hentaiFileTwo);
-
+        $hentaiTitle = (new HentaiTitle())
+            ->setName('Title Foo')
+            ->setAlternativeNames(['ほげ'])
+            ->setType(HentaiTitle::TYPE_2D)
+            ->setLanguage(HentaiTitle::LANGUAGE_PT_BR)
+            ->setEpisodes(2)
+            ->setStatusDownload(HentaiTitle::STATUS_DOWNLOAD_COMPLETE)
+            ->setStatusView(HentaiTitle::STATUS_VIEW_DONE)
+            ->addFansub($fansubFoo)
+            ->addTag($tagFoo)
+            ->addVideoFile($videoFileOne)
+            ->addVideoFile($videoFileTwo)
+            ->setCreatedAt(new DateTimeImmutable('2023-06-29 19:18:17'))
+        ;
         $response = new HentaiTitleResponse($hentaiTitle);
 
         self::assertEquals($arrayExpected, $response->jsonSerialize());

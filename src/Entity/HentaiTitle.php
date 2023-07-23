@@ -60,14 +60,14 @@ class HentaiTitle
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'hentaiTitles')]
     private Collection $tags;
 
-    #[ORM\OneToMany(mappedBy: 'title', targetEntity: HentaiFile::class, cascade: ['persist'])]
-    private Collection $files;
+    #[ORM\ManyToMany(targetEntity: VideoFile::class, mappedBy: 'hentaiTitles', cascade: ['persist'])]
+    private Collection $videoFiles;
 
     public function __construct()
     {
         $this->fansubs = new ArrayCollection();
         $this->tags = new ArrayCollection();
-        $this->files = new ArrayCollection();
+        $this->videoFiles = new ArrayCollection();
     }
     public function getName(): ?string
     {
@@ -213,28 +213,25 @@ class HentaiTitle
         return $this;
     }
 
-    public function getFiles(): Collection
+    public function getVideoFiles(): Collection
     {
-        return $this->files;
+        return $this->videoFiles;
     }
 
-    public function addFile(HentaiFile $file): self
+    public function addVideoFile(VideoFile $videoFile): self
     {
-        if (!$this->files->contains($file)) {
-            $this->files->add($file);
-            $file->setTitle($this);
+        if (!$this->videoFiles->contains($videoFile)) {
+            $this->videoFiles->add($videoFile);
+            $videoFile->addHentaiTitle($this);
         }
 
         return $this;
     }
 
-    public function removeFile(HentaiFile $file): self
+    public function removeVideoFile(VideoFile $videoFile): self
     {
-        if ($this->files->removeElement($file)) {
-            // set the owning side to null (unless already changed)
-            if ($file->getTitle() === $this) {
-                $file->setTitle(null);
-            }
+        if ($this->videoFiles->removeElement($videoFile)) {
+            $videoFile->removeHentaiTitle($this);
         }
 
         return $this;

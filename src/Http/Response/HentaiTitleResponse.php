@@ -27,7 +27,7 @@ class HentaiTitleResponse implements JsonSerializable
             'statusView' => $this->hentaiTitle->getStatusView(),
             'fansubs' => $this->getFansubs(),
             'tags' => $this->getTags(),
-            'files' => $this->getFiles(),
+            'videoFiles' => $this->getVideoFiles(),
             'createdAt' => DateTime::getString($this->hentaiTitle->getCreatedAt()),
             'updatedAt' => DateTime::getString($this->hentaiTitle->getUpdatedAt()),
         ];
@@ -37,7 +37,7 @@ class HentaiTitleResponse implements JsonSerializable
     {
         $fansubs = [];
 
-        foreach ($this->hentaiTitle->getFansubs()->toArray() as $fansub) {
+        foreach ($this->hentaiTitle->getFansubs() as $fansub) {
             $fansubs[] = [
                 'id' => $fansub->getId(),
                 'name' => $fansub->getName(),
@@ -51,21 +51,21 @@ class HentaiTitleResponse implements JsonSerializable
     {
         $tags = [];
 
-        foreach ($this->hentaiTitle->getTags()->toArray() as $tag) {
+        foreach ($this->hentaiTitle->getTags() as $tag) {
             $tags[] = $tag->getResourceName();
         }
 
         return $tags;
     }
 
-    private function getFiles(): array
+    private function getVideoFiles(): array
     {
-        $files = [];
+        $videoFiles = [];
 
-        foreach ($this->hentaiTitle->getFiles()->toArray() as $file) {
-            $files[] = $file->getName();
+        foreach ($this->hentaiTitle->getVideoFiles() as $videoFile) {
+            $videoFiles[] = $videoFile->getName();
         }
 
-        return $files;
+        return $videoFiles;
     }
 }

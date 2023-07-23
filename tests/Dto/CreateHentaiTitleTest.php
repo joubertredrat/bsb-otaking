@@ -7,6 +7,7 @@ namespace App\Tests\Dto;
 use App\Dto\CreateHentaiTitle;
 use App\Entity\HentaiTitle;
 use App\Exception\Dto\CreateHentaiTitle\InvalidArgumentsException;
+use App\Tests\Helper;
 use PHPUnit\Framework\TestCase;
 
 class CreateHentaiTitleTest extends TestCase
@@ -21,7 +22,7 @@ class CreateHentaiTitleTest extends TestCase
         $statusDownloadExpected = HentaiTitle::STATUS_DOWNLOAD_COMPLETE;
         $statusViewExpected = HentaiTitle::STATUS_VIEW_DONE;
         $fansubsExpected = [1, 2, 3];
-        $filesExpected = ['Ep1.mkv', 'Ep2.mkv'];
+        $videoFilesExpected = Helper::getVideoFiles();
         $tagsExpected = [4];
 
         $createHentaiTitle = new CreateHentaiTitle(
@@ -33,8 +34,8 @@ class CreateHentaiTitleTest extends TestCase
             statusDownload: $statusDownloadExpected,
             statusView: $statusViewExpected,
             fansubs: $fansubsExpected,
-            files: $filesExpected,
             tags: $tagsExpected,
+            videoFiles: $videoFilesExpected,
         );
 
         self::assertEquals($nameExpected, $createHentaiTitle->name);
@@ -44,7 +45,7 @@ class CreateHentaiTitleTest extends TestCase
         self::assertEquals($episodesExpected, $createHentaiTitle->episodes);
         self::assertEquals($statusDownloadExpected, $createHentaiTitle->statusDownload);
         self::assertEquals($statusViewExpected, $createHentaiTitle->statusView);
-        self::assertEquals($filesExpected, $createHentaiTitle->files);
+        self::assertEquals($videoFilesExpected, $createHentaiTitle->videoFiles);
         self::assertEquals($tagsExpected, $createHentaiTitle->tags);
     }
 
@@ -61,8 +62,8 @@ class CreateHentaiTitleTest extends TestCase
             statusDownload: 'unknown',
             statusView: 'unknown',
             fansubs: [1, 0, 2, 3],
-            files: ['Ep1.mkv', 'Ep2.mkv'],
             tags: [0],
+            videoFiles: ['Ep1.mkv', 'Ep2.mkv'],
         );
     }
 }

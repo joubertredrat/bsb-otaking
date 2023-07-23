@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use App\Entity\HentaiTitle;
+use App\Entity\VideoFile;
 use App\Exception\Dto\CreateHentaiTitle\InvalidArgumentsException;
 
 class CreateHentaiTitle
@@ -18,8 +19,8 @@ class CreateHentaiTitle
         public readonly string $statusDownload,
         public readonly string $statusView,
         public readonly array $fansubs,
-        public readonly array $files,
         public readonly array $tags,
+        public readonly array $videoFiles,
     ) {
         $errors = [];
         if ($name === '') {
@@ -46,6 +47,9 @@ class CreateHentaiTitle
         if (!self::isValidIds($this->tags)) {
             $errors[] = 'tags';
         }
+        if (!self::isValidVideoFiles($this->videoFiles)) {
+            $errors[] = 'videoFiles';
+        }
 
         if ($errors) {
             throw InvalidArgumentsException::create($errors);
@@ -56,6 +60,18 @@ class CreateHentaiTitle
     {
         foreach ($ids as $id) {
             if ($id < 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    private static function isValidVideoFiles(array $videoFiles): bool
+    {
+        foreach ($videoFiles as $videoFile) {
+            if (!VideoFile::isValidName($videoFile)) {
                 return false;
             }
         }

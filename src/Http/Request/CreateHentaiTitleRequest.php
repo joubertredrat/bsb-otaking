@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Request;
 
-use App\Dto\CreateHentaiTitle;
+use App\Entity\HentaiTitle;
+use App\Http\Validator\VideoFileName;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -26,17 +27,17 @@ class CreateHentaiTitleRequest extends AbstractJsonRequest
     #[NotBlank]
     #[Type('string')]
     #[Choice(options: [
-        CreateHentaiTitle::TYPE_2D,
-        CreateHentaiTitle::TYPE_3D,
+        HentaiTitle::TYPE_2D,
+        HentaiTitle::TYPE_3D,
     ])]
     public readonly string $type;
 
     #[NotBlank]
     #[Type('string')]
     #[Choice([
-        CreateHentaiTitle::LANGUAGE_EN_US,
-        CreateHentaiTitle::LANGUAGE_PT_BR,
-        CreateHentaiTitle::LANGUAGE_RAW,
+        HentaiTitle::LANGUAGE_EN_US,
+        HentaiTitle::LANGUAGE_PT_BR,
+        HentaiTitle::LANGUAGE_RAW,
     ])]
     public readonly string $language;
 
@@ -48,17 +49,17 @@ class CreateHentaiTitleRequest extends AbstractJsonRequest
     #[NotBlank]
     #[Type('string')]
     #[Choice([
-        CreateHentaiTitle::STATUS_DOWNLOAD_DOWNLOADING,
-        CreateHentaiTitle::STATUS_DOWNLOAD_COMPLETE,
+        HentaiTitle::STATUS_DOWNLOAD_DOWNLOADING,
+        HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
     ])]
     public readonly string $statusDownload;
 
     #[NotBlank]
     #[Type('string')]
     #[Choice([
-        CreateHentaiTitle::STATUS_VIEW_QUEUE,
-        CreateHentaiTitle::STATUS_VIEW_WATCHING,
-        CreateHentaiTitle::STATUS_VIEW_DONE,
+        HentaiTitle::STATUS_VIEW_QUEUE,
+        HentaiTitle::STATUS_VIEW_WATCHING,
+        HentaiTitle::STATUS_VIEW_DONE,
     ])]
     public readonly string $statusView;
 
@@ -70,13 +71,14 @@ class CreateHentaiTitleRequest extends AbstractJsonRequest
     public readonly array $fansubs;
 
     #[All([
-        new Type('string'),
-    ])]
-    public array $files = [];
-
-    #[All([
         new Type('int'),
         new Positive(),
     ])]
     public array $tags = [];
+
+    #[All([
+        new Type('string'),
+        new VideoFileName(),
+    ])]
+    public array $videoFiles = [];
 }

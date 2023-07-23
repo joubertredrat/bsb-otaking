@@ -60,8 +60,8 @@ class HentaiTitlesController extends ApiController
             statusDownload: $request->statusDownload,
             statusView: $request->statusView,
             fansubs: $request->fansubs,
-            files: $request->files,
             tags: $request->tags,
+            videoFiles: $request->videoFiles,
         );
         $title = $this->createHentaiTitle->execute($dto);
         $response = new HentaiTitleResponse($title);

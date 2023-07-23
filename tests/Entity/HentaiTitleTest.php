@@ -8,11 +8,13 @@ use App\Entity\Fansub;
 use App\Entity\HentaiFile;
 use App\Entity\HentaiTitle;
 use App\Entity\Tag;
+use App\Entity\VideoFile;
 use App\Exception\Entity\HentaiTitle\InvalidEpisodesException;
 use App\Exception\Entity\HentaiTitle\InvalidLanguageException;
 use App\Exception\Entity\HentaiTitle\InvalidStatusDownloadException;
 use App\Exception\Entity\HentaiTitle\InvalidStatusViewException;
 use App\Exception\Entity\HentaiTitle\InvalidTypeException;
+use App\Tests\Helper;
 use PHPUnit\Framework\TestCase;
 
 class HentaiTitleTest extends TestCase
@@ -38,7 +40,7 @@ class HentaiTitleTest extends TestCase
         self::assertNull($hentaiTitle->getStatusDownload());
         self::assertNull($hentaiTitle->getStatusView());
         self::assertCount(0, $hentaiTitle->getFansubs());
-        self::assertCount(0, $hentaiTitle->getFiles());
+        self::assertCount(0, $hentaiTitle->getVideoFiles());
         self::assertCount(0, $hentaiTitle->getTags());
 
         $hentaiTitle->setName($nameExpected);
@@ -62,18 +64,18 @@ class HentaiTitleTest extends TestCase
         $hentaiTitle->removeFansub($fansubFoo);
         self::assertCount(1, $hentaiTitle->getFansubs());
 
-        $hentaiFileOne = (new HentaiFile())->setName('episode_01.mkv');
-        $hentaiFileTwo = (new HentaiFile())->setName('episode_02.mkv');
-        $hentaiTitle->addFile($hentaiFileOne);
-        self::assertCount(1, $hentaiTitle->getFiles());
-        $hentaiTitle->addFile($hentaiFileOne);
-        self::assertCount(1, $hentaiTitle->getFiles());
-        $hentaiTitle->addFile($hentaiFileTwo);
-        self::assertCount(2, $hentaiTitle->getFiles());
-        $hentaiTitle->removeFile($hentaiFileOne);
-        self::assertCount(1, $hentaiTitle->getFiles());
-        $hentaiTitle->removeFile($hentaiFileOne);
-        self::assertCount(1, $hentaiTitle->getFiles());
+        $videoFileOne = (new VideoFile())->setName(Helper::VIDEOFILE_01);
+        $videoFileTwo = (new VideoFile())->setName(Helper::VIDEOFILE_02);
+        $hentaiTitle->addVideoFile($videoFileOne);
+        self::assertCount(1, $hentaiTitle->getVideoFiles());
+        $hentaiTitle->addVideoFile($videoFileOne);
+        self::assertCount(1, $hentaiTitle->getVideoFiles());
+        $hentaiTitle->addVideoFile($videoFileTwo);
+        self::assertCount(2, $hentaiTitle->getVideoFiles());
+        $hentaiTitle->removeVideoFile($videoFileOne);
+        self::assertCount(1, $hentaiTitle->getVideoFiles());
+        $hentaiTitle->removeVideoFile($videoFileOne);
+        self::assertCount(1, $hentaiTitle->getVideoFiles());
 
         $tagFoo = (new Tag())
             ->setType(Tag::TYPE_ALL)

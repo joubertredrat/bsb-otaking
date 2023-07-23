@@ -6,9 +6,9 @@ namespace App\UseCase;
 
 use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
 use App\Entity\Fansub;
-use App\Entity\HentaiFile;
 use App\Entity\HentaiTitle;
 use App\Entity\Tag;
+use App\Entity\VideoFile;
 use App\Exception\UseCase\CreateHentaiTitle\FansubsNotFoundException;
 use App\Exception\UseCase\CreateHentaiTitle\TagsNotFoundException;
 use App\Repository\FansubRepositoryInterface;
@@ -39,10 +39,9 @@ class CreateHentaiTitle
         $hentaiTitle->setStatusDownload($createHentaiTitle->statusDownload);
         $hentaiTitle->setStatusView($createHentaiTitle->statusView);
 
-        foreach ($createHentaiTitle->files as $filename) {
-            $file = new HentaiFile();
-            $file->setName($filename);
-            $hentaiTitle->addFile($file);
+        foreach ($createHentaiTitle->videoFiles as $filename) {
+            $videoFile = (new VideoFile())->setName($filename);
+            $hentaiTitle->addVideoFile($videoFile);
         }
 
         $this->hentaiTitleRepository->save($hentaiTitle, true);
