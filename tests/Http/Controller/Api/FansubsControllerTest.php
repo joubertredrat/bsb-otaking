@@ -9,6 +9,7 @@ use App\Entity\Fansub;
 use App\Http\Controller\Api\FansubsController;
 use App\Http\Request\CreateFansubRequest;
 use App\Tests\Helper;
+use App\Tests\Http\Controller\ControllerTestCase;
 use App\UseCase\CreateFansub;
 use App\UseCase\ListFansubs;
 use Mockery;

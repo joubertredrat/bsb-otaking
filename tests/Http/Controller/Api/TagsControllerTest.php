@@ -9,6 +9,7 @@ use App\Entity\Tag;
 use App\Http\Controller\Api\TagsController;
 use App\Http\Request\CreateTagRequest;
 use App\Tests\Helper;
+use App\Tests\Http\Controller\ControllerTestCase;
 use App\UseCase\CreateTag;
 use App\UseCase\ListTags;
 use Mockery;

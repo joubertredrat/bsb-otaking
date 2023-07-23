@@ -9,6 +9,7 @@ use App\Entity\HentaiTitle;
 use App\Http\Controller\Api\HentaiTitlesController;
 use App\Http\Request\CreateHentaiTitleRequest;
 use App\Tests\Helper;
+use App\Tests\Http\Controller\ControllerTestCase;
 use App\UseCase\CreateHentaiTitle;
 use App\UseCase\ListHentaiTitles;
 use Mockery;
