@@ -119,6 +119,10 @@ function getHentaiTitleRow(
   return `<tr
       class="hentai_titles_data_row"
       data-hentai-titles-search-name="${name}"
+      data-hentai-titles-search-alternative-names="${getHentaiTitleAlternativeNamesSearch(alternativeNames)}"
+      data-hentai-titles-search-type="${type}"
+      data-hentai-titles-search-status-download="${statusDownload}"
+      data-hentai-titles-search-status-view="${statusView}"
     >
     <td class="collapsing">${id}</td>
     <td>${getHentaiTitleAlternativeNamesPopup(name, alternativeNames)}</td>
@@ -140,6 +144,14 @@ function getHentaiTitleRow(
     </td>
   </tr>`;
 }//getHentaiTitleRow
+
+function getHentaiTitleAlternativeNamesSearch(alternativeNames) {
+  if (alternativeNames.length < 1) {
+    return '';
+  }
+
+  return alternativeNames.join(';');
+}
 
 function getHentaiTitleAlternativeNamesPopup(name, alternativeNames) {
   if (alternativeNames.length < 1) {
@@ -218,8 +230,12 @@ function searchHentaiTitles() {
     let hide = true;
 
     let row = $(this);
-    const resourceName = row.data('hentai-titles-search-name');
-    if (resourceName.toLowerCase().includes(searchCriteria.toLowerCase())) {
+    const searchName = row.data('hentai-titles-search-name');
+    if (searchName.toLowerCase().includes(searchCriteria.toLowerCase())) {
+      hide = false;
+    }
+    const searchAlternativeNames = row.data('hentai-titles-search-alternative-names');
+    if (searchAlternativeNames.toLowerCase().includes(searchCriteria.toLowerCase())) {
       hide = false;
     }
 
@@ -296,7 +312,7 @@ function addPopups() {
   </div>
   <div class="fourteen wide column">
     <div class="ui file action input" id="hentai_titles_search">
-      <input id="hentai_titles_search_criteria" type="text" placeholder="Search by hentai title name">
+      <input id="hentai_titles_search_criteria" type="text" placeholder="Search by hentai title name or alternative names">
       <label for="search" class="ui button">
         <i class="search icon"></i>Search
       </label>
