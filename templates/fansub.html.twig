@@ -46,6 +46,7 @@ function submitNewFansub() {
     contentType: 'application/json',
     encode: true,
     success: function (data, textStatus, xhr) {
+      clearForm();
       closeFormModal();
       getFansubData();
       alertSuccess(`Fansub ${jsonData.name} created with success`);
@@ -184,6 +185,7 @@ function addFormValidation() {
 
 function clearForm() {
   $('.fansubs_form').form('reset');
+  $('.fansubs_form').trigger('reset');
 }//clearForm
 </script>
 {% endblock %}

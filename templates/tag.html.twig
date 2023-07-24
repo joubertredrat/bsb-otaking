@@ -48,6 +48,7 @@ function submitNewTag() {
     contentType: 'application/json',
     encode: true,
     success: function (data, textStatus, xhr) {
+      clearForm();
       closeFormModal();
       getTagData();
       alertSuccess(`Tag ${jsonData.type}:${jsonData.name} created with success`);
@@ -208,6 +209,7 @@ function addFormValidation() {
 
 function clearForm() {
   $('.tags_form').form('reset');
+  $('.tags_form').trigger('reset');
 }//clearForm
 </script>
 {% endblock %}

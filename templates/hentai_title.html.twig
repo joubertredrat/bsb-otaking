@@ -44,12 +44,12 @@ $(document).ready(function() {
     searchHentaiTitles();
   });
 
-  getTypeSearch();
-  getLanguageSearch();
-  getStatusDownloadSearch();
-  getStatusViewSearch();
-  getFansubsSearch();
-  getTagsSearch();
+  populateHentaiTitleType();
+  populateHentaiTitleLanguage();
+  populateHentaiTitleStatusDownload();
+  populateHentaiTitleStatusView();
+  populateFansubs();
+  populateTags();
 
   getHentaiTitleData();
   addFormValidation();
@@ -60,14 +60,39 @@ $('.hentai_titles_form').submit(function(e) {
   if (isValid) {
     e.preventDefault();
     const id = $('#hentai_titles_form_id').val();
-    id === '' ? submitNewTag() : submitEditTag();
+    id === '' ? submitNewHentaiTitle() : submitEditHentaiTitle();
   }
   return false;
 });//$('.hentai_titles_form').submit
 
 function submitNewHentaiTitle() {
+  const alternativeNames = [];
+  const alternativeNamesData = $('#hentai_titles_form_alternative_names').val();
+  $.each(alternativeNamesData.split('\n'), function (i, item) {
+    if (item !== '') {
+      alternativeNames.push($.trim(item));
+    }
+  });
+
+  const videoFiles = [];
+  const videoFilesData = $('#hentai_titles_form_video_files').val();
+  $.each(videoFilesData.split('\n'), function (i, item) {
+    if (item !== '') {
+      videoFiles.push($.trim(item));
+    }
+  });
+
   jsonData = {
-    name: $('#hentai_titles_form_name').val()
+    name: $.trim($('#hentai_titles_form_name').val()),
+    alternativeNames: alternativeNames,
+    type: $('#hentai_titles_form_type').val(),
+    language: $('#hentai_titles_form_language').val(),
+    episodes: parseInt($('#hentai_titles_form_episodes').val()),
+    statusDownload: $('#hentai_titles_form_status_download').val(),
+    statusView: $('#hentai_titles_form_status_view').val(),
+    fansubs: $('#hentai_titles_form_fansubs').val().map(Number),
+    tags: $('#hentai_titles_form_tags').val().map(Number),
+    videoFiles: videoFiles
   };
 
   $.ajax({
@@ -77,8 +102,9 @@ function submitNewHentaiTitle() {
     contentType: 'application/json',
     encode: true,
     success: function (data, textStatus, xhr) {
+      clearForm();
       closeFormModal();
-      getTagData();
+      getHentaiTitleData();
       alertSuccess(`Hentai title ${jsonData.name} created with success`);
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -155,6 +181,7 @@ function getHentaiTitleRow(
       data-hentai-titles-search-name="${name}"
       data-hentai-titles-search-alternative-names="${getHentaiTitleAlternativeNamesSearch(alternativeNames)}"
       data-hentai-titles-search-type="${type}"
+      data-hentai-titles-search-language="${language}"
       data-hentai-titles-search-status-download="${statusDownload}"
       data-hentai-titles-search-status-view="${statusView}"
       data-hentai-titles-search-fansubs="${fansubsMedatada.criteria}"
@@ -361,7 +388,7 @@ function searchHentaiTitles() {
   }
 }//searchHentaiTitles
 
-function getTypeSearch() {
+function populateHentaiTitleType() {
   $.get('/api/hentai/titles/types', function(object, status) {
     if (object.data.length < 1) {
       return;
@@ -372,11 +399,15 @@ function getTypeSearch() {
           value: item,
           text: item
       }));
+      $('#hentai_titles_form_type').append($('<option>', {
+          value: item,
+          text: item
+      }));
     });
   });
-}//getTypeSearch
+}//populateHentaiTitleType
 
-function getLanguageSearch() {
+function populateHentaiTitleLanguage() {
   $.get('/api/hentai/titles/languages', function(object, status) {
     if (object.data.length < 1) {
       return;
@@ -387,11 +418,15 @@ function getLanguageSearch() {
           value: item,
           text: item
       }));
+      $('#hentai_titles_form_language').append($('<option>', {
+          value: item,
+          text: item
+      }));
     });
   });
-}//getLanguageSearch
+}//populateHentaiTitleLanguage
 
-function getStatusDownloadSearch() {
+function populateHentaiTitleStatusDownload() {
   $.get('/api/hentai/titles/statuses-download', function(object, status) {
     if (object.data.length < 1) {
       return;
@@ -402,11 +437,15 @@ function getStatusDownloadSearch() {
           value: item,
           text: item
       }));
+      $('#hentai_titles_form_status_download').append($('<option>', {
+          value: item,
+          text: item
+      }));
     });
   });
-}//getStatusDownloadSearch
+}//populateHentaiTitleStatusDownload
 
-function getStatusViewSearch() {
+function populateHentaiTitleStatusView() {
   $.get('/api/hentai/titles/statuses-view', function(object, status) {
     if (object.data.length < 1) {
       return;
@@ -417,11 +456,15 @@ function getStatusViewSearch() {
           value: item,
           text: item
       }));
+      $('#hentai_titles_form_status_view').append($('<option>', {
+          value: item,
+          text: item
+      }));
     });
   });
-}//getStatusViewSearch
+}//populateHentaiTitleStatusView
 
-function getFansubsSearch() {
+function populateFansubs() {
   $.get('/api/fansubs', function(object, status) {
     if (object.data.length < 1) {
       return;
@@ -432,11 +475,15 @@ function getFansubsSearch() {
           value: item.id,
           text: item.name
       }));
+      $('#hentai_titles_form_fansubs').append($('<option>', {
+          value: item.id,
+          text: item.name
+      }));
     });
   });
-}//getFansubsSearch
+}//populateFansubs
 
-function getTagsSearch() {
+function populateTags() {
   $.get('/api/tags', function(object, status) {
     if (object.data.length < 1) {
       return;
@@ -447,9 +494,13 @@ function getTagsSearch() {
           value: item.id,
           text: item.resourceName
       }));
+      $('#hentai_titles_form_tags').append($('<option>', {
+          value: item.id,
+          text: item.resourceName
+      }));
     });
   });
-}//getTagsSearch
+}//populateTags
 
 function openFormModal() {
   $('.hentai_titles_modal')
@@ -476,13 +527,32 @@ function addFormValidation() {
   $('.hentai_titles_form')
     .form({
       on: 'submit',
+      shouldTrim: true,
       fields: {
         hentai_titles_form_name: {
           identifier: 'hentai_titles_form_name',
           rules: [
             {
               type: 'empty',
-              prompt: 'Fill name of hentai title'
+              prompt: 'Fill name of hentai title',
+            }
+          ]
+        },
+        hentai_titles_form_episodes: {
+          identifier: 'hentai_titles_form_episodes',
+          rules: [
+            {
+              type: 'integer[0..99]',
+              prompt: 'Fill with a number of episodes'
+            }
+          ]
+        },
+        hentai_titles_form_fansubs: {
+          identifier: 'hentai_titles_form_fansubs',
+          rules: [
+            {
+              type: 'minLength[1]',
+              prompt: 'Fill with at least one fansub'
             }
           ]
         }
@@ -493,6 +563,7 @@ function addFormValidation() {
 
 function clearForm() {
   $('.hentai_titles_form').form('reset');
+  $('.hentai_titles_form').trigger('reset');
 }//clearForm
 
 function addPopups() {
@@ -603,52 +674,48 @@ function addPopups() {
             <input type="text" name="hentai_titles_form_name" id="hentai_titles_form_name" placeholder="Name of hentai title name">
           </div>
           <div class="field">
-            <label for="hentai_titles_form_alternative_names">Short Text</label>
+            <label for="hentai_titles_form_alternative_names">Alternative names</label>
             <textarea rows="2" name="hentai_titles_form_alternative_names" id="hentai_titles_form_alternative_names"></textarea>
           </div>
           <div class="three fields">
             <div class="field">
               <label for="hentai_titles_form_type">Type</label>
               <select class="ui fluid dropdown" name="hentai_titles_form_type" id="hentai_titles_form_type">
-                <option value="random">random</option>
               </select>
             </div>
             <div class="field">
               <label for="hentai_titles_form_language">Language</label>
               <select class="ui fluid dropdown" name="hentai_titles_form_language" id="hentai_titles_form_language">
-                <option value="random">random</option>
               </select>
             </div>
             <div class="field">
               <label for="hentai_titles_form_episodes">Episodes</label>
-              <input type="text" name="hentai_titles_form_episodes" id="hentai_titles_form_episodes" placeholder="Number of episodes">
+              <input type="number" name="hentai_titles_form_episodes" id="hentai_titles_form_episodes" placeholder="Number of episodes">
             </div>
           </div>
           <div class="two fields">
             <div class="field">
               <label for="hentai_titles_form_status_download">Status Download</label>
               <select class="ui fluid dropdown" name="hentai_titles_form_status_download" id="hentai_titles_form_status_download">
-                <option value="random">random</option>
               </select>
             </div>
             <div class="field">
               <label for="hentai_titles_form_status_view">Status View</label>
               <select class="ui fluid dropdown" name="hentai_titles_form_status_view" id="hentai_titles_form_status_view">
-                <option value="random">random</option>
               </select>
             </div>
           </div>
           <div class="two fields">
             <div class="field">
               <label for="hentai_titles_form_fansubs">Fansubs</label>
-              <select class="ui fluid dropdown" name="hentai_titles_form_fansubs" id="hentai_titles_form_fansubs">
-                <option value="random">random</option>
+              <select multiple="" class="ui fluid dropdown" name="hentai_titles_form_fansubs" id="hentai_titles_form_fansubs">
+                <option value=""></option>
               </select>
             </div>
             <div class="field">
               <label for="hentai_titles_form_tags">Tags</label>
-              <select class="ui fluid dropdown" name="hentai_titles_form_tags" id="hentai_titles_form_tags">
-                <option value="random">random</option>
+              <select multiple="" class="ui fluid dropdown" name="hentai_titles_form_tags" id="hentai_titles_form_tags">
+                <option value=""></option>
               </select>
             </div>
           </div>
