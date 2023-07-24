@@ -21,12 +21,12 @@ class TagsControllerTest extends ControllerTestCase
         $container = $this->getContainerMock();
 
         $createTag = Mockery::mock(CreateTag::class);
-        $tagFoo = (new Tag)
+        $tagFoo = (new Tag())
             ->setType(Tag::TYPE_ALL)
             ->setName('foo')
             ->setCreatedAtNow()
         ;
-        $tagBar = (new Tag)
+        $tagBar = (new Tag())
             ->setType(Tag::TYPE_ALL)
             ->setName('bar')
             ->setCreatedAtNow()
@@ -67,7 +67,7 @@ class TagsControllerTest extends ControllerTestCase
     {
         $container = $this->getContainerMock();
 
-        $tagFoo = (new Tag)
+        $tagFoo = (new Tag())
             ->setType(Tag::TYPE_ALL)
             ->setName('foo')
             ->setCreatedAtNow()

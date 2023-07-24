@@ -7,7 +7,6 @@ namespace App\Tests\Http\Controller;
 use Fig\Http\Message\StatusCodeInterface;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Environment;
 

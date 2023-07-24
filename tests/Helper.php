@@ -42,7 +42,7 @@ class Helper
         return Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
     }
 
-    public static  function getRequestStackMock(Request $request): RequestStack
+    public static function getRequestStackMock(Request $request): RequestStack
     {
         $requestStack = new RequestStack();
         $requestStack->push($request);

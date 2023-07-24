@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class VideoFileNameValidatorTest  extends ConstraintValidatorTestCase
+class VideoFileNameValidatorTest extends ConstraintValidatorTestCase
 {
     protected function createValidator(): VideoFileNameValidator
     {
