@@ -147,6 +147,9 @@ function getHentaiTitleRow(
   created,
   updated
 ) {
+  fansubsMedatada = getHentaiTitleFansubsMetadata(fansubs);
+  tagsMetadata = getHentaiTitleTagsMetadata(tags);
+
   return `<tr
       class="hentai_titles_data_row"
       data-hentai-titles-search-name="${name}"
@@ -154,6 +157,8 @@ function getHentaiTitleRow(
       data-hentai-titles-search-type="${type}"
       data-hentai-titles-search-status-download="${statusDownload}"
       data-hentai-titles-search-status-view="${statusView}"
+      data-hentai-titles-search-fansubs="${fansubsMedatada.criteria}"
+      data-hentai-titles-search-tags="${tagsMetadata.criteria}"
     >
     <td class="collapsing">${id}</td>
     <td>${getHentaiTitleAlternativeNamesPopup(name, alternativeNames)}</td>
@@ -162,7 +167,7 @@ function getHentaiTitleRow(
     <td class="collapsing">${episodes}</td>
     <td class="collapsing">${statusDownload}</td>
     <td class="collapsing">${statusView}</td>
-    <td class="collapsing">${getHentaiTitleFansubsPopup(fansubs)} ${getHentaiTitleTagsPopup(tags)} ${getHentaiTitleFilesPopup(videoFiles)}</td>
+    <td class="collapsing">${fansubsMedatada.popup} ${tagsMetadata.popup} ${getHentaiTitleFilesPopup(videoFiles)}</td>
     <td class="collapsing">${created}</td>
     <td class="collapsing">${updated}</td>
     <td class="collapsing">
@@ -198,24 +203,65 @@ function getHentaiTitleAlternativeNamesPopup(name, alternativeNames) {
   </div>`;
 }//getHentaiTitleAlternativeNamesPopup
 
-function getHentaiTitleFansubsPopup(fansubs) {
+function getHentaiTitleFansubsMetadata(fansubs) {
+  const metadata = {
+    criteria: '',
+    popup: '',
+  };
+
   if (fansubs.length < 1) {
-    return '<div class="ui icon button"><i class="icon"></i></div>';
+    metadata.popup = '<div class="ui icon button"><i class="icon"></i></div>';
+    return metadata;
   }
 
+  ids = [];
   fansubsName = [];
   $.each(fansubs, function (i, item) {
+    ids.push(item.id);
     fansubsName.push(item.name);
   });
 
-  const html = `<div class='header'>Fansubs</div><div class='content'>${fansubsName.join('<br />')}</div>`;
+  metadata.criteria = ids.join(';');
 
-  return `<div
+  const html = `<div class='header'>Fansubs</div><div class='content'>${fansubsName.join('<br />')}</div>`;
+  metadata.popup = `<div
     class="ui icon button hentai_titles_popup"
     data-html="${html}">
     <i class="palette icon"></i>
   </div>`;
-}//getHentaiTitleFansubsPopup
+
+  return metadata;
+}//getHentaiTitleFansubsMetadata
+
+function getHentaiTitleTagsMetadata(tags) {
+  const metadata = {
+    criteria: '',
+    popup: '',
+  };
+
+  if (tags.length < 1) {
+    metadata.popup = '<div class="ui icon button"><i class="icon"></i></div>';
+    return metadata;
+  }
+
+  ids = [];
+  tagsResourceName = [];
+  $.each(tags, function (i, item) {
+    ids.push(item.id);
+    tagsResourceName.push(item.resourceName);
+  });
+
+  metadata.criteria = ids.join(';');
+
+  const html = `<div class='header'>Tags</div><div class='content'>${tagsResourceName.join('<br />')}</div>`;
+  metadata.popup = `<div
+    class="ui icon button hentai_titles_popup"
+    data-html="${html}">
+    <i class="palette icon"></i>
+  </div>`;
+
+  return metadata;
+}//getHentaiTitleTagsMetadata
 
 function getHentaiTitleFilesPopup(files) {
   if (files.length < 1) {
@@ -230,20 +276,6 @@ function getHentaiTitleFilesPopup(files) {
     <i class="video icon"></i>
   </div>`;
 }//getHentaiTitleFilesPopup
-
-function getHentaiTitleTagsPopup(tags) {
-  if (tags.length < 1) {
-    return '<div class="ui icon button"><i class="icon"></i></div>';
-  }
-
-  const html = `<div class='header'>Tags</div><div class='content'>${tags.join('<br />')}</div>`;
-
-  return `<div
-    class="ui icon button hentai_titles_popup"
-    data-html="${html}">
-    <i class="tags icon"></i>
-  </div>`;
-}//getHentaiTitleTagsPopup
 
 function searchHentaiTitles() {
   $('#hentai_titles_data tbody .hentai_titles_data_norows').hide();
@@ -303,6 +335,18 @@ function searchHentaiTitles() {
 
     const statusViewData = row.data('hentai-titles-search-status-view');
     if (statusViewCriteria !== '' && statusViewCriteria === statusViewData) {
+      hide = false;
+    }
+
+    const fansubsData = row.data('hentai-titles-search-fansubs');
+    const fansubsIds = $.isNumeric(fansubsData) ? [fansubsData.toString()] : fansubsData.split(';');
+    if (fansubCriteria !== '' && fansubsIds.length > 0 && fansubsIds.includes(fansubCriteria)) {
+      hide = false;
+    }
+
+    const tagsData = row.data('hentai-titles-search-tags');
+    const tagsIds = $.isNumeric(tagsData) ? [tagsData.toString()] : tagsData.split(';');
+    if (tagCriteria !== '' && tagsIds.length > 0 && tagsIds.includes(tagCriteria)) {
       hide = false;
     }
 
