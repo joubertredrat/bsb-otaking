@@ -11,6 +11,7 @@ use App\Http\Request\CreateHentaiTitleRequest;
 use App\Http\Response\HentaiTitleResponse;
 use App\Http\Response\ListResponse;
 use App\UseCase\CreateHentaiTitle;
+use App\UseCase\GetHentaiTitle;
 use App\UseCase\ListHentaiTitles;
 use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,6 +22,7 @@ class HentaiTitlesController extends ApiController
     public function __construct(
         protected CreateHentaiTitle $createHentaiTitle,
         protected ListHentaiTitles $listHentaiTitles,
+        protected GetHentaiTitle $getHentaiTitle,
     ) {
     }
 
@@ -31,8 +33,8 @@ class HentaiTitlesController extends ApiController
     )]
     public function list(): JsonResponse
     {
-        $titles = $this->listHentaiTitles->execute();
-        $response = HentaiTitleListResponseFactory::createFromUsecase($titles);
+        $hentaiTitles = $this->listHentaiTitles->execute();
+        $response = HentaiTitleListResponseFactory::createFromUsecase($hentaiTitles);
         return $this->jsonOk($response);
     }
 
@@ -99,9 +101,23 @@ class HentaiTitlesController extends ApiController
             tags: $request->tags,
             videoFiles: $request->videoFiles,
         );
-        $title = $this->createHentaiTitle->execute($dto);
-        $response = new HentaiTitleResponse($title);
+        $hentaiTitle = $this->createHentaiTitle->execute($dto);
+        $response = new HentaiTitleResponse($hentaiTitle);
 
         return $this->jsonCreated($response);
+    }
+
+    #[Route(
+        path: '/api/hentai/titles/{id}',
+        name: 'app_api_hentai_titles_get',
+        requirements: ['id' => '\d+'],
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function get(int $id): JsonResponse
+    {
+        $hentaiTitle = $this->getHentaiTitle->execute($id);
+        $response = new HentaiTitleResponse($hentaiTitle);
+
+        return $this->jsonOk($response);
     }
 }

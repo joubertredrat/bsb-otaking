@@ -10,6 +10,7 @@ use App\Exception\UseCase\CreateFansub\FansubNameAlreadyExistsException;
 use App\Exception\UseCase\CreateHentaiTitle\FansubsNotFoundException;
 use App\Exception\UseCase\CreateHentaiTitle\TagsNotFoundException;
 use App\Exception\UseCase\CreateTag\TagAlreadyExistsException;
+use App\Exception\UseCase\GetHentaiTitle\HentaiTitleNotFoundException;
 use Exception;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Throwable;
 
@@ -58,6 +60,22 @@ class ExceptionListenerTest extends TestCase
     {
         $dispatcher = $this->getEventDispatcherMock();
         $event = $this->getExceptionEvent(TagsNotFoundException::create([1, 2, 3]));
+        $dispatcher->dispatch($event, 'onKernelException');
+        $this->assertInstanceOf(JsonResponse::class, $event->getResponse());
+    }
+
+    public function testOnKernelExceptionWithHentaiTitleNotFoundException(): void
+    {
+        $dispatcher = $this->getEventDispatcherMock();
+        $event = $this->getExceptionEvent(HentaiTitleNotFoundException::create(10));
+        $dispatcher->dispatch($event, 'onKernelException');
+        $this->assertInstanceOf(JsonResponse::class, $event->getResponse());
+    }
+
+    public function testOnKernelExceptionWithNotFoundHttpException(): void
+    {
+        $dispatcher = $this->getEventDispatcherMock();
+        $event = $this->getExceptionEvent(new NotFoundHttpException('No route found for GET: /'));
         $dispatcher->dispatch($event, 'onKernelException');
         $this->assertInstanceOf(JsonResponse::class, $event->getResponse());
     }

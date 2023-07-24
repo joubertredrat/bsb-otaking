@@ -11,6 +11,7 @@ use App\Http\Request\CreateHentaiTitleRequest;
 use App\Tests\Helper;
 use App\Tests\Http\Controller\ControllerTestCase;
 use App\UseCase\CreateHentaiTitle;
+use App\UseCase\GetHentaiTitle;
 use App\UseCase\ListHentaiTitles;
 use Mockery;
 
@@ -28,10 +29,12 @@ class HentaiTitlesControllerTest extends ControllerTestCase
             ->shouldReceive('execute')
             ->andReturn([$hentaiTitleFoo, $hentaiTitleBar])
         ;
+        $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
 
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
+            getHentaiTitle: $getHentaiTitle,
         );
         $controller->setContainer($container);
 
@@ -81,10 +84,12 @@ class HentaiTitlesControllerTest extends ControllerTestCase
             ->andReturn($hentaiTitleFoo)
         ;
         $listHentaiTitles = Mockery::mock(ListHentaiTitles::class);
+        $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
 
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
+            getHentaiTitle: $getHentaiTitle,
         );
         $controller->setContainer($container);
 
@@ -111,15 +116,43 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         self::assertEqualStatusCreated($response->getStatusCode());
     }
 
+    public function testGet(): void
+    {
+        $container = $this->getContainerMock();
+        $id = 10;
+
+        $hentaiTitleFoo = self::getHentaiTitleMock('Foo');
+        $createHentaiTitle = Mockery::mock(CreateHentaiTitle::class);
+        $listHentaiTitles = Mockery::mock(ListHentaiTitles::class);
+        $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
+        $getHentaiTitle
+            ->shouldReceive('execute')
+            ->withArgs([$id])
+            ->andReturn($hentaiTitleFoo)
+        ;
+
+        $controller = new HentaiTitlesController(
+            createHentaiTitle: $createHentaiTitle,
+            listHentaiTitles: $listHentaiTitles,
+            getHentaiTitle: $getHentaiTitle,
+        );
+        $controller->setContainer($container);
+
+        $response = $controller->get($id);
+        self::assertEqualStatusOk($response->getStatusCode());
+    }
+
     private function getControllerMockEmpty(): HentaiTitlesController
     {
         $container = $this->getContainerMock();
         $createHentaiTitle = Mockery::mock(CreateHentaiTitle::class);
         $listHentaiTitles = Mockery::mock(ListHentaiTitles::class);
+        $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
 
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
+            getHentaiTitle: $getHentaiTitle,
         );
         $controller->setContainer($container);
         return $controller;

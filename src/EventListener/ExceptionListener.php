@@ -9,9 +9,11 @@ use App\Exception\UseCase\CreateFansub\FansubNameAlreadyExistsException;
 use App\Exception\UseCase\CreateHentaiTitle\FansubsNotFoundException;
 use App\Exception\UseCase\CreateHentaiTitle\TagsNotFoundException;
 use App\Exception\UseCase\CreateTag\TagAlreadyExistsException;
+use App\Exception\UseCase\GetHentaiTitle\HentaiTitleNotFoundException;
 use Fig\Http\Message\StatusCodeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class ExceptionListener
@@ -44,6 +46,16 @@ class ExceptionListener
             return;
         }
 
+        if ($exception instanceof HentaiTitleNotFoundException) {
+            $event->setResponse($this->getJsonResponseNotFound($exception));
+            return;
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            $event->setResponse($this->getJsonResponseNotFound($exception));
+            return;
+        }
+
         if ($exception instanceof Throwable) {
             $event->setResponse($this->getJsonResponseInternalServerError($exception));
         }
@@ -54,6 +66,14 @@ class ExceptionListener
         return new JsonResponse(
             data: $this->getErrors($error),
             status: StatusCodeInterface::STATUS_BAD_REQUEST,
+        );
+    }
+
+    private function getJsonResponseNotFound(Throwable | array $error): JsonResponse
+    {
+        return new JsonResponse(
+            data: $this->getErrors($error),
+            status: StatusCodeInterface::STATUS_NOT_FOUND,
         );
     }
 

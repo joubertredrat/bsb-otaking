@@ -12,5 +12,7 @@ interface HentaiTitleRepositoryInterface
 
     public function remove(HentaiTitle $entity, bool $flush = false): void;
 
+    public function get(int $id): ?HentaiTitle;
+
     public function list(): array;
 }

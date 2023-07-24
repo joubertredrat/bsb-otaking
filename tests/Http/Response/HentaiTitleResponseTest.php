@@ -41,7 +41,12 @@ class HentaiTitleResponseTest extends TestCase
                     'name' => $fansubFoo->getName(),
                 ],
             ],
-            'tags' => [$tagFoo->getResourceName()],
+            'tags' => [
+                [
+                    'id' => $tagFoo->getId(),
+                    'resourceName' => $tagFoo->getResourceName(),
+                ],
+            ],
             'videoFiles' => [
                 $videoFileOne->getName(),
                 $videoFileTwo->getName(),

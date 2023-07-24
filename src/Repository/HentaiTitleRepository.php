@@ -33,6 +33,11 @@ class HentaiTitleRepository extends ServiceEntityRepository implements HentaiTit
         }
     }
 
+    public function get(int $id): ?HentaiTitle
+    {
+        return $this->find($id);
+    }
+
     public function list(): array
     {
         return $this
