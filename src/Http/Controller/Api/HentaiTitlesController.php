@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Controller\Api;
 
 use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
+use App\Dto\EditHentaiTitle as DtoEditHentaiTitle;
 use App\Entity\HentaiTitle;
 use App\Http\Factory\HentaiTitleListResponseFactory;
 use App\Http\Request\CreateHentaiTitleRequest;
+use App\Http\Request\UpdateHentaiTitleRequest;
 use App\Http\Response\HentaiTitleResponse;
 use App\Http\Response\ListResponse;
 use App\UseCase\CreateHentaiTitle;
+use App\UseCase\EditHentaiTitle;
 use App\UseCase\GetHentaiTitle;
 use App\UseCase\ListHentaiTitles;
 use Fig\Http\Message\RequestMethodInterface;
@@ -23,6 +26,7 @@ class HentaiTitlesController extends ApiController
         protected CreateHentaiTitle $createHentaiTitle,
         protected ListHentaiTitles $listHentaiTitles,
         protected GetHentaiTitle $getHentaiTitle,
+        protected EditHentaiTitle $editHentaiTitle,
     ) {
     }
 
@@ -116,6 +120,33 @@ class HentaiTitlesController extends ApiController
     public function get(int $id): JsonResponse
     {
         $hentaiTitle = $this->getHentaiTitle->execute($id);
+        $response = new HentaiTitleResponse($hentaiTitle);
+
+        return $this->jsonOk($response);
+    }
+
+    #[Route(
+        path: '/api/hentai/titles/{id}',
+        name: 'app_api_hentai_titles_update',
+        requirements: ['id' => '\d+'],
+        methods: [RequestMethodInterface::METHOD_PUT],
+    )]
+    public function update(UpdateHentaiTitleRequest $request, int $id): JsonResponse
+    {
+        $dto = new DtoEditHentaiTitle(
+            id: $id,
+            name: $request->name,
+            alternativeNames: $request->alternativeNames,
+            type: $request->type,
+            language: $request->language,
+            episodes: $request->episodes,
+            statusDownload: $request->statusDownload,
+            statusView: $request->statusView,
+            fansubs: $request->fansubs,
+            tags: $request->tags,
+            videoFiles: $request->videoFiles,
+        );
+        $hentaiTitle = $this->editHentaiTitle->execute($dto);
         $response = new HentaiTitleResponse($hentaiTitle);
 
         return $this->jsonOk($response);

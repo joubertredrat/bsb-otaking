@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use App\Entity\HentaiTitle;
-use App\Exception\Dto\CreateHentaiTitle\InvalidArgumentsException;
+use App\Exception\Dto\EditHentaiTitle\InvalidArgumentsException;
 
-class CreateHentaiTitle
+class EditHentaiTitle
 {
     use HentaiTitleTrait;
 
     public function __construct(
+        public readonly int $id,
         public readonly string $name,
         public readonly array $alternativeNames,
         public readonly string $type,
@@ -24,6 +25,9 @@ class CreateHentaiTitle
         public readonly array $videoFiles,
     ) {
         $errors = [];
+        if (!self::isValidId($id)) {
+            $errors[] = 'id';
+        }
         if ($name === '') {
             $errors[] = 'name';
         }
