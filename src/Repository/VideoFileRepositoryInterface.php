@@ -9,4 +9,6 @@ use App\Entity\VideoFile;
 interface VideoFileRepositoryInterface
 {
     public function save(VideoFile $entity, bool $flush = false): void;
+
+    public function removeByList(array $videoFiles): void;
 }

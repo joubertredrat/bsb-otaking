@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Fansub
 {
-    use PrimaryKeyable;
+    use PrimaryKey;
     use Timestampable;
 
     #[ORM\Column(length: 255)]

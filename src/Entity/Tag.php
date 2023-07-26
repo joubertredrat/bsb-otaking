@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Tag
 {
-    use PrimaryKeyable;
+    use PrimaryKey;
     use Timestampable;
 
     public const TYPE_ANIME = 'anime';

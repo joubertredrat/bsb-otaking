@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class VideoFile
 {
-    use PrimaryKeyable;
+    use PrimaryKey;
     use Timestampable;
 
     public const EXTENSION_MKV = 'mkv';

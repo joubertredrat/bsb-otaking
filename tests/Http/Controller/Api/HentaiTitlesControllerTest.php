@@ -11,6 +11,7 @@ use App\Http\Request\CreateHentaiTitleRequest;
 use App\Tests\Helper;
 use App\Tests\Http\Controller\ControllerTestCase;
 use App\UseCase\CreateHentaiTitle;
+use App\UseCase\EditHentaiTitle;
 use App\UseCase\GetHentaiTitle;
 use App\UseCase\ListHentaiTitles;
 use Mockery;
@@ -30,11 +31,13 @@ class HentaiTitlesControllerTest extends ControllerTestCase
             ->andReturn([$hentaiTitleFoo, $hentaiTitleBar])
         ;
         $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
+        $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
 
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
             getHentaiTitle: $getHentaiTitle,
+            editHentaiTitle: $editHentaiTitle,
         );
         $controller->setContainer($container);
 
@@ -85,11 +88,13 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         ;
         $listHentaiTitles = Mockery::mock(ListHentaiTitles::class);
         $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
+        $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
 
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
             getHentaiTitle: $getHentaiTitle,
+            editHentaiTitle: $editHentaiTitle,
         );
         $controller->setContainer($container);
 
@@ -130,11 +135,13 @@ class HentaiTitlesControllerTest extends ControllerTestCase
             ->withArgs([$id])
             ->andReturn($hentaiTitleFoo)
         ;
+        $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
 
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
             getHentaiTitle: $getHentaiTitle,
+            editHentaiTitle: $editHentaiTitle,
         );
         $controller->setContainer($container);
 
@@ -148,11 +155,13 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         $createHentaiTitle = Mockery::mock(CreateHentaiTitle::class);
         $listHentaiTitles = Mockery::mock(ListHentaiTitles::class);
         $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
+        $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
 
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
             getHentaiTitle: $getHentaiTitle,
+            editHentaiTitle: $editHentaiTitle,
         );
         $controller->setContainer($container);
         return $controller;

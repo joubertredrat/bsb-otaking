@@ -19,8 +19,8 @@ class CreateHentaiTitle
 {
     public function __construct(
         protected FansubRepositoryInterface $fansubRepository,
-        protected HentaiTitleRepositoryInterface $hentaiTitleRepository,
         protected TagRepositoryInterface $tagRepository,
+        protected HentaiTitleRepositoryInterface $hentaiTitleRepository,
     ) {
     }
 

@@ -82,7 +82,7 @@ class CreateHentaiTitleTest extends TestCase
         self::assertCount(1, $hentaiTitleGot->getTags());
     }
 
-    public function testCreateHentaiTitleWithFansubNotFound(): void
+    public function testCreateHentaiTitleWithFansubsNotFoundException(): void
     {
         $this->expectException(FansubsNotFoundException::class);
 

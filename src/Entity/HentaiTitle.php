@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class HentaiTitle
 {
-    use PrimaryKeyable;
+    use PrimaryKey;
     use Timestampable;
 
     public const TYPE_2D = '2D';
@@ -54,13 +54,14 @@ class HentaiTitle
     #[ORM\Column(length: 20)]
     private ?string $statusView = null;
 
-    #[ORM\ManyToMany(targetEntity: Fansub::class, inversedBy: 'hentaiTitles')]
+    #[ORM\ManyToMany(targetEntity: Fansub::class, inversedBy: 'hentaiTitles', cascade: ['remove'])]
     private Collection $fansubs;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'hentaiTitles')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'hentaiTitles', cascade: ['remove'])]
     private Collection $tags;
 
-    #[ORM\ManyToMany(targetEntity: VideoFile::class, mappedBy: 'hentaiTitles', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: VideoFile::class, mappedBy: 'hentaiTitles', cascade: ['persist', 'remove'])]
+    #[ORM\OrderBy(['name' => 'ASC'])]
     private Collection $videoFiles;
 
     public function __construct()

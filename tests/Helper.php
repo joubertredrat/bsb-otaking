@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class Helper
 {
     public const VIDEOFILE_01 = 'episode_01_[ABCDE012].mkv';
+    public const VIDEOFILE_01_V2 = 'episode_01_v2_[ABCDE012].mkv';
     public const VIDEOFILE_02 = 'episode_02_[210EDCBA].mkv';
 
     public static function getVideoFiles(): array

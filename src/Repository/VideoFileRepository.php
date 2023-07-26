@@ -23,4 +23,16 @@ class VideoFileRepository extends ServiceEntityRepository implements VideoFileRe
             $this->getEntityManager()->flush();
         }
     }
+
+    public function removeByList(array $videoFiles): void
+    {
+        $this
+            ->createQueryBuilder('v')
+            ->delete()
+            ->where('v.id IN(:ids)')
+            ->setParameter('ids', $videoFiles)
+            ->getQuery()
+            ->execute()
+        ;
+    }
 }
