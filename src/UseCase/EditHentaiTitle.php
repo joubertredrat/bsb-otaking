@@ -55,7 +55,7 @@ class EditHentaiTitle
     {
         $fansubsToRemove = $hentaiTitle
             ->getFansubs()
-            ->filter(function($fansub) use ($ids) {
+            ->filter(function ($fansub) use ($ids) {
                 return !in_array($fansub->getId(), $ids);
             })
         ;
@@ -80,7 +80,7 @@ class EditHentaiTitle
     {
         $tagsToRemove = $hentaiTitle
             ->getTags()
-            ->filter(function($tag) use ($ids) {
+            ->filter(function ($tag) use ($ids) {
                 return !in_array($tag->getId(), $ids);
             })
         ;
@@ -109,7 +109,7 @@ class EditHentaiTitle
 
         $videoFilesToRemove = $hentaiTitle
             ->getVideoFiles()
-            ->filter(function($videoFile) use ($hentaiTitle, $videoFiles) {
+            ->filter(function ($videoFile) use ($hentaiTitle, $videoFiles) {
                 $return = !in_array($videoFile->getName(), $videoFiles);
                 if ($return) {
                     $hentaiTitle->removeVideoFile($videoFile);
@@ -121,7 +121,7 @@ class EditHentaiTitle
         ;
         $videoFilesFound = $hentaiTitle
             ->getVideoFiles()
-            ->map(function($videoFile) {
+            ->map(function ($videoFile) {
                 return $videoFile->getName();
             })
             ->toArray()
