@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Http\Controller\Api;
 
 use App\Dto\CreateHentaiTitle as DtoCreateHentaiTitle;
+use App\Dto\EditHentaiTitle as DtoEditHentaiTitle;
 use App\Entity\HentaiTitle;
 use App\Http\Controller\Api\HentaiTitlesController;
 use App\Http\Request\CreateHentaiTitleRequest;
+use App\Http\Request\UpdateHentaiTitleRequest;
 use App\Tests\Helper;
 use App\Tests\Http\Controller\ControllerTestCase;
 use App\UseCase\CreateHentaiTitle;
@@ -146,6 +148,55 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         $controller->setContainer($container);
 
         $response = $controller->get($id);
+        self::assertEqualStatusOk($response->getStatusCode());
+    }
+
+    public function testUpdate(): void
+    {
+        $container = $this->getContainerMock();
+        $id = 10;
+
+        $hentaiTitleFoo = self::getHentaiTitleMock('Foo');
+        $createHentaiTitle = Mockery::mock(CreateHentaiTitle::class);
+        $listHentaiTitles = Mockery::mock(ListHentaiTitles::class);
+        $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
+        $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
+        $editHentaiTitle
+            ->shouldReceive('execute')
+            ->with(Mockery::on(function ($argument) {
+                return $argument instanceof DtoEditHentaiTitle;
+            }))
+            ->andReturn($hentaiTitleFoo)
+        ;
+
+        $controller = new HentaiTitlesController(
+            createHentaiTitle: $createHentaiTitle,
+            listHentaiTitles: $listHentaiTitles,
+            getHentaiTitle: $getHentaiTitle,
+            editHentaiTitle: $editHentaiTitle,
+        );
+        $controller->setContainer($container);
+
+        $validator = Helper::getValidationMock();
+        $request = Helper::getRequestMock([
+            'name' => 'Foo',
+            'type' => HentaiTitle::TYPE_2D,
+            'language' => HentaiTitle::LANGUAGE_PT_BR,
+            'episodes' => 2,
+            'statusDownload' => HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
+            'statusView' => HentaiTitle::STATUS_VIEW_DONE,
+            'fansubs' => [1],
+            'tags' => [1, 2],
+            'videoFiles' => Helper::getVideoFiles(),
+        ]);
+        $requestStack = Helper::getRequestStackMock($request);
+        $updateHentaiTitleRequest = new UpdateHentaiTitleRequest(
+            validator: $validator,
+            requestStack: $requestStack,
+            convertCase: false,
+        );
+
+        $response = $controller->update($updateHentaiTitleRequest, $id);
         self::assertEqualStatusOk($response->getStatusCode());
     }
 
