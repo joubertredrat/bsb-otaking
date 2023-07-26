@@ -19,6 +19,16 @@ class FrontendControllerTest extends ControllerTestCase
         self::assertEqualStatusOk($response->getStatusCode());
     }
 
+    public function testPagePato(): void
+    {
+        $container = $this->getContainerMock();
+        $controller = new FrontendController();
+        $controller->setContainer($container);
+
+        $response = $controller->pagePato();
+        self::assertEqualStatusOk($response->getStatusCode());
+    }
+
     public function testPageFansub(): void
     {
         $container = $this->getContainerMock();

@@ -22,6 +22,16 @@ class FrontendController extends AbstractController
     }
 
     #[Route(
+        path: '/pato',
+        name: 'app_frontend_pato',
+        methods: [RequestMethodInterface::METHOD_GET],
+    )]
+    public function pagePato(): Response
+    {
+        return $this->render('pato.html.twig');
+    }
+
+    #[Route(
         path: '/pato/fansub',
         name: 'app_frontend_fansub',
         methods: [RequestMethodInterface::METHOD_GET],
@@ -42,7 +52,7 @@ class FrontendController extends AbstractController
     }
 
     #[Route(
-        path: '/pato/hentai/title',
+        path: '/pato/hentai-title',
         name: 'app_frontend_hentai_title',
         methods: [RequestMethodInterface::METHOD_GET],
     )]
