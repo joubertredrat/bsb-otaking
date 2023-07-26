@@ -53,6 +53,7 @@ $(document).ready(function() {
 
   getHentaiTitleData();
   addFormValidation();
+  clearForm();
 });//$(document).ready
 
 $('.hentai_titles_form').submit(function(e) {
@@ -60,40 +61,13 @@ $('.hentai_titles_form').submit(function(e) {
   if (isValid) {
     e.preventDefault();
     const id = $('#hentai_titles_form_id').val();
-    id === '' ? submitNewHentaiTitle() : submitEditHentaiTitle();
+    id === '' ? submitNewHentaiTitle() : submitEditHentaiTitle(id);
   }
   return false;
 });//$('.hentai_titles_form').submit
 
 function submitNewHentaiTitle() {
-  const alternativeNames = [];
-  const alternativeNamesData = $('#hentai_titles_form_alternative_names').val();
-  $.each(alternativeNamesData.split('\n'), function (i, item) {
-    if (item !== '') {
-      alternativeNames.push($.trim(item));
-    }
-  });
-
-  const videoFiles = [];
-  const videoFilesData = $('#hentai_titles_form_video_files').val();
-  $.each(videoFilesData.split('\n'), function (i, item) {
-    if (item !== '') {
-      videoFiles.push($.trim(item));
-    }
-  });
-
-  jsonData = {
-    name: $.trim($('#hentai_titles_form_name').val()),
-    alternativeNames: alternativeNames,
-    type: $('#hentai_titles_form_type').val(),
-    language: $('#hentai_titles_form_language').val(),
-    episodes: parseInt($('#hentai_titles_form_episodes').val()),
-    statusDownload: $('#hentai_titles_form_status_download').val(),
-    statusView: $('#hentai_titles_form_status_view').val(),
-    fansubs: $('#hentai_titles_form_fansubs').val().map(Number),
-    tags: $('#hentai_titles_form_tags').val().map(Number),
-    videoFiles: videoFiles
-  };
+  jsonData = getFormData();
 
   $.ajax({
     type: 'POST',
@@ -114,9 +88,58 @@ function submitNewHentaiTitle() {
   });
 }//submitNewHentaiTitle
 
-function submitEditHentaiTitle() {
-  alertInfo('Soon');
+function submitEditHentaiTitle(id) {
+  jsonData = getFormData();
+
+  $.ajax({
+    type: 'PUT',
+    url: `/api/hentai/titles/${id}`,
+    data: JSON.stringify(jsonData),
+    contentType: 'application/json',
+    encode: true,
+    success: function (data, textStatus, xhr) {
+      clearForm();
+      closeFormModal();
+      getHentaiTitleData();
+      alertSuccess(`Hentai title ${jsonData.name} edited with success`);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      let message = 'Anything wrong is not right';
+      alertError(message);
+    },
+  });
 }//submitEditHentaiTitle
+
+function getFormData() {
+  const alternativeNames = [];
+  const alternativeNamesData = $('#hentai_titles_form_alternative_names').val();
+  $.each(alternativeNamesData.split('\n'), function (i, item) {
+    if (item !== '') {
+      alternativeNames.push($.trim(item));
+    }
+  });
+
+  const videoFiles = [];
+  const videoFilesData = $('#hentai_titles_form_video_files').val();
+  $.each(videoFilesData.split('\n'), function (i, item) {
+    if (item !== '') {
+      videoFiles.push($.trim(item));
+    }
+  });
+
+  return {
+    name: $.trim($('#hentai_titles_form_name').val()),
+    alternativeNames: alternativeNames,
+    type: $('#hentai_titles_form_type').val(),
+    language: $('#hentai_titles_form_language').val(),
+    episodes: parseInt($('#hentai_titles_form_episodes').val()),
+    statusDownload: $('#hentai_titles_form_status_download').val(),
+    statusView: $('#hentai_titles_form_status_view').val(),
+    fansubs: $('#hentai_titles_form_fansubs').val().map(Number),
+    tags: $('#hentai_titles_form_tags').val().map(Number),
+    videoFiles: videoFiles
+  };
+}//getFormData
 
 function getHentaiTitleData() {
   $('#hentai_titles_data tbody .hentai_titles_data_row').remove();
@@ -150,13 +173,46 @@ function getHentaiTitleData() {
     addPopups();
 
     $('.hentai_titles_edit').bind('click', function () {
-      alertInfo('Soon');
+      const button = $(this);
+      const id = button.data('hentai-titles-id');
+      getHentaiTitleDataForm(id);
     });
+
     $('.hentai_titles_remove').bind('click', function () {
       alertInfo('Soon');
     });
   });
 }//getHentaiTitleData
+
+function getHentaiTitleDataForm(id) {
+  $.get(`/api/hentai/titles/${id}`, function(object, status) {
+    fansubs = [];
+    $.each(object.fansubs, function (i, item) {
+      fansubs.push(item.id);
+    });
+
+    tags = [];
+    $.each(object.tags, function (i, item) {
+      tags.push(item.id);
+    });
+
+
+    $('#hentai_titles_form_id').val(object.id);
+    $('#hentai_titles_form_name').val(object.name);
+    $('#hentai_titles_form_alternative_names').val(object.alternativeNames.join('\n'));
+    $('#hentai_titles_form_name').val(object.name);
+    $('#hentai_titles_form_type').dropdown('set selected', object.type);
+    $('#hentai_titles_form_language').dropdown('set selected', object.language);
+    $('#hentai_titles_form_episodes').val(object.episodes);
+    $('#hentai_titles_form_status_download').dropdown('set selected', object.statusDownload);
+    $('#hentai_titles_form_status_view').dropdown('set selected', object.statusView);
+    $('#hentai_titles_form_fansubs').dropdown('set selected', fansubs);
+    $('#hentai_titles_form_tags').dropdown('set selected', tags);
+    $('#hentai_titles_form_video_files').val(object.videoFiles.join('\n'));
+  });
+
+  openFormModal();
+}//getHentaiTitleDataForm
 
 function getHentaiTitleRow(
   id,
@@ -198,11 +254,11 @@ function getHentaiTitleRow(
     <td class="collapsing">${created}</td>
     <td class="collapsing">${updated}</td>
     <td class="collapsing">
-      <button class="ui icon button hentai_titles_edit">
-      <i class="edit icon"></i>
+      <button class="ui icon button hentai_titles_edit" data-hentai-titles-id="${id}">
+        <i class="edit icon"></i>
       </button>
       <button class="ui icon button hentai_titles_remove">
-      <i class="trash icon"></i>
+        <i class="trash icon"></i>
       </button>
     </td>
   </tr>`;
@@ -284,7 +340,7 @@ function getHentaiTitleTagsMetadata(tags) {
   metadata.popup = `<div
     class="ui icon button hentai_titles_popup"
     data-html="${html}">
-    <i class="palette icon"></i>
+    <i class="tags icon"></i>
   </div>`;
 
   return metadata;
@@ -295,7 +351,7 @@ function getHentaiTitleFilesPopup(files) {
     return '<div class="ui icon button"><i class="icon"></i></div>';
   }
 
-  const html = `<div class='header'>Files</div><div class='content'>${files.join('<br />')}</div>`;
+  const html = `<div class='header'>Video files</div><div class='content'>${files.join('<br />')}</div>`;
 
   return `<div
     class="ui icon button hentai_titles_popup"
@@ -675,7 +731,7 @@ function addPopups() {
           </div>
           <div class="field">
             <label for="hentai_titles_form_alternative_names">Alternative names</label>
-            <textarea rows="2" name="hentai_titles_form_alternative_names" id="hentai_titles_form_alternative_names"></textarea>
+            <textarea rows="2" name="hentai_titles_form_alternative_names" id="hentai_titles_form_alternative_names" placeholder="Alternative names of hentai title"></textarea>
           </div>
           <div class="three fields">
             <div class="field">
@@ -721,7 +777,7 @@ function addPopups() {
           </div>
           <div class="field">
             <label for="hentai_titles_form_video_files">Video files</label>
-            <textarea rows="4" name="hentai_titles_form_video_files" id="hentai_titles_form_video_files"></textarea>
+            <textarea rows="4" name="hentai_titles_form_video_files" id="hentai_titles_form_video_files" placeholder="Video files of hentai title"></textarea>
           </div>
           <div class="ui error message"></div>
           <div class="ui submit primary button">Send</div>
