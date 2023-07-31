@@ -56,7 +56,7 @@ abstract class AbstractJsonRequest
 
         $errors = [];
 
-        /** @var \Symfony\Component\Validator\ConstraintViolation */
+        /** @var \Symfony\Component\Validator\ConstraintViolation $violation */
         foreach ($violations as $violation) {
             $attribute = $this->snakeCase($violation->getPropertyPath());
             $errors[] = [
