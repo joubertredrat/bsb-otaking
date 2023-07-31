@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Exception\Entity\HentaiTitle\InvalidEpisodesException;
 use App\Exception\Entity\HentaiTitle\InvalidLanguageException;
+use App\Exception\Entity\HentaiTitle\InvalidRatingException;
 use App\Exception\Entity\HentaiTitle\InvalidStatusDownloadException;
 use App\Exception\Entity\HentaiTitle\InvalidStatusViewException;
 use App\Exception\Entity\HentaiTitle\InvalidTypeException;
@@ -27,6 +28,8 @@ class HentaiTitle
     public const LANGUAGE_EN_US = 'en_us';
     public const LANGUAGE_PT_BR = 'pt_br';
     public const LANGUAGE_RAW = 'raw';
+    public const RATING_MIN = 0;
+    public const RATING_MAX = 5;
     public const STATUS_DOWNLOAD_DOWNLOADING = 'downloading';
     public const STATUS_DOWNLOAD_COMPLETE = 'complete';
     public const STATUS_VIEW_QUEUE = 'queue';
@@ -47,6 +50,9 @@ class HentaiTitle
 
     #[ORM\Column]
     private ?int $episodes = null;
+
+    #[ORM\Column]
+    private ?int $rating = null;
 
     #[ORM\Column(length: 20)]
     private ?string $statusDownload = null;
@@ -135,6 +141,22 @@ class HentaiTitle
             throw InvalidEpisodesException::create($episodes);
         }
         $this->episodes = $episodes;
+
+        return $this;
+    }
+
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(int $rating): static
+    {
+        if (!self::isValidRating($rating)) {
+            throw InvalidRatingException::create($rating, self::RATING_MIN, self::RATING_MAX);
+        }
+
+        $this->rating = $rating;
 
         return $this;
     }
@@ -254,6 +276,11 @@ class HentaiTitle
     public static function isValidEpisodes(int $episodes): bool
     {
         return $episodes >= 0;
+    }
+
+    public static function isValidRating(int $rating): bool
+    {
+        return $rating >= self::RATING_MIN && $rating <= self::RATING_MAX;
     }
 
     public static function isValidLanguage(string $language): bool

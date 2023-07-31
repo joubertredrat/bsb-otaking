@@ -23,6 +23,7 @@ class HentaiTitleResponse implements JsonSerializable
             'type' => $this->hentaiTitle->getType(),
             'language' => $this->hentaiTitle->getLanguage(),
             'episodes' => $this->hentaiTitle->getEpisodes(),
+            'rating' => $this->hentaiTitle->getRating(),
             'statusDownload' => $this->hentaiTitle->getStatusDownload(),
             'statusView' => $this->hentaiTitle->getStatusView(),
             'fansubs' => $this->getFansubs(),

@@ -28,6 +28,7 @@ class CreateHentaiTitleTest extends TestCase
             type: HentaiTitle::TYPE_2D,
             language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
+            rating: 4,
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1],
@@ -75,6 +76,7 @@ class CreateHentaiTitleTest extends TestCase
         self::assertEquals($dtoCreateHentaiTitle->type, $hentaiTitleGot->getType());
         self::assertEquals($dtoCreateHentaiTitle->language, $hentaiTitleGot->getLanguage());
         self::assertEquals($dtoCreateHentaiTitle->episodes, $hentaiTitleGot->getEpisodes());
+        self::assertEquals($dtoCreateHentaiTitle->rating, $hentaiTitleGot->getRating());
         self::assertEquals($dtoCreateHentaiTitle->statusDownload, $hentaiTitleGot->getStatusDownload());
         self::assertEquals($dtoCreateHentaiTitle->statusView, $hentaiTitleGot->getStatusView());
         self::assertCount(1, $hentaiTitleGot->getFansubs());
@@ -92,6 +94,7 @@ class CreateHentaiTitleTest extends TestCase
             type: HentaiTitle::TYPE_2D,
             language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
+            rating: 4,
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [7],
@@ -128,6 +131,7 @@ class CreateHentaiTitleTest extends TestCase
             type: HentaiTitle::TYPE_2D,
             language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
+            rating: 4,
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1],

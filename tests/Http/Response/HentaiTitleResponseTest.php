@@ -27,12 +27,13 @@ class HentaiTitleResponseTest extends TestCase
         $videoFileTwo = (new VideoFile())->setName(Helper::VIDEOFILE_02);
 
         $arrayExpected = [
-            'id' => null,
+            'id' => 10,
             'name' => 'Title Foo',
             'alternativeNames' => ['ほげ'],
             'type' => HentaiTitle::TYPE_2D,
             'language' => HentaiTitle::LANGUAGE_PT_BR,
             'episodes' => 2,
+            'rating' => 4,
             'statusDownload' => HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             'statusView' => HentaiTitle::STATUS_VIEW_DONE,
             'fansubs' => [
@@ -56,11 +57,13 @@ class HentaiTitleResponseTest extends TestCase
         ];
 
         $hentaiTitle = (new HentaiTitle())
+            ->setId(10)
             ->setName('Title Foo')
             ->setAlternativeNames(['ほげ'])
             ->setType(HentaiTitle::TYPE_2D)
             ->setLanguage(HentaiTitle::LANGUAGE_PT_BR)
             ->setEpisodes(2)
+            ->setRating(4)
             ->setStatusDownload(HentaiTitle::STATUS_DOWNLOAD_COMPLETE)
             ->setStatusView(HentaiTitle::STATUS_VIEW_DONE)
             ->addFansub($fansubFoo)

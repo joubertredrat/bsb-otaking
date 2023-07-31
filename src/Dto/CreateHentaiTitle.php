@@ -17,6 +17,7 @@ class CreateHentaiTitle
         public readonly string $type,
         public readonly string $language,
         public readonly int $episodes,
+        public readonly int $rating,
         public readonly string $statusDownload,
         public readonly string $statusView,
         public readonly array $fansubs,
@@ -33,8 +34,11 @@ class CreateHentaiTitle
         if (!HentaiTitle::isValidLanguage($this->language)) {
             $errors[] = 'language';
         }
-        if ($this->episodes < 0) {
+        if (!HentaiTitle::isValidEpisodes($this->episodes)) {
             $errors[] = 'episodes';
+        }
+        if (!HentaiTitle::isValidRating($this->rating)) {
+            $errors[] = 'rating';
         }
         if (!HentaiTitle::isValidStatusDownload($this->statusDownload)) {
             $errors[] = 'statusDownload';

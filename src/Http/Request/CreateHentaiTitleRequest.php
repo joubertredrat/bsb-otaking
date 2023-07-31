@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
 use Symfony\Component\Validator\Constraints\PositiveOrZero;
+use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Type;
 
 class CreateHentaiTitleRequest extends AbstractJsonRequest
@@ -45,6 +46,15 @@ class CreateHentaiTitleRequest extends AbstractJsonRequest
     #[Type('int')]
     #[PositiveOrZero]
     public readonly int $episodes;
+
+    #[NotBlank]
+    #[Type('int')]
+    #[Range(
+        min: HentaiTitle::RATING_MIN,
+        max: HentaiTitle::RATING_MAX,
+        notInRangeMessage: 'Your rating must be between {{ min }} and {{ max }} and got {{ value }}',
+    )]
+    public readonly int $rating;
 
     #[NotBlank]
     #[Type('string')]

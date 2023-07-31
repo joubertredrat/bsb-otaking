@@ -33,6 +33,7 @@ class EditHentaiTitleTest extends TestCase
             type: HentaiTitle::TYPE_2D,
             language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
+            rating: 4,
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1, 4],
@@ -61,6 +62,7 @@ class EditHentaiTitleTest extends TestCase
             ->setType(HentaiTitle::TYPE_2D)
             ->setLanguage(HentaiTitle::LANGUAGE_PT_BR)
             ->setEpisodes(2)
+            ->setRating(4)
             ->setStatusDownload(HentaiTitle::STATUS_DOWNLOAD_COMPLETE)
             ->setStatusView(HentaiTitle::STATUS_VIEW_DONE)
             ->addFansub($fansubOne)
@@ -128,6 +130,7 @@ class EditHentaiTitleTest extends TestCase
         self::assertEquals($dtoEditHentaiTitle->alternativeNames, $hentaiTitleGot->getAlternativeNames());
         self::assertEquals($dtoEditHentaiTitle->type, $hentaiTitleGot->getType());
         self::assertEquals($dtoEditHentaiTitle->language, $hentaiTitleGot->getLanguage());
+        self::assertEquals($dtoEditHentaiTitle->rating, $hentaiTitleGot->getRating());
         self::assertEquals($dtoEditHentaiTitle->episodes, $hentaiTitleGot->getEpisodes());
         self::assertEquals($dtoEditHentaiTitle->statusDownload, $hentaiTitleGot->getStatusDownload());
         self::assertEquals($dtoEditHentaiTitle->statusView, $hentaiTitleGot->getStatusView());
@@ -145,6 +148,7 @@ class EditHentaiTitleTest extends TestCase
             type: HentaiTitle::TYPE_2D,
             language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
+            rating: 4,
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1, 2],
@@ -245,6 +249,7 @@ class EditHentaiTitleTest extends TestCase
             type: HentaiTitle::TYPE_2D,
             language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
+            rating: 4,
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1, 4],
@@ -285,6 +290,7 @@ class EditHentaiTitleTest extends TestCase
             type: HentaiTitle::TYPE_2D,
             language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
+            rating: 4,
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1, 2],
@@ -360,6 +366,7 @@ class EditHentaiTitleTest extends TestCase
             type: HentaiTitle::TYPE_2D,
             language: HentaiTitle::LANGUAGE_PT_BR,
             episodes: 2,
+            rating: 4,
             statusDownload: HentaiTitle::STATUS_DOWNLOAD_COMPLETE,
             statusView: HentaiTitle::STATUS_VIEW_DONE,
             fansubs: [1, 2],

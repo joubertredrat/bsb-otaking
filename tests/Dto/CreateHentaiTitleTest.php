@@ -19,6 +19,7 @@ class CreateHentaiTitleTest extends TestCase
         $typeExpected = HentaiTitle::TYPE_2D;
         $languageExpected = HentaiTitle::LANGUAGE_PT_BR;
         $episodesExpected = 2;
+        $ratingExpected = 4;
         $statusDownloadExpected = HentaiTitle::STATUS_DOWNLOAD_COMPLETE;
         $statusViewExpected = HentaiTitle::STATUS_VIEW_DONE;
         $fansubsExpected = [1, 2, 3];
@@ -31,6 +32,7 @@ class CreateHentaiTitleTest extends TestCase
             type: $typeExpected,
             language: $languageExpected,
             episodes: $episodesExpected,
+            rating: $ratingExpected,
             statusDownload: $statusDownloadExpected,
             statusView: $statusViewExpected,
             fansubs: $fansubsExpected,
@@ -43,6 +45,7 @@ class CreateHentaiTitleTest extends TestCase
         self::assertEquals($typeExpected, $createHentaiTitle->type);
         self::assertEquals($languageExpected, $createHentaiTitle->language);
         self::assertEquals($episodesExpected, $createHentaiTitle->episodes);
+        self::assertEquals($ratingExpected, $createHentaiTitle->rating);
         self::assertEquals($statusDownloadExpected, $createHentaiTitle->statusDownload);
         self::assertEquals($statusViewExpected, $createHentaiTitle->statusView);
         self::assertEquals($videoFilesExpected, $createHentaiTitle->videoFiles);
@@ -59,6 +62,7 @@ class CreateHentaiTitleTest extends TestCase
             type: '4D',
             language: 'ru_ru',
             episodes: -1,
+            rating: 16,
             statusDownload: 'unknown',
             statusView: 'unknown',
             fansubs: [1, 0, 2, 3],

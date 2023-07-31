@@ -36,6 +36,7 @@ class CreateHentaiTitle
         $hentaiTitle->setType($createHentaiTitle->type);
         $hentaiTitle->setLanguage($createHentaiTitle->language);
         $hentaiTitle->setEpisodes($createHentaiTitle->episodes);
+        $hentaiTitle->setRating($createHentaiTitle->rating);
         $hentaiTitle->setStatusDownload($createHentaiTitle->statusDownload);
         $hentaiTitle->setStatusView($createHentaiTitle->statusView);
 
