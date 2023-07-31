@@ -26,6 +26,15 @@
     "symfony/validator": "6.3.*",
     "symfony/yaml": "6.3.*"
   },
+  "require-dev": {
+    "mockery/mockery": "^1.6",
+    "phpmetrics/phpmetrics": "^2.8",
+    "phpunit/phpunit": "^10",
+    "squizlabs/php_codesniffer": "^3.7",
+    "symfony/maker-bundle": "^1.48",
+    "symfony/stopwatch": "6.3.*",
+    "symfony/web-profiler-bundle": "6.3.*"
+  },
   "config": {
     "allow-plugins": {
       "php-http/discovery": true,
@@ -73,10 +82,11 @@
       "vendor/bin/phpmetrics --report-html=.metrics src/",
       "open .metrics/index.html"
     ],
-    "phpcs":[
+    "phpcs": [
       "vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR12 --extensions=php,inc,lib --ignore=*/Migrations/* src/",
       "vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR12 --extensions=php,inc,lib tests/"
-    ]
+    ],
+    "mysql-prod-tunnel": "ssh -L 27306:mysql.jouass1.dreamhosters.com:3306 joubertredrat@galena.dreamhost.com"
   },
   "conflict": {
     "symfony/symfony": "*"
@@ -87,14 +97,5 @@
       "require": "6.3.*",
       "docker": true
     }
-  },
-  "require-dev": {
-    "mockery/mockery": "^1.6",
-    "phpmetrics/phpmetrics": "^2.8",
-    "phpunit/phpunit": "^10",
-    "squizlabs/php_codesniffer": "^3.7",
-    "symfony/maker-bundle": "^1.48",
-    "symfony/stopwatch": "6.3.*",
-    "symfony/web-profiler-bundle": "6.3.*"
   }
 }
