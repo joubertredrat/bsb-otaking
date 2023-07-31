@@ -67,7 +67,8 @@ $('.hentai_titles_form').submit(function(e) {
 });//$('.hentai_titles_form').submit
 
 function submitNewHentaiTitle() {
-  jsonData = getFormData();
+  lockForm();
+  const jsonData = getFormData();
 
   $.ajax({
     type: 'POST',
@@ -76,20 +77,22 @@ function submitNewHentaiTitle() {
     contentType: 'application/json',
     encode: true,
     success: function (data, textStatus, xhr) {
+      unlockForm();
       clearForm();
       closeFormModal();
       getHentaiTitleData();
       alertSuccess(`Hentai title ${jsonData.name} created with success`);
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      let message = 'Anything wrong is not right';
-      alertError(message);
+      unlockForm();
+      alertError('Anything wrong is not right');
     },
   });
 }//submitNewHentaiTitle
 
 function submitEditHentaiTitle(id) {
-  jsonData = getFormData();
+  lockForm();
+  const jsonData = getFormData();
 
   $.ajax({
     type: 'PUT',
@@ -98,14 +101,15 @@ function submitEditHentaiTitle(id) {
     contentType: 'application/json',
     encode: true,
     success: function (data, textStatus, xhr) {
+      unlockForm();
       clearForm();
       closeFormModal();
       getHentaiTitleData();
       alertSuccess(`Hentai title ${jsonData.name} edited with success`);
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      let message = 'Anything wrong is not right';
-      alertError(message);
+      unlockForm();
+      alertError('Anything wrong is not right');
     },
   });
 }//submitEditHentaiTitle
@@ -622,6 +626,18 @@ function clearForm() {
   $('.hentai_titles_form').trigger('reset');
 }//clearForm
 
+function lockForm() {
+  $('.hentai_titles_form div.field').addClass('disabled');
+  $('.hentai_titles_form .submit').addClass('disabled');
+  $('.hentai_titles_form .submit').addClass('loading');
+}//lockForm
+
+function unlockForm() {
+  $('.hentai_titles_form div.field').removeClass('disabled');
+  $('.hentai_titles_form .submit').removeClass('disabled');
+  $('.hentai_titles_form .submit').removeClass('loading');
+}//unlockForm
+
 function addPopups() {
   $('.hentai_titles_popup').popup({delay: {
     show: 700,
@@ -647,8 +663,8 @@ function addPopups() {
   <div class="fourteen wide column">
     <div class="field">
       <div class="ui file action input" id="hentai_titles_search">
-        <input id="hentai_titles_search_criteria" type="text" placeholder="Search by hentai title name or alternative names">
-        <label for="search" class="ui button">
+        <input id="hentai_titles_search_criteria" name="hentai_titles_search_criteria" type="text" placeholder="Search by hentai title name or alternative names">
+        <label for="hentai_titles_search_criteria" class="ui button">
           <i class="search icon"></i>Search
         </label>
       </div>
