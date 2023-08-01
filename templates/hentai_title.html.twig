@@ -137,6 +137,7 @@ function getFormData() {
     type: $('#hentai_titles_form_type').val(),
     language: $('#hentai_titles_form_language').val(),
     episodes: parseInt($('#hentai_titles_form_episodes').val()),
+    rating: parseInt($('#hentai_titles_form_rating').val()),
     statusDownload: $('#hentai_titles_form_status_download').val(),
     statusView: $('#hentai_titles_form_status_view').val(),
     fansubs: $('#hentai_titles_form_fansubs').val().map(Number),
@@ -163,6 +164,7 @@ function getHentaiTitleData() {
           item.type,
           item.language,
           item.episodes,
+          item.rating,
           item.statusDownload,
           item.statusView,
           item.fansubs,
@@ -175,6 +177,7 @@ function getHentaiTitleData() {
     });
 
     addPopups();
+    addRating();
 
     $('.hentai_titles_edit').bind('click', function () {
       const button = $(this);
@@ -208,6 +211,8 @@ function getHentaiTitleDataForm(id) {
     $('#hentai_titles_form_type').dropdown('set selected', object.type);
     $('#hentai_titles_form_language').dropdown('set selected', object.language);
     $('#hentai_titles_form_episodes').val(object.episodes);
+    $('.hentai_titles_form_rating_select').rating('set rating', object.rating);
+    $('#hentai_titles_form_rating').val(object.rating);
     $('#hentai_titles_form_status_download').dropdown('set selected', object.statusDownload);
     $('#hentai_titles_form_status_view').dropdown('set selected', object.statusView);
     $('#hentai_titles_form_fansubs').dropdown('set selected', fansubs);
@@ -225,6 +230,7 @@ function getHentaiTitleRow(
   type,
   language,
   episodes,
+  rating,
   statusDownload,
   statusView,
   fansubs,
@@ -247,16 +253,17 @@ function getHentaiTitleRow(
       data-hentai-titles-search-fansubs="${fansubsMedatada.criteria}"
       data-hentai-titles-search-tags="${tagsMetadata.criteria}"
     >
-    <td class="collapsing">${id}</td>
     <td>${getHentaiTitleAlternativeNamesPopup(name, alternativeNames)}</td>
     <td class="collapsing">${type}</td>
     <td class="collapsing">${language}</td>
     <td class="collapsing">${episodes}</td>
+    <td class="collapsing">
+      <div class="ui yellow rating hentai_titles_rating" data-icon="star" data-rating="${rating}"></div>
+    </td>
     <td class="collapsing">${statusDownload}</td>
     <td class="collapsing">${statusView}</td>
     <td class="collapsing">${fansubsMedatada.popup} ${tagsMetadata.popup} ${getHentaiTitleFilesPopup(videoFiles)}</td>
-    <td class="collapsing">${created}</td>
-    <td class="collapsing">${updated}</td>
+    <td class="collapsing">${created}<br/>${updated}</td>
     <td class="collapsing">
       <button class="ui icon button hentai_titles_edit" data-hentai-titles-id="${id}">
         <i class="edit icon"></i>
@@ -285,7 +292,10 @@ function getHentaiTitleAlternativeNamesPopup(name, alternativeNames) {
 
   return `<div
     class="hentai_titles_popup"
-    data-html="${html}">
+    data-html="${html}"
+    data-position="top center"
+    data-variation="very wide"
+  >
     ${name} <i class="mouse pointer icon"></i>
   </div>`;
 }//getHentaiTitleAlternativeNamesPopup
@@ -313,7 +323,10 @@ function getHentaiTitleFansubsMetadata(fansubs) {
   const html = `<div class='header'>Fansubs</div><div class='content'>${fansubsName.join('<br />')}</div>`;
   metadata.popup = `<div
     class="ui icon button hentai_titles_popup"
-    data-html="${html}">
+    data-html="${html}"
+    data-position="top center"
+    data-variation="very wide"
+  >
     <i class="palette icon"></i>
   </div>`;
 
@@ -343,7 +356,10 @@ function getHentaiTitleTagsMetadata(tags) {
   const html = `<div class='header'>Tags</div><div class='content'>${tagsResourceName.join('<br />')}</div>`;
   metadata.popup = `<div
     class="ui icon button hentai_titles_popup"
-    data-html="${html}">
+    data-html="${html}"
+    data-position="top center"
+    data-variation="very wide"
+  >
     <i class="tags icon"></i>
   </div>`;
 
@@ -359,7 +375,10 @@ function getHentaiTitleFilesPopup(files) {
 
   return `<div
     class="ui icon button hentai_titles_popup"
-    data-html="${html}">
+    data-html="${html}"
+    data-position="top center"
+    data-variation="very wide"
+  >
     <i class="video icon"></i>
   </div>`;
 }//getHentaiTitleFilesPopup
@@ -624,26 +643,45 @@ function addFormValidation() {
 function clearForm() {
   $('.hentai_titles_form').form('reset');
   $('.hentai_titles_form').trigger('reset');
+  $('.hentai_titles_form_rating_select').rating('set rating', 0);
 }//clearForm
 
 function lockForm() {
   $('.hentai_titles_form div.field').addClass('disabled');
   $('.hentai_titles_form .submit').addClass('disabled');
   $('.hentai_titles_form .submit').addClass('loading');
+  $('.hentai_titles_form_rating_select').rating('disable');
 }//lockForm
 
 function unlockForm() {
   $('.hentai_titles_form div.field').removeClass('disabled');
   $('.hentai_titles_form .submit').removeClass('disabled');
   $('.hentai_titles_form .submit').removeClass('loading');
+  $('.hentai_titles_form_rating_select').rating('enable');
 }//unlockForm
 
 function addPopups() {
-  $('.hentai_titles_popup').popup({delay: {
-    show: 700,
-    hide: 10
-  }});
+  $('.hentai_titles_popup').popup({
+    delay: {
+      show: 700,
+      hide: 100
+    },
+    hoverable: true,
+  });
 }//addPopups
+
+function addRating() {
+  $('.hentai_titles_rating').rating({
+    maxRating: 5,
+    interactive: false,
+  });
+  $('.hentai_titles_form_rating_select').rating({
+    maxRating: 5,
+    onRate: function (value) {
+      $('#hentai_titles_form_rating').val(value);
+    },
+  });
+}//addRating
 </script>
 {% endblock %}
 
@@ -719,22 +757,21 @@ function addPopups() {
       <caption></caption>
       <thead>
         <tr>
-          <th class="collapsing">ID</th>
           <th>Name</th>
           <th class="collapsing">Type</th>
           <th class="collapsing">Lang</th>
           <th class="collapsing">Eps</th>
+          <th class="collapsing">Rating</th>
           <th class="collapsing">Down</th>
           <th class="collapsing">View</th>
           <th class="collapsing">Fansubs, Tags, Files</th>
-          <th class="collapsing">Created</th>
-          <th class="collapsing">Updated</th>
+          <th class="collapsing">Created<br/>Updated</th>
           <th class="collapsing"></th>
         </tr>
       </thead>
       <tbody>
         <tr class="center aligned hentai_titles_data_norows" hidden>
-          <td colspan="11">None hentai titles found</td>
+          <td colspan="10">None hentai titles found</td>
         </tr>
       </tbody>
     </table>
@@ -771,7 +808,7 @@ function addPopups() {
               <input type="number" name="hentai_titles_form_episodes" id="hentai_titles_form_episodes" placeholder="Number of episodes">
             </div>
           </div>
-          <div class="two fields">
+          <div class="three fields">
             <div class="field">
               <label for="hentai_titles_form_status_download">Status Download</label>
               <select class="ui fluid dropdown" name="hentai_titles_form_status_download" id="hentai_titles_form_status_download">
@@ -781,6 +818,11 @@ function addPopups() {
               <label for="hentai_titles_form_status_view">Status View</label>
               <select class="ui fluid dropdown" name="hentai_titles_form_status_view" id="hentai_titles_form_status_view">
               </select>
+            </div>
+            <div class="field">
+              <label for="hentai_titles_form_rating">Rating</label>
+              <div class="ui yellow rating massive hentai_titles_form_rating_select" data-icon="star" data-rating="0"></div>
+              <input type="hidden" name="hentai_titles_form_rating" id="hentai_titles_form_rating" value="0" />
             </div>
           </div>
           <div class="two fields">
