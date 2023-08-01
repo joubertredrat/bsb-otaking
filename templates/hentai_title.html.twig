@@ -28,6 +28,10 @@ $(document).ready(function() {
     searchHentaiTitles();
   });
 
+  $('#hentai_titles_search_rating').bind('change', function () {
+    searchHentaiTitles();
+  });
+
   $('#hentai_titles_search_status_download').bind('change', function () {
     searchHentaiTitles();
   });
@@ -248,6 +252,7 @@ function getHentaiTitleRow(
       data-hentai-titles-search-alternative-names="${getHentaiTitleAlternativeNamesSearch(alternativeNames)}"
       data-hentai-titles-search-type="${type}"
       data-hentai-titles-search-language="${language}"
+      data-hentai-titles-search-rating="${rating}"
       data-hentai-titles-search-status-download="${statusDownload}"
       data-hentai-titles-search-status-view="${statusView}"
       data-hentai-titles-search-fansubs="${fansubsMedatada.criteria}"
@@ -390,6 +395,7 @@ function searchHentaiTitles() {
   const searchCriteria = $('#hentai_titles_search_criteria').val();
   const typeCriteria = $('#hentai_titles_search_type').val();
   const languageCriteria = $('#hentai_titles_search_language').val();
+  const ratingCriteria = $('#hentai_titles_search_rating').val();
   const statusDownloadCriteria = $('#hentai_titles_search_status_download').val();
   const statusViewCriteria = $('#hentai_titles_search_status_view').val();
   const fansubCriteria = $('#hentai_titles_search_fansubs').val();
@@ -399,6 +405,7 @@ function searchHentaiTitles() {
   criterias.push(searchCriteria);
   criterias.push(typeCriteria);
   criterias.push(languageCriteria);
+  criterias.push(ratingCriteria);
   criterias.push(statusDownloadCriteria);
   criterias.push(statusViewCriteria);
   criterias.push(fansubCriteria);
@@ -431,6 +438,11 @@ function searchHentaiTitles() {
 
     const languageData = row.data('hentai-titles-search-language');
     if (languageCriteria !== '' && languageCriteria === languageData) {
+      hide = false;
+    }
+
+    const ratingData = row.data('hentai-titles-search-rating').toString();
+    if (ratingCriteria !== '' && ratingCriteria === ratingData) {
       hide = false;
     }
 
@@ -722,6 +734,18 @@ function addRating() {
           <label for="hentai_titles_search_language">Language</label>
           <select class="ui fluid dropdown" name="hentai_titles_search_language" id="hentai_titles_search_language">
             <option value="">All</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="hentai_titles_search_rating">Rating</label>
+          <select class="ui fluid dropdown" name="hentai_titles_search_rating" id="hentai_titles_search_rating">
+            <option value="">All</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select>
         </div>
         <div class="field">
