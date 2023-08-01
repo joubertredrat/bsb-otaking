@@ -79,6 +79,7 @@
       "XDEBUG_MODE=coverage vendor/phpunit/phpunit/phpunit --coverage-html .coverage",
       "open .coverage/index.html"
     ],
+    "coverage-console": "XDEBUG_MODE=coverage vendor/phpunit/phpunit/phpunit --coverage-text",
     "metrics": [
       "vendor/bin/phpmetrics --report-html=.metrics src/",
       "open .metrics/index.html"
