@@ -31,10 +31,12 @@
     "phpmetrics/phpmetrics": "^2.8",
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^10",
+    "psalm/plugin-symfony": "^5.0",
     "squizlabs/php_codesniffer": "^3.7",
     "symfony/maker-bundle": "^1.48",
     "symfony/stopwatch": "6.3.*",
-    "symfony/web-profiler-bundle": "6.3.*"
+    "symfony/web-profiler-bundle": "6.3.*",
+    "vimeo/psalm": "^5.14"
   },
   "config": {
     "allow-plugins": {
