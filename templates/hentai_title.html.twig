@@ -57,6 +57,7 @@ $(document).ready(function() {
 
   getHentaiTitleData();
   addFormValidation();
+  addRatingForm();
   clearForm();
 });//$(document).ready
 
@@ -682,16 +683,19 @@ function addPopups() {
   });
 }//addPopups
 
-function addRating() {
-  $('.hentai_titles_rating').rating({
-    maxRating: 5,
-    interactive: false,
-  });
+function addRatingForm() {
   $('.hentai_titles_form_rating_select').rating({
     maxRating: 5,
     onRate: function (value) {
       $('#hentai_titles_form_rating').val(value);
     },
+  });
+}//addRatingForm
+
+function addRating() {
+  $('.hentai_titles_rating').rating({
+    maxRating: 5,
+    interactive: false,
   });
 }//addRating
 </script>
