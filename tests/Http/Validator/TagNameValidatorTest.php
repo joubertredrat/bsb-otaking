@@ -7,12 +7,13 @@ namespace App\Tests\Http\Validator;
 use App\Http\Validator\TagName;
 use App\Http\Validator\TagNameValidator;
 use Symfony\Component\Validator\Constraints\Blank;
+use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class TagNameValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function createValidator(): TagNameValidator
+    protected function createValidator(): ConstraintValidatorInterface
     {
         return new TagNameValidator();
     }

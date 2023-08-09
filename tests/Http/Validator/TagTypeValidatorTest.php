@@ -8,12 +8,13 @@ use App\Entity\Tag;
 use App\Http\Validator\TagType;
 use App\Http\Validator\TagTypeValidator;
 use Symfony\Component\Validator\Constraints\Blank;
+use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class TagTypeValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function createValidator(): TagTypeValidator
+    protected function createValidator(): ConstraintValidatorInterface
     {
         return new TagTypeValidator();
     }
