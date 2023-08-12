@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Exception\Entity\PrimaryKeyable;
+namespace App\Exception\Entity\PrimaryKey;
 
 use InvalidArgumentException;
 

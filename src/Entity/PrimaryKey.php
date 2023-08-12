@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Exception\Entity\PrimaryKeyable\InvalidPrimaryKeyException;
+use App\Exception\Entity\PrimaryKey\InvalidPrimaryKeyException;
 use Doctrine\ORM\Mapping as ORM;
 
 trait PrimaryKey

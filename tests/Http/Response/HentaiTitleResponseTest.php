@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Http\Response;
 
 use App\Entity\Fansub;
-use App\Entity\HentaiFile;
 use App\Entity\HentaiTitle;
 use App\Entity\Tag;
 use App\Entity\VideoFile;

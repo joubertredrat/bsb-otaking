@@ -21,6 +21,7 @@ class VideoFile
     public const EXTENSION_MKV = 'mkv';
     public const EXTENSION_MP4 = 'mp4';
     public const EXTENSION_AVI = 'avi';
+    public const EXTENSION_OGM = 'ogm';
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $name = null;
@@ -88,6 +89,7 @@ class VideoFile
             self::EXTENSION_MKV,
             self::EXTENSION_MP4,
             self::EXTENSION_AVI,
+            self::EXTENSION_OGM,
         ];
     }
 }

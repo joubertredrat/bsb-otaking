@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Exception\Entity\PrimaryKeyable;
+namespace App\Tests\Exception\Entity\PrimaryKey;
 
-use App\Exception\Entity\PrimaryKeyable\InvalidPrimaryKeyException;
+use App\Exception\Entity\PrimaryKey\InvalidPrimaryKeyException;
 use PHPUnit\Framework\TestCase;
 
 class InvalidPrimaryKeyExceptionTest extends TestCase

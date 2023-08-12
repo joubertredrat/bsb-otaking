@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Exception\UseCase\EditHentaiTitle;
 
-use RuntimeException;
+use InvalidArgumentException;
 
-class TagsNotFoundException extends RuntimeException
+class TagsNotFoundException extends InvalidArgumentException
 {
     public static function create(array $ids): self
     {

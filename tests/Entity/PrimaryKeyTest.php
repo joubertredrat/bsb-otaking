@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\PrimaryKey;
-use App\Exception\Entity\PrimaryKeyable\InvalidPrimaryKeyException;
+use App\Exception\Entity\PrimaryKey\InvalidPrimaryKeyException;
 use PHPUnit\Framework\TestCase;
 
 class PrimaryKeyTest extends TestCase
