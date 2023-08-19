@@ -19,3 +19,4 @@
 /.metrics
 
 /public/.htpassword
+dump.sql
