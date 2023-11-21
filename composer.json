@@ -8,7 +8,7 @@
     "ext-ctype": "*",
     "ext-iconv": "*",
     "doctrine/doctrine-bundle": "^2.11",
-    "doctrine/doctrine-migrations-bundle": "^3.2",
+    "doctrine/doctrine-migrations-bundle": "^3.3",
     "doctrine/orm": "^2.16",
     "fig/http-message-util": "^1.1",
     "jawira/case-converter": "^3.5",
