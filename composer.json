@@ -33,7 +33,7 @@
     "phpunit/phpunit": "^10",
     "psalm/plugin-symfony": "^5.04",
     "squizlabs/php_codesniffer": "^3.8",
-    "symfony/maker-bundle": "^1.52",
+    "symfony/maker-bundle": "^1.53",
     "symfony/stopwatch": "6.3.*",
     "symfony/web-profiler-bundle": "6.3.*",
     "vimeo/psalm": "^5.21"
