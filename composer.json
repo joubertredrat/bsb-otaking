@@ -36,7 +36,7 @@
     "symfony/maker-bundle": "^1.53",
     "symfony/stopwatch": "6.3.*",
     "symfony/web-profiler-bundle": "6.3.*",
-    "vimeo/psalm": "^5.25"
+    "vimeo/psalm": "^5.26"
   },
   "config": {
     "allow-plugins": {
