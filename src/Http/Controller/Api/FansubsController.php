@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controller\Api;
 
 use App\Dto\CreateFansub as DtoCreateFansub;
+use App\Dto\ListFansubs as DtoListFansubs;
 use App\Http\Factory\FansubListResponseFactory;
+use App\Http\Factory\PaginationFactory;
 use App\Http\Request\CreateFansubRequest;
 use App\Http\Response\FansubResponse;
 use App\UseCase\CreateFansub;
 use App\UseCase\ListFansubs;
 use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FansubsController extends ApiController
@@ -27,10 +30,16 @@ class FansubsController extends ApiController
         name: 'app_api_fansub_list',
         methods: [RequestMethodInterface::METHOD_GET],
     )]
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        $fansubs = $this->listFansubs->execute();
+        $pagination = PaginationFactory::createFromRequest($request);
+        $dto = new DtoListFansubs(
+            pagination: $pagination,
+            fansubName: $request->get('fansubName', ''),
+        );
+        $fansubs = $this->listFansubs->execute($dto);
         $response = FansubListResponseFactory::createFromUsecase($fansubs);
+
         return $this->jsonOk($response);
     }
 

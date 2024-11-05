@@ -9,6 +9,9 @@ use App\Exception\Dto\Pagination\InvalidPageException;
 
 class Pagination
 {
+    public const DEFAULT_PAGE = 1;
+    public const DEFAULT_ITEMS_PER_PAGE = 10;
+
     public function __construct(
         public readonly int $page,
         public readonly int $itemsPerPage,
@@ -29,5 +32,12 @@ class Pagination
     public static function isValidItemsPerPage(int $itemsPerPage): bool
     {
         return $itemsPerPage > 0;
+    }
+
+    public static function create(?int $page = null, ?int $itemsPerPage = null): self
+    {
+        $page ??= self::DEFAULT_PAGE;
+        $itemsPerPage ??= self::DEFAULT_ITEMS_PER_PAGE;
+        return new self(page: $page, itemsPerPage: $itemsPerPage);
     }
 }

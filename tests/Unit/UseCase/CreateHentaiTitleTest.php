@@ -63,6 +63,9 @@ class CreateHentaiTitleTest extends TestCase
             ->once()
         ;
 
+        /** @var FansubRepositoryInterface $fansubRepository */
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
+        /** @var TagRepositoryInterface $tagRepository */
         $usecase = new CreateHentaiTitle(
             fansubRepository: $fansubRepository,
             hentaiTitleRepository: $hentaiTitleRepository,
@@ -112,6 +115,9 @@ class CreateHentaiTitleTest extends TestCase
         $tagRepository = Mockery::mock(TagRepositoryInterface::class);
         $hentaiTitleRepository = Mockery::mock(HentaiTitleRepositoryInterface::class);
 
+        /** @var FansubRepositoryInterface $fansubRepository */
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
+        /** @var TagRepositoryInterface $tagRepository */
         $usecase = new CreateHentaiTitle(
             fansubRepository: $fansubRepository,
             hentaiTitleRepository: $hentaiTitleRepository,
@@ -158,6 +164,9 @@ class CreateHentaiTitleTest extends TestCase
 
         $hentaiTitleRepository = Mockery::mock(HentaiTitleRepositoryInterface::class);
 
+        /** @var FansubRepositoryInterface $fansubRepository */
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
+        /** @var TagRepositoryInterface $tagRepository */
         $usecase = new CreateHentaiTitle(
             fansubRepository: $fansubRepository,
             hentaiTitleRepository: $hentaiTitleRepository,

@@ -16,7 +16,7 @@ class CreateFansubTest extends TestCase
 {
     public function testCreateFansubWithSuccess(): void
     {
-        $dtoCreateTag = new DtoCreateFansub(name: 'Foo');
+        $dtoCreateFansub = new DtoCreateFansub(name: 'Foo');
 
         $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $fansubRepository
@@ -29,17 +29,18 @@ class CreateFansubTest extends TestCase
             ->once()
         ;
 
-        $createTag = new CreateFansub($fansubRepository);
-        $fansubGot = $createTag->execute($dtoCreateTag);
+        /** @var FansubRepositoryInterface $fansubRepository */
+        $createFansub = new CreateFansub($fansubRepository);
+        $fansubGot = $createFansub->execute($dtoCreateFansub);
 
-        self::assertEquals($dtoCreateTag->name, $fansubGot->getName());
+        self::assertEquals($dtoCreateFansub->name, $fansubGot->getName());
     }
 
     public function testCreateFansubWithNameAlreadyExists(): void
     {
         $this->expectException(FansubNameAlreadyExistsException::class);
 
-        $dtoCreateTag = new DtoCreateFansub(name: 'Foo');
+        $dtoCreateFansub = new DtoCreateFansub(name: 'Foo');
         $fansubFound = new Fansub();
         $fansubFound->setName('Foo');
 
@@ -50,7 +51,8 @@ class CreateFansubTest extends TestCase
             ->andReturn($fansubFound)
         ;
 
-        $createTag = new CreateFansub($fansubRepository);
-        $createTag->execute($dtoCreateTag);
+        /** @var FansubRepositoryInterface $fansubRepository */
+        $createFansub = new CreateFansub($fansubRepository);
+        $createFansub->execute($dtoCreateFansub);
     }
 }

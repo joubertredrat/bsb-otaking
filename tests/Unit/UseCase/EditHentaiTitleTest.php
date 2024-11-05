@@ -116,6 +116,10 @@ class EditHentaiTitleTest extends TestCase
             ->andReturn($tagThree)
         ;
 
+        /** @var FansubRepositoryInterface $fansubRepository */
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
+        /** @var TagRepositoryInterface $tagRepository */
+        /** @var VideoFileRepositoryInterface $videoFileRepository */
         $usecase = new EditHentaiTitle(
             fansubRepository: $fansubRepository,
             tagRepository: $tagRepository,
@@ -216,6 +220,10 @@ class EditHentaiTitleTest extends TestCase
             ->andReturn($tagTwo)
         ;
 
+        /** @var FansubRepositoryInterface $fansubRepository */
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
+        /** @var TagRepositoryInterface $tagRepository */
+        /** @var VideoFileRepositoryInterface $videoFileRepository */
         $usecase = new EditHentaiTitle(
             fansubRepository: $fansubRepository,
             tagRepository: $tagRepository,
@@ -269,6 +277,10 @@ class EditHentaiTitleTest extends TestCase
         $fansubRepository = Mockery::mock(FansubRepositoryInterface::class);
         $tagRepository = Mockery::mock(TagRepositoryInterface::class);
 
+        /** @var FansubRepositoryInterface $fansubRepository */
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
+        /** @var TagRepositoryInterface $tagRepository */
+        /** @var VideoFileRepositoryInterface $videoFileRepository */
         $usecase = new EditHentaiTitle(
             fansubRepository: $fansubRepository,
             tagRepository: $tagRepository,
@@ -344,6 +356,10 @@ class EditHentaiTitleTest extends TestCase
 
         $tagRepository = Mockery::mock(TagRepositoryInterface::class);
 
+        /** @var FansubRepositoryInterface $fansubRepository */
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
+        /** @var TagRepositoryInterface $tagRepository */
+        /** @var VideoFileRepositoryInterface $videoFileRepository */
         $usecase = new EditHentaiTitle(
             fansubRepository: $fansubRepository,
             tagRepository: $tagRepository,
@@ -430,6 +446,10 @@ class EditHentaiTitleTest extends TestCase
             ->andReturn($tagTwo)
         ;
 
+        /** @var FansubRepositoryInterface $fansubRepository */
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
+        /** @var TagRepositoryInterface $tagRepository */
+        /** @var VideoFileRepositoryInterface $videoFileRepository */
         $usecase = new EditHentaiTitle(
             fansubRepository: $fansubRepository,
             tagRepository: $tagRepository,

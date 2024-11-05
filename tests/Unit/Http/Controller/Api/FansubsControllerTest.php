@@ -12,6 +12,8 @@ use App\Tests\Helper;
 use App\Tests\Unit\Http\Controller\ControllerTestCase;
 use App\UseCase\CreateFansub;
 use App\UseCase\ListFansubs;
+use App\ValueObject\PaginatedItems;
+use App\ValueObject\Total;
 use Mockery;
 
 class FansubsControllerTest extends ControllerTestCase
@@ -27,16 +29,20 @@ class FansubsControllerTest extends ControllerTestCase
         $listFansubs = Mockery::mock(ListFansubs::class);
         $listFansubs
             ->shouldReceive('execute')
-            ->andReturn([$fansubFoo, $fansubBar])
+            ->andReturn(new PaginatedItems([$fansubFoo, $fansubBar], new Total(2)))
         ;
 
+        /** @var CreateFansub $createFansub */
+        /** @var ListFansubs $listFansubs */
         $controller = new FansubsController(
             createFansub: $createFansub,
             listFansubs: $listFansubs,
         );
         $controller->setContainer($container);
 
-        $response = $controller->list();
+        $request = Helper::getRequestMock(queryData: ['page' => 1, 'itemsPerPage' => 10]);
+
+        $response = $controller->list($request);
         self::assertEqualStatusOk($response->getStatusCode());
     }
 
@@ -56,6 +62,8 @@ class FansubsControllerTest extends ControllerTestCase
         ;
         $listFansubs = Mockery::mock(ListFansubs::class);
 
+        /** @var CreateFansub $createFansub */
+        /** @var ListFansubs $listFansubs */
         $controller = new FansubsController(
             createFansub: $createFansub,
             listFansubs: $listFansubs,
@@ -63,7 +71,7 @@ class FansubsControllerTest extends ControllerTestCase
         $controller->setContainer($container);
 
         $validator = Helper::getValidationMock();
-        $request = Helper::getRequestMock(['name' => 'Foo Fansub']);
+        $request = Helper::getRequestMock(bodyData: ['name' => 'Foo Fansub']);
         $requestStack = Helper::getRequestStackMock($request);
         $createFansubRequest = new CreateFansubRequest(
             validator: $validator,

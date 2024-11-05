@@ -27,6 +27,7 @@ class ListHentaiTitlesTest extends TestCase
             ->andReturn($hentaiTitlesExpected)
         ;
 
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
         $listTitles = new ListHentaiTitles($hentaiTitleRepository);
         $hentaiTitlesGot = $listTitles->execute();
 

@@ -29,6 +29,7 @@ class CreateTagTest extends TestCase
             ->once()
         ;
 
+        /** @var TagRepositoryInterface $tagRepository */
         $usecase = new CreateTag($tagRepository);
         $tagGot = $usecase->execute($dtoCreateTag);
 
@@ -52,6 +53,7 @@ class CreateTagTest extends TestCase
             ->andReturn($tagFound)
         ;
 
+        /** @var TagRepositoryInterface $tagRepository */
         $usecase = new CreateTag($tagRepository);
         $usecase->execute($dtoCreateTag);
     }

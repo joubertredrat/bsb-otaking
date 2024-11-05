@@ -51,13 +51,37 @@ class FansubRepository extends ServiceEntityRepository implements FansubReposito
         return $this->findOneBy(['name' => $name]);
     }
 
-    public function list(): array
+    public function list(PaginationSQL $pagination, string $fansubName): array
     {
-        return $this
+        $qb = $this
             ->createQueryBuilder('f')
             ->orderBy('f.name', 'ASC')
-            ->getQuery()
-            ->getResult()
+            ->setMaxResults($pagination->getLimit())
+            ->setFirstResult($pagination->getOffset())
         ;
+        if ($fansubName) {
+            $qb
+                ->where($qb->expr()->like('f.name', ':fansubName'))
+                ->setParameter('fansubName', '%' . $fansubName . '%')
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function countAll(string $fansubName): int
+    {
+        $qb = $this
+            ->createQueryBuilder('f')
+            ->select('COUNT(f.id) AS total')
+        ;
+        if ($fansubName) {
+            $qb
+                ->where($qb->expr()->like('f.name', ':fansubName'))
+                ->setParameter('fansubName', '%' . $fansubName . '%')
+            ;
+        }
+
+        return (int) $qb->getQuery()->getOneOrNullResult()['total'];
     }
 }

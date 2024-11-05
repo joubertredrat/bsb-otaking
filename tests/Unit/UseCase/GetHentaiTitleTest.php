@@ -27,6 +27,7 @@ class GetHentaiTitleTest extends TestCase
             ->andReturn($hentaiTitleExpected)
         ;
 
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
         $getHentaiTitle = new GetHentaiTitle($hentaiTitleRepository);
         $hentaiTitleGot = $getHentaiTitle->execute($id);
 
@@ -46,6 +47,7 @@ class GetHentaiTitleTest extends TestCase
             ->andReturn(null)
         ;
 
+        /** @var HentaiTitleRepositoryInterface $hentaiTitleRepository */
         $getHentaiTitle = new GetHentaiTitle($hentaiTitleRepository);
         $getHentaiTitle->execute($id);
     }

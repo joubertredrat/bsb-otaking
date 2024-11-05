@@ -23,10 +23,13 @@ class Helper
         ];
     }
 
-    public static function getRequestMock(array $data, string $contentType = 'application/json'): Request
-    {
+    public static function getRequestMock(
+        array $bodyData = [],
+        array $queryData = [],
+        string $contentType = 'application/json'
+    ): Request {
         return new Request(
-            query: [],
+            query: $queryData,
             request: [],
             attributes: [],
             cookies: [],
@@ -34,7 +37,7 @@ class Helper
             server: [
                 'CONTENT_TYPE' => $contentType,
             ],
-            content: \json_encode($data),
+            content: \json_encode($bodyData),
         );
     }
 

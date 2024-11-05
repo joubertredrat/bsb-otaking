@@ -44,4 +44,23 @@ class PaginationTest extends TestCase
             itemsPerPage: 0,
         );
     }
+
+    public function testCreatePaginationWithDefaultValues(): void
+    {
+        $pagination = Pagination::create();
+
+        self::assertEquals(Pagination::DEFAULT_PAGE, $pagination->page);
+        self::assertEquals(Pagination::DEFAULT_ITEMS_PER_PAGE, $pagination->itemsPerPage);
+    }
+
+    public function testCreatePaginationWithDefinedValues(): void
+    {
+        $pageExpected = 2;
+        $itemsPerPageExpected = 50;
+
+        $pagination = Pagination::create($pageExpected, $itemsPerPageExpected);
+
+        self::assertEquals($pageExpected, $pagination->page);
+        self::assertEquals($itemsPerPageExpected, $pagination->itemsPerPage);
+    }
 }

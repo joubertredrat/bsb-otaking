@@ -16,5 +16,7 @@ interface FansubRepositoryInterface
 
     public function getByName(string $name): ?Fansub;
 
-    public function list(): array;
+    public function list(PaginationSQL $pagination, string $fansubName): array;
+
+    public function countAll(string $fansubName): int;
 }

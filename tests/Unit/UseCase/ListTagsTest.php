@@ -29,6 +29,7 @@ class ListTagsTest extends TestCase
             ->andReturn($tagsExpected)
         ;
 
+        /** @var TagRepositoryInterface $tagRepository */
         $usecase = new ListTags($tagRepository);
         $tagsGot = $usecase->execute();
 
