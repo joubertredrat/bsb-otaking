@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace App\Http\Controller\Api;
 
 use App\Dto\CreateTag as DtoCreateTag;
+use App\Dto\ListTags as DtoListTags;
 use App\Entity\Tag;
+use App\Http\Factory\PaginationFactory;
 use App\Http\Factory\TagListResponseFactory;
 use App\Http\Request\CreateTagRequest;
 use App\Http\Response\ListResponse;
 use App\Http\Response\TagResponse;
 use App\UseCase\CreateTag;
 use App\UseCase\ListTags;
+use App\ValueObject\Total;
 use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TagsController extends ApiController
@@ -29,9 +33,14 @@ class TagsController extends ApiController
         name: 'app_api_tags_list',
         methods: [RequestMethodInterface::METHOD_GET],
     )]
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        $tags = $this->listTags->execute();
+        $pagination = PaginationFactory::createFromRequest($request);
+        $dto = new DtoListTags(
+            pagination: $pagination,
+            resourceName: $request->get('resourceName', ''),
+        );
+        $tags = $this->listTags->execute($dto);
         $response = TagListResponseFactory::createFromUsecase($tags);
         return $this->jsonOk($response);
     }
@@ -43,8 +52,7 @@ class TagsController extends ApiController
     )]
     public function types(): JsonResponse
     {
-        $response = new ListResponse(list: Tag::getTypesAvailable());
-        return $this->jsonOk($response);
+        return $this->jsonOk(['data' => Tag::getTypesAvailable()]);
     }
 
     #[Route(

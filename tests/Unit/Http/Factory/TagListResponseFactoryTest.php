@@ -7,6 +7,8 @@ namespace App\Tests\Unit\Http\Factory;
 use App\Entity\Tag;
 use App\Http\Factory\TagListResponseFactory;
 use App\Http\Response\TagResponse;
+use App\ValueObject\PaginatedItems;
+use App\ValueObject\Total;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -19,14 +21,15 @@ class TagListResponseFactoryTest extends TestCase
             ->setName('foo')
             ->setCreatedAt(new DateTimeImmutable('2023-06-29 19:18:17'))
         ;
-        $tagResponse = new TagResponse($tag);
+        $totalExpected = new Total(1);
 
         $arrayExpected = [
-            'total' => 1,
-            'data' => [$tagResponse],
+            'total' => $totalExpected->value,
+            'data' => [new TagResponse($tag)],
         ];
+        $paginatedItems = new PaginatedItems([$tag], $totalExpected);
 
-        $response = TagListResponseFactory::createFromUsecase([$tag]);
+        $response = TagListResponseFactory::createFromUsecase($paginatedItems);
         self::assertEquals($arrayExpected, $response->jsonSerialize());
     }
 }

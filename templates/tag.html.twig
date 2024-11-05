@@ -23,6 +23,10 @@ $(document).ready(function() {
   getTagTypeData();
   getTagData();
   addFormValidation();
+
+  const queryStringParams = new URLSearchParams(window.location.search);
+  const resourceName = queryStringParams.get('resourceName') ?? '';
+  $('#tags_search_criteria').val(resourceName);
 });//$(document).ready
 
 $('.tags_form').submit(function(e) {
@@ -70,12 +74,31 @@ function submitEditTag() {
 }//submitEditTag
 
 function getTagData() {
+  const queryStringParams = new URLSearchParams(window.location.search);
+  const page = queryStringParams.get('page') ?? 1;
+  const itemsPerPage = queryStringParams.get('itemsPerPage') ?? 10;
+  const resourceName = queryStringParams.get('resourceName') ?? '';
+
+  const queryString = [];
+  if (page) {
+    queryString.push('page=' + page);
+  }
+  if (itemsPerPage) {
+   queryString.push('itemsPerPage=' + itemsPerPage);
+  }
+  if (resourceName) {
+   queryString.push('resourceName=' + resourceName);
+  }
+
   $('#tags_data tbody .tags_data_row').remove();
-  $.get('/api/tags', function(object, status) {
+  $.get('/api/tags?' + queryString.join('&'), function(object, status) {
     if (object.data.length < 1) {
+      $('#tags_total_rows').html(0);
       $('#tags_data tbody .tags_data_norows').show();
       return;
     }
+
+    $('#tags_total_rows').html(object.total);
 
     $('#tags_data tbody .tags_data_norows').hide();
     $.each(object.data, function (i, item) {
@@ -83,6 +106,8 @@ function getTagData() {
         getTagRow(item.id, item.type, item.name, item.resourceName, formatDate(item.createdAt), formatDate(item.updatedAt))
       );
     });
+
+    buildPaginationOptions(object.total, page, itemsPerPage);
 
     $('.tags_edit').bind('click', function () {
       alertInfo('Soon');
@@ -130,32 +155,10 @@ function searchTags() {
   $('#tags_data tbody .tags_data_norows').hide();
   $('#tags_data tbody .tags_data_row').show();
 
-  const searchCriteria = $('#tags_search_criteria').val();
-  if (searchCriteria == '') {
-    return;
-  }
-
-  let listSize = $('#tags_data tbody .tags_data_row').length;
-  let hideCount = 0;
-
-  $('#tags_data tbody .tags_data_row').each(function() {
-    let hide = true;
-
-    let row = $(this);
-    const resourceName = row.data('tags-search-resource-name');
-    if (resourceName.toLowerCase().includes(searchCriteria.toLowerCase())) {
-      hide = false;
-    }
-
-    if (hide) {
-      row.hide();
-      hideCount++;
-    }
-  });
-
-  if (hideCount == listSize) {
-    $('#tags_data tbody .tags_data_norows').show();
-  }
+  const url = new URL(window.location.href);
+  url.searchParams.set('resourceName', $('#tags_search_criteria').val());
+  url.searchParams.set('page', 1);
+  window.location.href = url.toString();
 }//searchTags
 
 function openFormModal() {
@@ -207,6 +210,45 @@ function addFormValidation() {
   ;
 }//addFormValidation
 
+function buildPaginationOptions(total, page, itemsPerPage) {
+  const totalPages = Math.ceil(total / itemsPerPage);
+
+  const pageSetClassPrevious = ['item'];
+  if (page == 1) {
+    pageSetClassPrevious.push('disabled');
+  }
+  const previousPage = page == 1 ? 1 : parseInt(page) - 1;
+
+  const previousUrl = new URL(window.location.href);
+  previousUrl.searchParams.set('page', previousPage);
+
+  $('.tags_pagination').append(`<a class="${pageSetClassPrevious.join(' ')}" href="${previousUrl.toString()}">Previous</a>`);
+
+  for (let pageSet = 1; pageSet <= totalPages; pageSet++) {
+    const pageSetClass = ['item'];
+    if (page == pageSet) {
+      pageSetClass.push('active');
+      pageSetClass.push('disabled');
+    }
+
+    const pageUrl = new URL(window.location.href);
+    pageUrl.searchParams.set('page', pageSet);
+
+    $('.tags_pagination').append(`<a class="${pageSetClass.join(' ')}" href="${pageUrl.toString()}">${pageSet}</a>`);
+  }
+
+  const pageSetClassNext = ['item'];
+  if (page == totalPages) {
+    pageSetClassNext.push('disabled');
+  }
+  const nextPage = parseInt(page) + 1;
+
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.set('page', nextPage);
+
+  $('.tags_pagination').append(`<a class="${pageSetClassNext.join(' ')}" href="${nextUrl.toString()}">Next</a>`);
+}//buildPaginationOptions
+
 function clearForm() {
   $('.tags_form').form('reset');
   $('.tags_form').trigger('reset');
@@ -237,6 +279,9 @@ function clearForm() {
   </div>
 
   <div class="sixteen wide column">
+    <div class="ui pagination menu centered tags_pagination" id="tags_pagination_top">
+    </div>
+
     <table class="ui celled table" id="tags_data">
       <caption></caption>
       <thead>
@@ -255,7 +300,15 @@ function clearForm() {
           <td colspan="7">None tags found</td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr class="center aligned">
+          <td colspan="7">Total Rows: <span id="tags_total_rows">0</span></th>
+        </tr>
+      </tfoot>
     </table>
+
+    <div class="ui pagination menu centered tags_pagination" id="tags_pagination_bottom">
+    </div>
   </div>
 
   <div class="sixteen wide column">

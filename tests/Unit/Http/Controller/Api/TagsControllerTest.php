@@ -12,6 +12,8 @@ use App\Tests\Helper;
 use App\Tests\Unit\Http\Controller\ControllerTestCase;
 use App\UseCase\CreateTag;
 use App\UseCase\ListTags;
+use App\ValueObject\PaginatedItems;
+use App\ValueObject\Total;
 use Mockery;
 
 class TagsControllerTest extends ControllerTestCase
@@ -34,16 +36,20 @@ class TagsControllerTest extends ControllerTestCase
         $listTags = Mockery::mock(ListTags::class);
         $listTags
             ->shouldReceive('execute')
-            ->andReturn([$tagFoo, $tagBar])
+            ->andReturn(new PaginatedItems([$tagFoo, $tagBar], new Total(2)))
         ;
 
+        /** @var CreateTag $createTag */
+        /** @var ListTags $listTags */
         $controller = new TagsController(
             createTag: $createTag,
             listTags: $listTags,
         );
         $controller->setContainer($container);
 
-        $response = $controller->list();
+        $request = Helper::getRequestMock(queryData: ['page' => 1, 'itemsPerPage' => 10]);
+
+        $response = $controller->list($request);
         self::assertEqualStatusOk($response->getStatusCode());
     }
 
@@ -53,6 +59,8 @@ class TagsControllerTest extends ControllerTestCase
         $createTag = Mockery::mock(CreateTag::class);
         $listTags = Mockery::mock(ListTags::class);
 
+        /** @var CreateTag $createTag */
+        /** @var ListTags $listTags */
         $controller = new TagsController(
             createTag: $createTag,
             listTags: $listTags,
@@ -82,6 +90,8 @@ class TagsControllerTest extends ControllerTestCase
         ;
         $listTags = Mockery::mock(ListTags::class);
 
+        /** @var CreateTag $createTag */
+        /** @var ListTags $listTags */
         $controller = new TagsController(
             createTag: $createTag,
             listTags: $listTags,
@@ -89,7 +99,7 @@ class TagsControllerTest extends ControllerTestCase
         $controller->setContainer($container);
 
         $validator = Helper::getValidationMock();
-        $request = Helper::getRequestMock(['type' => 'all', 'name' => 'foo']);
+        $request = Helper::getRequestMock(bodyData: ['type' => 'all', 'name' => 'foo']);
         $requestStack = Helper::getRequestStackMock($request);
         $createTagRequest = new CreateTagRequest(
             validator: $validator,

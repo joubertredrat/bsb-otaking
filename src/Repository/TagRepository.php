@@ -43,14 +43,46 @@ class TagRepository extends ServiceEntityRepository implements TagRepositoryInte
         return $this->findOneBy(['type' => $type, 'name' => $name]);
     }
 
-    public function list(): array
+    public function list(PaginationSQL $pagination, string $tagTypeName): array
     {
-        return $this
+        $qb = $this
             ->createQueryBuilder('t')
             ->addOrderBy('t.type', 'ASC')
             ->addOrderBy('t.name', 'ASC')
-            ->getQuery()
-            ->getResult()
+            ->setMaxResults($pagination->getLimit())
+            ->setFirstResult($pagination->getOffset())
         ;
+
+        if ($tagTypeName) {
+            $qb
+                ->where($qb->expr()->like(
+                    (string) $qb->expr()->concat('t.type', $qb->expr()->literal(':'), 't.name'),
+                    ':tagTypeName',
+                ))
+                ->setParameter('tagTypeName', '%' . $tagTypeName . '%')
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function countAll(string $tagTypeName): int
+    {
+        $qb = $this
+            ->createQueryBuilder('t')
+            ->select('COUNT(t.id) AS total')
+        ;
+
+        if ($tagTypeName) {
+            $qb
+                ->where($qb->expr()->like(
+                    (string) $qb->expr()->concat('t.type', $qb->expr()->literal(':'), 't.name'),
+                    ':tagTypeName',
+                ))
+                ->setParameter('tagTypeName', '%' . $tagTypeName . '%')
+            ;
+        }
+
+        return (int) $qb->getQuery()->getOneOrNullResult()['total'];
     }
 }

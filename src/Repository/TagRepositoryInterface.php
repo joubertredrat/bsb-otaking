@@ -16,5 +16,7 @@ interface TagRepositoryInterface
 
     public function getByTypeName(string $type, string $name): ?Tag;
 
-    public function list(): array;
+    public function list(PaginationSQL $pagination, string $tagTypeName): array;
+
+    public function countAll(string $tagTypeName): int;
 }
