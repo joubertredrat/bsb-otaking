@@ -77,28 +77,22 @@ function getTagData() {
   const queryStringParams = new URLSearchParams(window.location.search);
   const page = queryStringParams.get('page') ?? 1;
   const itemsPerPage = queryStringParams.get('itemsPerPage') ?? 10;
-  const resourceName = queryStringParams.get('resourceName') ?? '';
 
   const queryString = [];
-  if (page) {
-    queryString.push('page=' + page);
-  }
-  if (itemsPerPage) {
-   queryString.push('itemsPerPage=' + itemsPerPage);
-  }
-  if (resourceName) {
-   queryString.push('resourceName=' + resourceName);
-  }
+  queryString.push('page=' + page);
+  queryString.push('itemsPerPage=' + itemsPerPage);
+  queryString.push('resourceName=' + (queryStringParams.get('resourceName') ?? ''));
 
   $('#tags_data tbody .tags_data_row').remove();
   $.get('/api/tags?' + queryString.join('&'), function(object, status) {
+    buildPaginationOptions(object.total, page, itemsPerPage);
+
+    $('#tags_total_rows').html(object.total);
+
     if (object.data.length < 1) {
-      $('#tags_total_rows').html(0);
       $('#tags_data tbody .tags_data_norows').show();
       return;
     }
-
-    $('#tags_total_rows').html(object.total);
 
     $('#tags_data tbody .tags_data_norows').hide();
     $.each(object.data, function (i, item) {
@@ -106,8 +100,6 @@ function getTagData() {
         getTagRow(item.id, item.type, item.name, item.resourceName, formatDate(item.createdAt), formatDate(item.updatedAt))
       );
     });
-
-    buildPaginationOptions(object.total, page, itemsPerPage);
 
     $('.tags_edit').bind('click', function () {
       alertInfo('Soon');
@@ -238,7 +230,7 @@ function buildPaginationOptions(total, page, itemsPerPage) {
   }
 
   const pageSetClassNext = ['item'];
-  if (page == totalPages) {
+  if (page == totalPages || totalPages == 0) {
     pageSetClassNext.push('disabled');
   }
   const nextPage = parseInt(page) + 1;
