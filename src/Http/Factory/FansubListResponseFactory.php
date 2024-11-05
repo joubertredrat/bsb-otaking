@@ -11,11 +11,11 @@ use App\ValueObject\PaginatedItems;
 
 class FansubListResponseFactory
 {
-    public static function createFromUsecase(PaginatedItems $data): ListResponse
+    public static function createFromUsecase(PaginatedItems $paginatedItems): ListResponse
     {
-        $response = new ListResponse($data->total);
+        $response = new ListResponse($paginatedItems->total);
 
-        foreach ($data->items as $item) {
+        foreach ($paginatedItems->items as $item) {
             if ($item instanceof Fansub) {
                 $response->add(new FansubResponse($item));
             }
