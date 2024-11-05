@@ -83,7 +83,7 @@ function getFansubData() {
 
   $('#fansubs_data tbody .fansubs_data_row').remove();
   $.get('/api/fansubs?' + queryString.join('&'), function(object, status) {
-    buildPaginationOptions(object.total, page, itemsPerPage);
+    buildPaginationOptions('.fansubs_pagination', object.total, page, itemsPerPage);
 
     $('#fansubs_total_rows').html(object.total);
 
@@ -177,45 +177,6 @@ function addFormValidation() {
     })
   ;
 }//addFormValidation
-
-function buildPaginationOptions(total, page, itemsPerPage) {
-  const totalPages = Math.ceil(total / itemsPerPage);
-
-  const pageSetClassPrevious = ['item'];
-  if (page == 1) {
-    pageSetClassPrevious.push('disabled');
-  }
-  const previousPage = page == 1 ? 1 : parseInt(page) - 1;
-
-  const previousUrl = new URL(window.location.href);
-  previousUrl.searchParams.set('page', previousPage);
-
-  $('.fansubs_pagination').append(`<a class="${pageSetClassPrevious.join(' ')}" href="${previousUrl.toString()}">Previous</a>`);
-
-  for (let pageSet = 1; pageSet <= totalPages; pageSet++) {
-    const pageSetClass = ['item'];
-    if (page == pageSet) {
-      pageSetClass.push('active');
-      pageSetClass.push('disabled');
-    }
-
-    const pageUrl = new URL(window.location.href);
-    pageUrl.searchParams.set('page', pageSet);
-
-    $('.fansubs_pagination').append(`<a class="${pageSetClass.join(' ')}" href="${pageUrl.toString()}">${pageSet}</a>`);
-  }
-
-  const pageSetClassNext = ['item'];
-  if (page == totalPages || totalPages == 0) {
-    pageSetClassNext.push('disabled');
-  }
-  const nextPage = parseInt(page) + 1;
-
-  const nextUrl = new URL(window.location.href);
-  nextUrl.searchParams.set('page', nextPage);
-
-  $('.fansubs_pagination').append(`<a class="${pageSetClassNext.join(' ')}" href="${nextUrl.toString()}">Next</a>`);
-}//buildPaginationOptions
 
 function clearForm() {
   $('.fansubs_form').form('reset');

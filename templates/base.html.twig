@@ -89,6 +89,46 @@
       function isUnprocessableContent(status) {
         return status === 422;
       }//isUnprocessableContent
+
+      function buildPaginationOptions(elementClass, total, page, itemsPerPage) {
+        const totalPages = Math.ceil(total / itemsPerPage);
+
+        const pageSetClassPrevious = ['item'];
+        if (page == 1) {
+          pageSetClassPrevious.push('disabled');
+        }
+        const previousPage = page == 1 ? 1 : parseInt(page) - 1;
+
+        const previousUrl = new URL(window.location.href);
+        previousUrl.searchParams.set('page', previousPage);
+
+        $(elementClass).append(`<a class="${pageSetClassPrevious.join(' ')}" href="${previousUrl.toString()}">Previous</a>`);
+
+        const limitItemsPagination = 10;
+        for (let pageSet = 1; pageSet <= totalPages; pageSet++) {
+          const pageSetClass = ['item'];
+          if (page == pageSet) {
+            pageSetClass.push('active');
+            pageSetClass.push('disabled');
+          }
+
+          const pageUrl = new URL(window.location.href);
+          pageUrl.searchParams.set('page', pageSet);
+
+          $(elementClass).append(`<a class="${pageSetClass.join(' ')}" href="${pageUrl.toString()}">${pageSet}</a>`);
+        }
+
+        const pageSetClassNext = ['item'];
+        if (page == totalPages || totalPages == 0) {
+          pageSetClassNext.push('disabled');
+        }
+        const nextPage = parseInt(page) + 1;
+
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set('page', nextPage);
+
+        $(elementClass).append(`<a class="${pageSetClassNext.join(' ')}" href="${nextUrl.toString()}">Next</a>`);
+      }//buildPaginationOptions
     </script>
     {% block scripts %}
     {% endblock %}
