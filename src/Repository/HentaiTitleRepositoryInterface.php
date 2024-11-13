@@ -14,5 +14,26 @@ interface HentaiTitleRepositoryInterface
 
     public function get(int $id): ?HentaiTitle;
 
-    public function list(): array;
+    public function list(
+        PaginationSQL $pagination,
+        string $searchCriteria,
+        string $type,
+        string $language,
+        int $rating,
+        string $statusDownload,
+        string $statusView,
+        int $fansubId,
+        int $tagId,
+    ): array;
+
+    public function countAll(
+        string $searchCriteria,
+        string $type,
+        string $language,
+        int $rating,
+        string $statusDownload,
+        string $statusView,
+        int $fansubId,
+        int $tagId,
+    ): int;
 }

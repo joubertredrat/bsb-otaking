@@ -91,21 +91,26 @@
       }//isUnprocessableContent
 
       function buildPaginationOptions(elementClass, total, page, itemsPerPage) {
-        const totalPages = Math.ceil(total / itemsPerPage);
-
-        const pageSetClassPrevious = ['item'];
-        if (page == 1) {
-          pageSetClassPrevious.push('disabled');
+        if (total == 0) {
+          $(elementClass).append(`<a class="item disabled" href="">1</a>`);
+          return;
         }
-        const previousPage = page == 1 ? 1 : parseInt(page) - 1;
 
-        const previousUrl = new URL(window.location.href);
-        previousUrl.searchParams.set('page', previousPage);
+        const maxVisibleLinks = 10;
+        const totalPages = Math.ceil(total / itemsPerPage);
+        const halfVisible = Math.floor(maxVisibleLinks / 2);
+        let startPage = Math.max(1, parseInt(page) - halfVisible);
+        let endPage = Math.min(totalPages, parseInt(page) + halfVisible);
 
-        $(elementClass).append(`<a class="${pageSetClassPrevious.join(' ')}" href="${previousUrl.toString()}">Previous</a>`);
+        if (endPage - startPage + 1 < maxVisibleLinks) {
+          if (startPage === 1) {
+            endPage = Math.min(totalPages, startPage + maxVisibleLinks - 1);
+          } else if (endPage === totalPages) {
+            startPage = Math.max(1, endPage - maxVisibleLinks + 1);
+          }
+        }
 
-        const limitItemsPagination = 10;
-        for (let pageSet = 1; pageSet <= totalPages; pageSet++) {
+        for (let pageSet = startPage; pageSet <= endPage; pageSet++) {
           const pageSetClass = ['item'];
           if (page == pageSet) {
             pageSetClass.push('active');
@@ -117,17 +122,6 @@
 
           $(elementClass).append(`<a class="${pageSetClass.join(' ')}" href="${pageUrl.toString()}">${pageSet}</a>`);
         }
-
-        const pageSetClassNext = ['item'];
-        if (page == totalPages || totalPages == 0) {
-          pageSetClassNext.push('disabled');
-        }
-        const nextPage = parseInt(page) + 1;
-
-        const nextUrl = new URL(window.location.href);
-        nextUrl.searchParams.set('page', nextPage);
-
-        $(elementClass).append(`<a class="${pageSetClassNext.join(' ')}" href="${nextUrl.toString()}">Next</a>`);
       }//buildPaginationOptions
     </script>
     {% block scripts %}

@@ -16,7 +16,7 @@ final class ListResponse implements JsonSerializable
     ) {
     }
 
-    public function add(JsonSerializable $item): void
+    public function add(JsonSerializable|array $item): void
     {
         $this->list[] = $item;
     }

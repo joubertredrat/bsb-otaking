@@ -101,7 +101,7 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         $controller->setContainer($container);
 
         $validator = Helper::getValidationMock();
-        $request = Helper::getRequestMock([
+        $request = Helper::getRequestMock(bodyData: [
             'name' => 'Foo',
             'type' => HentaiTitle::TYPE_2D,
             'language' => HentaiTitle::LANGUAGE_PT_BR,
@@ -179,7 +179,7 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         $controller->setContainer($container);
 
         $validator = Helper::getValidationMock();
-        $request = Helper::getRequestMock([
+        $request = Helper::getRequestMock(bodyData: [
             'name' => 'Foo',
             'type' => HentaiTitle::TYPE_2D,
             'language' => HentaiTitle::LANGUAGE_PT_BR,

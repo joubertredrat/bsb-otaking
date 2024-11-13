@@ -17,7 +17,7 @@ class AbstractJsonRequestTest extends TestCase
     {
         $nameExpected = 'Foo';
 
-        $request = Helper::getRequestMock(['name' => $nameExpected]);
+        $request = Helper::getRequestMock(bodyData: ['name' => $nameExpected]);
         $requestStack = Helper::getRequestStackMock($request);
         $validator = Helper::getValidationMock();
 
@@ -38,11 +38,11 @@ class AbstractJsonRequestTest extends TestCase
     {
         $this->expectException(InvalidJsonRequestException::class);
 
-        $request = Helper::getRequestMock(['name' => 'foo'], 'application/other');
+        $request = Helper::getRequestMock(bodyData: ['name' => 'foo'], contentType: 'application/other');
         $requestStack = Helper::getRequestStackMock($request);
         $validator = Helper::getValidationMock();
 
-        $requestValidator = new class (
+        new class (
             validator: $validator,
             requestStack: $requestStack,
             convertCase: true
@@ -57,11 +57,11 @@ class AbstractJsonRequestTest extends TestCase
     {
         $this->expectException(InvalidJsonRequestException::class);
 
-        $request = Helper::getRequestMock(['names' => 'foo']);
+        $request = Helper::getRequestMock(bodyData: ['names' => 'foo']);
         $requestStack = Helper::getRequestStackMock($request);
         $validator = Helper::getValidationMock();
 
-        $requestValidator = new class (
+        new class (
             validator: $validator,
             requestStack: $requestStack,
             convertCase: true
