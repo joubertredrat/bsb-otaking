@@ -7,7 +7,7 @@ namespace App\Http\Controller\Api;
 use App\Helper\DateTime;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class StatusController extends ApiController
 {

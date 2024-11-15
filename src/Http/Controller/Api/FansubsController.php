@@ -14,7 +14,7 @@ use App\UseCase\CreateFansub;
 use App\UseCase\ListFansubs;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class FansubsController extends ApiController
 {

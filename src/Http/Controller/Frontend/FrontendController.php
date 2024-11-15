@@ -6,7 +6,7 @@ namespace App\Http\Controller\Frontend;
 
 use App\Http\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class FrontendController extends BaseController
 {
