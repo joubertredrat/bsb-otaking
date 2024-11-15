@@ -20,7 +20,7 @@ class DateTimeTest extends TestCase
     public function testWithNull(): void
     {
         $dateTimeExpected = null;
-        $dateTimeGot = DateTime::getString(null);
+        $dateTimeGot = DateTime::getString($dateTimeExpected);
 
         self::assertEquals($dateTimeExpected, $dateTimeGot);
     }

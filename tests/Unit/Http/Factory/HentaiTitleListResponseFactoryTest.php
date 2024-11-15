@@ -7,6 +7,9 @@ namespace App\Tests\Unit\Http\Factory;
 use App\Entity\HentaiTitle;
 use App\Http\Factory\HentaiTitleListResponseFactory;
 use App\Http\Response\HentaiTitleResponse;
+use App\ValueObject\PaginatedItems;
+use App\ValueObject\Total;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 class HentaiTitleListResponseFactoryTest extends TestCase
@@ -15,14 +18,16 @@ class HentaiTitleListResponseFactoryTest extends TestCase
     {
         $hentaiTitle = new HentaiTitle();
         $hentaiTitle->setName('Foo');
-        $hentaiTitleResponse = new HentaiTitleResponse($hentaiTitle);
+        $hentaiTitle->setCreatedAt(new DateTimeImmutable('2023-06-29 19:18:17'));
+        $totalExpected = new Total(1);
 
         $arrayExpected = [
-            'total' => 1,
-            'data' => [$hentaiTitleResponse],
+            'total' => $totalExpected->value,
+            'data' => [new HentaiTitleResponse($hentaiTitle)],
         ];
+        $paginatedItems = new PaginatedItems([$hentaiTitle], $totalExpected);
 
-        $response = HentaiTitleListResponseFactory::createFromUsecase([$hentaiTitle]);
+        $response = HentaiTitleListResponseFactory::createFromUsecase($paginatedItems);
         self::assertEquals($arrayExpected, $response->jsonSerialize());
     }
 }

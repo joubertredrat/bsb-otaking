@@ -32,6 +32,7 @@
     "phpstan/phpstan": "^1.12",
     "phpunit/phpunit": "^10",
     "psalm/plugin-symfony": "^5.04",
+    "slevomat/coding-standard": "^8.15",
     "squizlabs/php_codesniffer": "^3.10",
     "symfony/maker-bundle": "^1.53",
     "symfony/stopwatch": "6.3.*",
@@ -42,7 +43,8 @@
     "allow-plugins": {
       "php-http/discovery": true,
       "symfony/flex": true,
-      "symfony/runtime": true
+      "symfony/runtime": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
     },
     "sort-packages": true
   },
@@ -87,8 +89,8 @@
       "open .metrics/index.html"
     ],
     "phpcs": [
-      "vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR12 --extensions=php,inc,lib --ignore=*/Migrations/* src/",
-      "vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR12 --extensions=php,inc,lib tests/"
+      "vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR12 -p --standard=ruleset.xml --extensions=php,inc,lib --ignore=*/Migrations/* src/",
+      "vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR12 -p --standard=ruleset.xml --extensions=php,inc,lib tests/"
     ],
     "phpstan": "vendor/bin/phpstan",
     "mysql-prod-tunnel": "ssh -L 27306:mysql.jouass1.dreamhosters.com:3306 joubertredrat@galena.dreamhost.com"

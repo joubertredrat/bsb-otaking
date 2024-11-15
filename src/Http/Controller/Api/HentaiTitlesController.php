@@ -13,12 +13,10 @@ use App\Http\Factory\PaginationFactory;
 use App\Http\Request\CreateHentaiTitleRequest;
 use App\Http\Request\UpdateHentaiTitleRequest;
 use App\Http\Response\HentaiTitleResponse;
-use App\Http\Response\ListResponse;
 use App\UseCase\CreateHentaiTitle;
 use App\UseCase\EditHentaiTitle;
 use App\UseCase\GetHentaiTitle;
 use App\UseCase\ListHentaiTitles;
-use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,7 +34,7 @@ class HentaiTitlesController extends ApiController
     #[Route(
         path: '/api/hentai/titles',
         name: 'app_api_hentai_titles_list',
-        methods: [RequestMethodInterface::METHOD_GET],
+        methods: [self::METHOD_GET],
     )]
     public function list(Request $request): JsonResponse
     {
@@ -60,7 +58,7 @@ class HentaiTitlesController extends ApiController
     #[Route(
         path: '/api/hentai/titles/types',
         name: 'app_api_hentai_titles_types',
-        methods: [RequestMethodInterface::METHOD_GET],
+        methods: [self::METHOD_GET],
     )]
     public function types(): JsonResponse
     {
@@ -70,7 +68,7 @@ class HentaiTitlesController extends ApiController
     #[Route(
         path: '/api/hentai/titles/languages',
         name: 'app_api_hentai_titles_languages',
-        methods: [RequestMethodInterface::METHOD_GET],
+        methods: [self::METHOD_GET],
     )]
     public function languages(): JsonResponse
     {
@@ -80,7 +78,7 @@ class HentaiTitlesController extends ApiController
     #[Route(
         path: '/api/hentai/titles/statuses-download',
         name: 'app_api_hentai_titles_statuses_download',
-        methods: [RequestMethodInterface::METHOD_GET],
+        methods: [self::METHOD_GET],
     )]
     public function statusesDownload(): JsonResponse
     {
@@ -90,7 +88,7 @@ class HentaiTitlesController extends ApiController
     #[Route(
         path: '/api/hentai/titles/statuses-view',
         name: 'app_api_hentai_titles_statuses_view',
-        methods: [RequestMethodInterface::METHOD_GET],
+        methods: [self::METHOD_GET],
     )]
     public function statusesView(): JsonResponse
     {
@@ -100,7 +98,7 @@ class HentaiTitlesController extends ApiController
     #[Route(
         path: '/api/hentai/titles',
         name: 'app_api_hentai_titles_create',
-        methods: [RequestMethodInterface::METHOD_POST],
+        methods: [self::METHOD_POST],
     )]
     public function create(CreateHentaiTitleRequest $request): JsonResponse
     {
@@ -127,7 +125,7 @@ class HentaiTitlesController extends ApiController
         path: '/api/hentai/titles/{id}',
         name: 'app_api_hentai_titles_get',
         requirements: ['id' => '\d+'],
-        methods: [RequestMethodInterface::METHOD_GET],
+        methods: [self::METHOD_GET],
     )]
     public function get(int $id): JsonResponse
     {
@@ -141,7 +139,7 @@ class HentaiTitlesController extends ApiController
         path: '/api/hentai/titles/{id}',
         name: 'app_api_hentai_titles_update',
         requirements: ['id' => '\d+'],
-        methods: [RequestMethodInterface::METHOD_PUT],
+        methods: [self::METHOD_PUT],
     )]
     public function update(UpdateHentaiTitleRequest $request, int $id): JsonResponse
     {

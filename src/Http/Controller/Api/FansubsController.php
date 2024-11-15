@@ -12,7 +12,6 @@ use App\Http\Request\CreateFansubRequest;
 use App\Http\Response\FansubResponse;
 use App\UseCase\CreateFansub;
 use App\UseCase\ListFansubs;
-use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,7 +27,7 @@ class FansubsController extends ApiController
     #[Route(
         path: '/api/fansubs',
         name: 'app_api_fansub_list',
-        methods: [RequestMethodInterface::METHOD_GET],
+        methods: [self::METHOD_GET],
     )]
     public function list(Request $request): JsonResponse
     {
@@ -46,7 +45,7 @@ class FansubsController extends ApiController
     #[Route(
         path: '/api/fansubs',
         name: 'app_api_fansub_create',
-        methods: [RequestMethodInterface::METHOD_POST],
+        methods: [self::METHOD_POST],
     )]
     public function create(CreateFansubRequest $request): JsonResponse
     {

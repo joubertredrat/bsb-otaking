@@ -16,6 +16,8 @@ use App\UseCase\CreateHentaiTitle;
 use App\UseCase\EditHentaiTitle;
 use App\UseCase\GetHentaiTitle;
 use App\UseCase\ListHentaiTitles;
+use App\ValueObject\PaginatedItems;
+use App\ValueObject\Total;
 use Mockery;
 
 class HentaiTitlesControllerTest extends ControllerTestCase
@@ -30,11 +32,15 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         $listHentaiTitles = Mockery::mock(ListHentaiTitles::class);
         $listHentaiTitles
             ->shouldReceive('execute')
-            ->andReturn([$hentaiTitleFoo, $hentaiTitleBar])
+            ->andReturn(new PaginatedItems([$hentaiTitleFoo, $hentaiTitleBar], new Total(2)))
         ;
         $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
         $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
 
+        /** @var CreateHentaiTitle $createHentaiTitle */
+        /** @var ListHentaiTitles $listHentaiTitles */
+        /** @var GetHentaiTitle $getHentaiTitle */
+        /** @var EditHentaiTitle $editHentaiTitle */
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
@@ -43,7 +49,9 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         );
         $controller->setContainer($container);
 
-        $response = $controller->list();
+        $request = Helper::getRequestMock(queryData: ['page' => 1, 'itemsPerPage' => 10]);
+
+        $response = $controller->list($request);
         self::assertEqualStatusOk($response->getStatusCode());
     }
 
@@ -92,6 +100,10 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
         $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
 
+        /** @var CreateHentaiTitle $createHentaiTitle */
+        /** @var ListHentaiTitles $listHentaiTitles */
+        /** @var GetHentaiTitle $getHentaiTitle */
+        /** @var EditHentaiTitle $editHentaiTitle */
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
@@ -140,6 +152,10 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         ;
         $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
 
+        /** @var CreateHentaiTitle $createHentaiTitle */
+        /** @var ListHentaiTitles $listHentaiTitles */
+        /** @var GetHentaiTitle $getHentaiTitle */
+        /** @var EditHentaiTitle $editHentaiTitle */
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
@@ -170,6 +186,10 @@ class HentaiTitlesControllerTest extends ControllerTestCase
             ->andReturn($hentaiTitleFoo)
         ;
 
+        /** @var CreateHentaiTitle $createHentaiTitle */
+        /** @var ListHentaiTitles $listHentaiTitles */
+        /** @var GetHentaiTitle $getHentaiTitle */
+        /** @var EditHentaiTitle $editHentaiTitle */
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
@@ -210,6 +230,10 @@ class HentaiTitlesControllerTest extends ControllerTestCase
         $getHentaiTitle = Mockery::mock(GetHentaiTitle::class);
         $editHentaiTitle = Mockery::mock(EditHentaiTitle::class);
 
+        /** @var CreateHentaiTitle $createHentaiTitle */
+        /** @var ListHentaiTitles $listHentaiTitles */
+        /** @var GetHentaiTitle $getHentaiTitle */
+        /** @var EditHentaiTitle $editHentaiTitle */
         $controller = new HentaiTitlesController(
             createHentaiTitle: $createHentaiTitle,
             listHentaiTitles: $listHentaiTitles,
