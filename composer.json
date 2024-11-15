@@ -29,7 +29,7 @@
   "require-dev": {
     "mockery/mockery": "^1.6",
     "phpmetrics/phpmetrics": "^2.8",
-    "phpstan/phpstan": "^1.12",
+    "phpstan/phpstan": "^2.0",
     "phpunit/phpunit": "^10",
     "psalm/plugin-symfony": "^5.04",
     "slevomat/coding-standard": "^8.15",
