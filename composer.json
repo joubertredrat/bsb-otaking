@@ -33,7 +33,7 @@
     "phpunit/phpunit": "^10",
     "psalm/plugin-symfony": "^5.04",
     "slevomat/coding-standard": "^8.15",
-    "squizlabs/php_codesniffer": "^3.10",
+    "squizlabs/php_codesniffer": "^3.11",
     "symfony/maker-bundle": "^1.53",
     "symfony/stopwatch": "6.3.*",
     "symfony/web-profiler-bundle": "6.3.*",
