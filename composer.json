@@ -24,7 +24,7 @@
     "symfony/serializer": "6.4.*",
     "symfony/twig-bundle": "6.4.*",
     "symfony/validator": "6.4.*",
-    "symfony/yaml": "7.1.*"
+    "symfony/yaml": "7.2.*"
   },
   "require-dev": {
     "mockery/mockery": "^1.6",
