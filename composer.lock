@@ -1284,16 +1284,16 @@
         },
         {
             "name": "jawira/case-converter",
-            "version": "v3.5.1",
+            "version": "v3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jawira/case-converter.git",
-                "reference": "2be05b98dcb743bef60ab6f849145bd3434ed003"
+                "reference": "a3c957aac2b3ef7389c4a7930b952fb8aa740954"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jawira/case-converter/zipball/2be05b98dcb743bef60ab6f849145bd3434ed003",
-                "reference": "2be05b98dcb743bef60ab6f849145bd3434ed003",
+                "url": "https://api.github.com/repos/jawira/case-converter/zipball/a3c957aac2b3ef7389c4a7930b952fb8aa740954",
+                "reference": "a3c957aac2b3ef7389c4a7930b952fb8aa740954",
                 "shasum": ""
             },
             "require": {
@@ -1302,9 +1302,8 @@
             },
             "require-dev": {
                 "behat/behat": "^3.0",
-                "phpstan/phpstan": "^1.0",
-                "phpunit/phpunit": "^9.0",
-                "vimeo/psalm": "^4.0"
+                "phpstan/phpstan": "^v2",
+                "phpunit/phpunit": "^9.0"
             },
             "suggest": {
                 "pds/skeleton": "PHP Package Development Standards",
@@ -1345,9 +1344,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jawira/case-converter/issues",
-                "source": "https://github.com/jawira/case-converter/tree/v3.5.1"
+                "source": "https://github.com/jawira/case-converter/tree/v3.5.2"
             },
-            "time": "2022-08-14T11:40:18+00:00"
+            "time": "2024-12-21T19:43:32+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
