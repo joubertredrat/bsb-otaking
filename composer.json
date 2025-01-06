@@ -19,7 +19,7 @@
     "symfony/flex": "^2",
     "symfony/framework-bundle": "6.3.*",
     "symfony/property-access": "7.1.*",
-    "symfony/property-info": "7.1.*",
+    "symfony/property-info": "7.2.*",
     "symfony/runtime": "7.1.*",
     "symfony/serializer": "6.4.*",
     "symfony/twig-bundle": "6.4.*",
